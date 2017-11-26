@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# Updates the conky config file for the cheat sheets of vim and mutt.
+# Instead of updating the conky config file, update de notes_***.txt file and
+# then run this script, e.g.:
+#	$ format_cheat.sh mutt
+# Requirements:
+# Conky config files and notes files should be placed in the .i3 directory
+# TODO: Add dialog environment to the script
+#
+
+_title1_format='${alignc}${font Ubuntu:size=12:bold}${color6}'
+_title_format='${offset 5}${font Ubuntu:size=10:bold}${color5}'		# conky formats
+_header_format='${color3}${hr 2}'					# -|
+_command_format='${offset 5}${font Ubuntu:size=9:normal}${color2}'	# -|
+_shortcut_format='${alignr}${offset -5}${color4}'			# -|
+_run_dir="$HOME/.i3"
+declare -a _LINES
+
+# for debuging
+#trap "set +x; sleep 1; set -x" DEBUG
+
+#trap 'rm -f $tempfile' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM" "$SIG_KILL"
+
+. "$HOME"/sbin/script-funcs.sh
+
+# is_title()
+# Given a text line in $1 return 0 if it begins with "*" , 1 if begins
+# with a % or 2 whichever other char.
+# This values should be catched and procesed elsewhere.
+#
+is_title()
+{
+	# abort script if $1 is not set
+	[[ -z $1 ]] && \
+		report_msg "$0" "Error: empty line in $_notes" && \
+		exit 1
+
+	local _allbutfirst=${1#?}
+	if [ "${1%"$_allbutfirst"}" == '*' ]; then
+		return 0
+	elif [ "${1%"$_allbutfirst"}" == '%' ]; then
+		return 1
+	else
+		return 2
+	fi
+}
+
+# Main script
+#
+
+# check for command line arguments
+#
+if (( $# != 1 )); then
+	report_msg "$0" "ERROR: Argument needed vim/mutt"
+	exit 1
+fi
+
+# set the files and check them
+#
+_notes="$_run_dir/$1_notes.txt"
+_conf="$_run_dir/conky_$1_cheat.conf"
+if [ ! -r "$_notes" ]; then
+	report_msg "$0" "ERROR: $_notes doesn't exist or is unreadable"
+	exit 1
+fi
+if [ ! -w "$_conf" ]; then
+	report_msg "$0" "ERROR: $_conf doesn't exist or is not writable"
+	exit 1
+fi
+
+# clean config file for update. Remove lines begining with "$", empty lines
+# and the closing text line. WARNING NO ENDING BLANK LINE.
+#
+sed -i -e '/^\$.*/d' -e '/^$/d' -e '$d' "$_conf"
+
+read_lines "$_notes" _LINES
+
+# format the notes lines and put them in conf file
+#
+i=0
+while (( i < ${#_LINES[@]} )); do
+	is_title "${_LINES[$i]}"
+	_rc="$?"
+	if [ "$_rc" -eq 0 ]; then
+		# line beggining with * is a title, add an empty line unless first line
+		(( i == 0 )) && format_str="%s\n" || format_str="\n%s\n"
+		printf "$format_str" "$_title_format${_LINES[$i]#\*} $_header_format" >>"$_conf"
+	elif [ "$_rc" -eq 1 ]; then
+		# line beggining with % is a title1
+		printf "%s\n" "$_title1_format${_LINES[$i]#\%}" >>"$_conf"
+	else
+		_head="${_LINES[$i]%%\|*}"
+		_tail="${_LINES[$i]##*\|}"
+		printf "%s\n" "$_command_format$_head $_shortcut_format$_tail" >>"$_conf"
+	fi
+(( i++ ))
+done
+
+# close the text notes
+#
+printf "%s\n" "]]" >>"$_conf"
+
+report_msg "$0" "$_notes processed, $_conf updated."

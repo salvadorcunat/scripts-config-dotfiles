@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Creates an i3-wm workspace, launching mutt in a terminal and a conky instance
+# nearby, containing mutt useful commands an key shortcuts
+#
+# Requires conky, termite and libnotify-bin (last two may be changed to
+# different preferences changing this script)
+#
+# Uses a config file for conky, containing vim's commands and shortcuts and
+# formatting conky output, ~/.i3/conky_vim_cheat.conf. Change this file to your
+# preferences and system settings. Personally, I edit this file over the time
+# to remove memorized commands or shortcuts and add new ones. Keep in mind
+# that screen space is limited and reducing the font size is also limited.
+#
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+TRMNL=$HOME/.i3/termite_wrap	# adjust to your preferred
+CONKY=/usr/bin/conky
+NOTIFY=/usr/bin/notify-send
+SLEEP=/bin/sleep		# GNU sleep permits float numbers
+TEMPFILE=/tmp/mutt_ws_tmp.$$$$
+RC=0
+COUNT=0
+
+trap 'rm -f $TEMPFILE' 0	# Remove tempfile on good exit
+
+# Display an error warning and the tempfile. Do not remove
+# tempfile on error for forencsics tasks
+function notify_error()
+{
+	RC=64
+	$NOTIFY -u critical "Ha fallado $1" "Return code = $RC\n$(cat "$2")"
+}
+
+"$HOME"/.i3/init_ws -l "/home/boret/.i3/mutt_ws.json" \
+	-c "/usr/bin/conky -c /home/boret/.i3/conky_mutt_cheat.conf && sleep 2" \
+	-c "/home/boret/.i3/termite_wrap -t Terminal -e mutt" 2>&1
+
+$SLEEP 1.00
+
+"$HOME"/.i3/compton_wrap -f
+
+TERMPROC="$(pgrep -n mutt)"
+if [[ -z $TERMPROC ]]; then
+	notify_error "$TRMNL" "$TEMPFILE"
+	exit $RC
+fi
+
+CONKYPROC="$(pgrep -f mutt_cheat)"
+if [[ -z $CONKYPROC ]]; then
+	notify_error $CONKY $TEMPFILE
+	exit $RC
+fi
+
+# Keep the script waiting until mutt is closed
+while [[ -d "/proc/$TERMPROC" ]]; do
+	sleep 1
+	(( COUNT++ ))
+done
+
+# Kill conky and exit
+kill -9 "$CONKYPROC"
+exit $RC

@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Launches a xterm with an alsamixer in it.
+# Intended to be used on i3wm environment.
+# Author: boret
+# Returns: 0 on success, 1 on failure
+# Arguments: none
+#
+
+I3MSG=/usr/bin/i3-msg
+NOTIFY=/usr/bin/notify-send
+TMPFILE=/tmp/tmp_$$
+RC=0	# Return code
+
+if ! $I3MSG 'exec --no-startup-id "/usr/bin/xfce4-terminal --hide-menubar --hide-borders --title=Alsamixer -x /usr/bin/alsamixer -g -c 0 -V -all"' 2> $TMPFILE
+then
+	RC=1
+	$NOTIFY -u critical "Amixer failed" "`/bin/cat $TMPFILE`"
+fi
+/bin/rm $TMPFILE
+exit $RC

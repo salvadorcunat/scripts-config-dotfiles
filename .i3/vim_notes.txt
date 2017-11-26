@@ -1,0 +1,36 @@
+*Movimientos raros
+Modo normal|w -- fin palabra
+|e -- w sin espac
+|$ -- fin linea
+*Dividir pantalla
+|:split (mismo archivo)
+|:new archivo.txt (otro archivo)
+*Escribir archivo
+diferente|:w <archivo>
+|:saveas <archivo>
+append|:w >><archivo>
+*Borrar
+linea|[esc] d[num]d
+palabra|w
+h/fin linea|$
+*Reemplazar
+|[esc] r[caracter]
+*Cambiar
+linea|[esc] c[num]d
+palabra|w
+h/fin linea|$
+*Fold
+|[esc] v <seleccionar texto> zf
+Unfold|zo
+Refold|zc
+*Busqueda parentesis
+|% (situado sobre parentesis)
+*Posición
+anterior|CTRL-O
+última|CTRL-I
+*Ortografía
+|:setlocal spell spelllang=es_es
+Buscar mal adelante|]s
+Buscar mal atrás|[s
+Añadir palabra|
+bajo el cursor|zg

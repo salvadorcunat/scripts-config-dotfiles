@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Copyright 2017 Salvador Cuñat <salvador.cunat@gmail.com>
+#
+# Licensed under the terms of the GNU GPL v3, or any later version.
+
+# Fix a locale. To avoid locale dependant issues
+#
+export LC_ALL='C'
+
+# Get average idle time percentage and change "," to "."
+# substitution could probably be avoided and done in awk, but i'm too lazy
+#
+IDLE=$(mpstat 1 1 |grep -a "Average" |awk '{printf $12}')
+IDLE=${IDLE//,/.}
+
+# So, use percentage is 100 - $IDLE
+#
+RESULT=$(echo "100-($IDLE)" |bc)
+
+# Get an integer result for bash comparisons and remove the trailing
+# ".00" from bc
+#
+RESULT_PERCENT=$(echo "scale=0; $RESULT*100" |bc)
+RESULT_PERCENT=${RESULT_PERCENT%.*}
+
+echo "$RESULT"%          # full text
+echo "$RESULT"%          # short text
+
+# Show colors
+#
+if [ "$RESULT_PERCENT" -ge 6600 ]; then
+	echo "#720000"	# red for greater loads
+elif [ "$RESULT_PERCENT" -ge 3300 ]; then
+	echo "#734f00"	# yellow for medium loads
+else
+	echo "#006e34"	# green up to 33% average loads
+fi
+
+# Set an action button to display continuous cpu stats
+#
+case $BLOCK_BUTTON in
+    1) /usr/bin/terminator -b -T "Mpstat" -p floating --geometry=700x120 -e 'mpstat -P ALL 1';;
+esac

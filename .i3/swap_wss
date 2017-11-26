@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+# Little perl script which swaps two visible i3 workspaces while multimonitor
+# working. This scritp doesn't make use of i3-ipc protocol but simples system
+# calls. We keep here the i3-ipc code for future (may be, just in case) use.
+
+use JSON;
+
+$work_screen = "LVDS1";
+
+# Get actually opened workspaces
+$wss = new JSON::XS;
+$ws_vector = $wss->decode(`/usr/bin/i3-msg -t get_workspaces`);
+
+# Workspaces may be visible or not, and may be focused or not.
+# We need to know those which are visibles and if they are focused
+# As I only have two monitors, I'll have two visible workspaces but
+# one will be focused and the other won't.
+# Here we get the ws name and output of both visible workspaces.
+for ($i = 0; $i < @$ws_vector; $i++) {
+	if ($$ws_vector[$i]->{"visible"} == 1) {
+		if ($$ws_vector[$i]->{"focused"} == 1) {
+			$active = $$ws_vector[$i]->{"name"};
+			$act_output = $$ws_vector[$i]->{"output"};
+		} else {
+			$inactive = $$ws_vector[$i]->{"name"};
+			$inact_output = $$ws_vector[$i]->{"output"};
+		}
+	}
+}
+
+#
+# Set the i3-msg data
+#
+@args1 = ("/usr/bin/i3-msg", "workspace $inactive; move workspace to output $act_output");
+@args2 = ("/usr/bin/i3-msg", "workspace $active; move workspace to output $inact_output");
+@args3 = ("/usr/bin/i3-msg", "focus output $work_screen");
+
+#
+# system calls. Do not make 2nd call if 1st fails
+#
+if (system(@args1) == 0) {
+	system(@args2) == 0
+		or die "system @args2 failed: $?";
+	} else {
+		die "system @args1 failed: $?";
+	}
+system(@args3) == 0
+	or die "system @args3 failed: $?";

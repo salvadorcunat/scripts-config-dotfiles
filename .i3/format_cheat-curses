@@ -1,0 +1,182 @@
+#!/bin/bash
+#
+# A curses front-end for format_cheat
+# The script can be called with or without parameters.
+# If no parameter, simply will run some dialog screens to edit or apply
+# changes on notes files.
+# It can be called with -e/--edit and/or -r/--run flags being their needed
+# parameters vim, mutt or tests. An example:
+#	format_cheat-curses -e tests -r tests
+#			or
+#	format_cheat-curses -e tests
+# The first will launch the edition dialog of tests_notes.txt and, when
+# finished will go directly to apply the changes.
+# The second form launch the edition dialog and when finished, will get
+# back to the main menu.
+#
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+DIALOG_OK=0					#
+DIALOG_CANCEL=1					#
+DIALOG_ESC=255					#
+
+SIG_NONE=0					#
+SIG_HUP=1					#
+SIG_INT=2					# System signals for trap
+SIG_QUIT=3					#
+SIG_KILL=9					#
+SIG_TERM=15
+
+_backtitle="Dialog based front end for format_cheat"
+_menu_list="edit:Edit a notes file:run:Update conky config file:quit:Exit Scriipt"
+_dlg_output=
+tempfile=/tmp/tmp_dialog_$$
+
+trap 'rm -f $tempfile' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM" "$SIG_KILL"
+
+. "$HOME"/sbin/script-funcs.sh
+
+# fselect_dlg max_term_height max_term_width text_string dialog_options(just
+# one)
+fselect_dlg()
+{
+	local _options=
+	[[ ! -z $4 ]] && _options+=$4
+	dialog --clear $_options --backtitle "$_backtitle" \
+		--fselect "$3" $(( (($1*2))/3 )) $(( (($2*2))/3 )) \
+		2> $tempfile
+	return $?
+}
+
+# edit_dlg file dialog_options(just one)
+edit_dlg()
+{
+	local _options=
+	[[ ! -z $2 ]] && _options+=$2
+	dialog --clear $_options --backtitle "$_backtitle" \
+		--editbox "$1" 0 0 \
+		2> $tempfile
+	return $?
+}
+
+# confirm_dlg command2run dialog_options(just one)
+confirm_dlg()
+{
+	local _options=
+	[[ ! -z $2 ]] && _options+=$2
+	dialog --clear $_options --backtitle "$_backtitle" \
+		--yesno "You are going to run:\n     $1\nPlease confirm." 0 0
+	return $?
+}
+
+# Do some stuff if received some return codes.
+# This function has to be changed on every script where it is used, to fit
+# script particular needs.
+# parameters:	1- return code to test
+# output:	depending on readed input code
+# returns:	the same return code received as parameter
+#
+check_rc()
+{
+	case $1 in
+		$DIALOG_CANCEL)	abort_dlg "Cancel pressed. Returning to previous menu"
+				return $DIALOG_CANCEL
+				;;
+		$DIALOG_ESC)	clear
+				echo "User aborted. Bye bye."
+				exit $SIG_QUIT
+				;;
+		*)		return "$1"
+				;;
+	esac
+}
+
+#
+# Main script
+#
+get_term_size _H _W
+
+# Read command line parameters
+#
+TEMP="$(getopt -o 'e:r:' --long 'edit:,run:' -n " -- ${0##*/}" -- "$@")"
+(( $? != 0 )) && exit 1
+eval set -- "$TEMP"
+unset TEMP
+
+declare -a _dlg_opts
+# Endless loop
+#
+while : ; do
+	# if called without params or coming from inside loop present a
+	# selection menu
+	if (( $# == 0 )) || [ "$1" == "--" ]; then
+		menu_dlg "$_menu_list" _dlg_output _dlg_opts "Select an option:"
+		check_rc $?
+		(( $? == DIALOG_CANCEL )) && exit 0
+		case $_dlg_output in
+			edit)	fselect_dlg "$_H" "$_W" "$HOME/.i3/"
+				check_rc $?
+				(( $? == DIALOG_CANCEL )) && continue
+				_file="$(cat $tempfile)"
+				edit_dlg "$_file"
+				check_rc $?
+				(( $? == DIALOG_CANCEL )) && continue
+				dialog --clear --backtitle "$_backtitle" \
+					--prgbox "diff $_file $tempfile" $((_H / 2)) $((_W / 2))
+				confirm_dlg "mv -f $tempfile $_file\nThis will override $_file"
+				check_rc $?
+				(( $? == DIALOG_OK )) && mv -f "$tempfile" "$_file"
+				continue
+				;;
+			run)	fselect_dlg "$_H" "$_W" "$HOME/.i3/conky_"
+				check_rc $?
+				(( $? == DIALOG_CANCEL )) && continue
+				# extract the meaning part of the file name
+				_file="$(cat $tempfile)"
+				_file=${_file#*_}; _file=${_file%_*}
+				confirm_dlg "format_cheat $_file\nThis will override $(cat $tempfile)."
+				check_rc $?
+				(( $? == DIALOG_OK )) && format_cheat "$_file"
+				shift 2
+				;;
+			quit)	report_msg "${0##*/}" "Ended. Bye bye."
+				exit 0
+				;;
+			*)	report_msg "${0##*/}" "Selection menu returned $_dlg_output. Aborting"
+				exit 1 ;;
+		esac
+		#exit 0
+	# if called with params, run them, and get back to the loop; now
+	# $# should be 0 so will achieve previous condition
+	else
+		while true; do
+			case $1 in
+				-e|--edit)	_file="$HOME/.i3/$2_notes.txt"
+						shift 2
+						edit_dlg "$_file"
+						check_rc $?
+						(( $? == DIALOG_CANCEL )) && continue
+						dialog --clear --backtitle "$_backtitle" \
+							--prgbox "diff $_file $tempfile" $((_H / 2)) $((_W / 2))
+						confirm_dlg "mv -f $tempfile $_file\nThis will override $_file."
+						check_rc $?
+						(( $? == DIALOG_OK )) && mv -f "$tempfile" "$_file"
+						continue
+						;;
+				-r|--run)	confirm_dlg "format_cheat $2\nThis will override conky_$2_cheat.conf."
+						check_rc $?
+						(( $? == DIALOG_OK )) && format_cheat "$2"
+						shift 2
+						;;
+				"--")		shift
+						break
+						;;
+				*)		report_msg "${0##*/}" "ERROR: Wrong parameter $1. Aborting."
+						exit 1
+						;;
+			esac
+		done
+	fi
+done

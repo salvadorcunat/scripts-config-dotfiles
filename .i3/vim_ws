@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# Creates an i3-wm workspace, launching vim in a terminal and a conky instance
+# nearby, containing vim useful commands an key shortcuts
+#
+# Requires conky, termite and libnotify-bin (last two may be changed to
+# different preferences changing this script)
+#
+# Uses a config file for conky, containing vim's commands and shortcuts and
+# formatting conky output, ~/.i3/conky_vim_cheat.conf. Change this file to your
+# preferences and system settings. Personally, I edit this file over the time
+# to remove memorized commands or shortcuts and add new ones. Keep in mind
+# that screen space is limited and reducing the font size is also limited.
+#
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+I3MSG=/usr/bin/i3-msg
+TRMNL=$HOME/.i3/termite_wrap	# adjust to your preferred
+CONKY=/usr/bin/conky
+NOTIFY=/usr/bin/notify-send
+SLEEP=/bin/sleep		# GNU sleep permits float numbers
+TEMPFILE=/tmp/vim_ws_tmp.$$
+RC=0
+COUNT=0
+
+trap 'rm -f $TEMPFILE' 0	# Remove tempfile on good exit
+
+$I3MSG "append_layout /home/boret/.i3/vim_ws.json"
+# Display an error warning and the tempfile. Do not remove
+# tempfile on error for forencsics tasks
+function notify_error()
+{
+	RC=64
+	$NOTIFY -u critical "Ha fallado $1" "Return code = $RC\n$(cat "$2")"
+}
+
+# Launch vim in a terminal and admit file names, abort on error
+$TRMNL -t "Terminal" -e "vim $*" >>$TEMPFILE 2>&1 &
+$SLEEP 1.00
+TERMPROC=$(pgrep -n vim)
+if [[ -z $TERMPROC ]]; then
+	notify_error "$TRMNL" "$TEMPFILE"
+	exit $RC
+fi
+
+# Launch a conky item with a vim commands cheat sheet, abort on error
+$CONKY -DD -c "$HOME"/.i3/conky_vim_cheat.conf >>$TEMPFILE 2>&1 &
+$SLEEP 0.50
+CONKYPROC=$(pgrep -n -f vim_cheat)
+if [[ -z $CONKYPROC ]]; then
+	notify_error $CONKY $TEMPFILE
+	exit $RC
+fi
+
+# For any reason, compton fails to get newer instances of conky, even while
+# running in daemon mode. We are forced to reload i3 to get the desired efect
+# in conky cheat sheet: transparent, no blurr, no focus ...
+#$I3MSG -t command 'restart'
+sleep 1 && "$HOME"/.i3/compton_wrap -f
+
+# Keep the script waiting until vim is closed
+while [ -d "/proc/$TERMPROC" ]; do
+	sleep 1
+	(( COUNT++ ))
+done
+
+# Kill conky and exit
+kill -9 "$CONKYPROC"
+exit $RC

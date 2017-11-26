@@ -1,0 +1,177 @@
+#!/bin/bash
+
+DIALOG_OK=0					#
+DIALOG_CANCEL=1					#
+DIALOG_ESC=255					#
+
+SIG_NONE=0					#
+SIG_HUP=1					#
+SIG_INT=2					# System signals for trap
+SIG_QUIT=3					#
+SIG_KILL=9					#
+SIG_TERM=15
+
+tempfile=/tmp/wp_tmp_$$
+_H=0						# Terminal height
+_W=0						# Terminal width
+_new_wp_dir=$HOME/Descargas			# Default dir for wallpaper adding
+_wp_repo=$HOME/.i3/wallpapers.txt		# wallpapers list file, edit if needed
+_backtitle="Wallpaper management. Dialog based script by boret"
+
+# for debuging
+#trap "set +x; sleep 1; set -x" DEBUG
+
+trap 'rm -f $tempfile; reset' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM" "$SIG_KILL"
+
+. "$HOME"/sbin/script-funcs.sh
+
+# Do some stuff if received some return codes.
+# This function has to be changed on every script where it is used, to fit
+# script particular needs.
+# parameters:	1- return code to test
+# output:	depending on readed input code
+# returns:	the same return code received as parameter
+#
+check_rc()
+{
+	case $1 in
+		$DIALOG_CANCEL)	abort_dlg "Cancel pressed. Returning to previous menu"
+				return $DIALOG_CANCEL
+				;;
+		$DIALOG_ESC)	clear
+				echo "User aborted. Bye bye."
+				exit $SIG_QUIT
+				;;
+		$SIG_TERM)	abort_dlg "$_RC_ERROR"
+				return $SIG_TERM
+				;;
+		*)		return "$1"
+				;;
+	esac
+}
+
+# "add a wallpaper" dialog
+# select a file and append it to the wallpapers repo
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+add_dlg()
+{
+	local _options="--clear"
+	local rc=0
+	local _file=
+	dialog $_options --backtitle "$_backtitle" \
+		--fselect "$_new_wp_dir" $((_H / 3)) $((_W - $((_W / 4)))) 2> $tempfile
+	# if cancel pressed, abort
+	check_rc $?
+	[[ $? -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	_file="$(cat "$tempfile")"
+	# confirmation dialog, last oportunity to get back
+	dialog $_options --backtitle "$_backtitle" \
+		--yesno "$_file is going to be added to wallpapers list.
+
+
+				Please confirm." $((_H / 2)) $((_W / 2))
+	rc=$?
+	check_rc $rc
+	[[ $? -eq $DIALOG_OK ]] && echo "$_file" >>"$_wp_repo"
+	return $rc
+}
+
+# "remove a wallpaper" dialog
+# select an entry from the wallpapers file list and remove it
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+rmv_dlg()
+{	local -a _dlg_opts=( --no-tags )
+	local rc=0
+	local _string=""
+	txt2menu_list "$_wp_repo" ":" _string || abort_dlg "Couldn't read $_wp_repo."
+	local IFS=":"
+	menu_dlg "$_string" _sel _dlg_opts "Select the file to remove from list"
+	# if cancel pressed, abort
+	check_rc $?
+	[[ $? -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	# confirmation dialog, last oportunity to get back
+	dialog ${_dlg_opts[@]} --backtitle "$_backtitle" \
+		--yesno "$(_string=${_string#*$_sel:}; _string=${_string%:$((_sel+1))*}; \
+		echo -n "$_string") is going to be removed from wallpapers list.
+
+
+				Please confirm." $((_H / 2)) $((_W / 2))
+	rc=$?
+	check_rc $rc
+	if [[ $? -eq $DIALOG_OK ]]; then
+		sed "$_sel"d <"$_wp_repo" >/tmp/tmplist_$$ || abort_dlg "Error, remove failed."
+		mv -f /tmp/tmplist_$$ "$_wp_repo" || abort_dlg "Error, file $_wp_repo couldn't be modified"
+	fi
+	return $rc
+}
+
+# 'select a wallpaper' dialog
+# select an entry from the wallpapers file list and set it as background
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+select_dlg()
+{
+	local -a _dlg_opts=( --no-tags )
+	local rc=0
+	local _string=""
+	txt2menu_list "$_wp_repo" ":" _string
+	local IFS=":"
+	menu_dlg "$_string" _sel _dlg_opts "Select the wallpaper to apply"
+	# if cancel pressed, abort
+	rc=$?
+	check_rc $rc
+	[[ $? -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	# no confirmation needed, report error if any
+	feh --bg-fill "$(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
+		abort_dlg "Error: feh failed.
+
+	$(cat $tempfile)"
+	return $rc
+}
+
+# Main script
+#
+_sel=
+get_term_size _H _W
+
+# sanity check
+#
+if [[ ! -s $_wp_repo ]] || [[ ! -r $_wp_repo ]] || [[ ! -w $_wp_repo ]]; then
+	abort_dlg "Sanity checks failed.\nDoublecheck $_wp_repo and its permissions"
+	exit 1
+fi
+
+# endless loop
+#
+declare -a _dlg_opts=( --no-tags )
+while : ; do
+	menu_dlg "1:Random wallpaper:2:Select a wallpaper:3:Add a wallpaper to the list:4:Remove a wallpaper from the list:5:Quit" _sel _dlg_opts "Select an option"
+	rc=$?
+	check_rc $rc
+	# on initial menu, cancel means quit
+	[[ $? -eq $DIALOG_CANCEL ]] && exit 0
+	case $_sel in
+		1)	if ! ~/.i3/fehbg_new; then
+				abort_dlg "fehbg_new failed.\nCheck $_wp_repo and its permissions"
+			fi
+			;;
+		2)	select_dlg
+			;;
+		3)	add_dlg
+			;;
+		4)	rmv_dlg
+			;;
+		5)	abort_dlg "Exiting.\nGood bye."
+			exit 0
+			;;
+		*)	;;
+	esac
+done

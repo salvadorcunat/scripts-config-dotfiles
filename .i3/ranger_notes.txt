@@ -1,0 +1,20 @@
+%Ranger Shortcuts
+*General
+Copy selected|yy
+Cut selected|dd
+Paste copied|pp
+Paste overwrite|po
+Select file|space
+Select all|v
+Visual select|V
+Undo select|u+previous
+*Tabs
+Open new tab|gn
+Close tab|gc
+Goto next/prev|gt/gT
+Goto tab-N|ALT+N
+*Other
+Create symlink|pL
+Open log window|W
+Open task window|w
+Open a shell in dir|S

@@ -1,0 +1,30 @@
+*Correo
+Correo nuevo|'m'
+Respoder|'r'
+Reenviar(1)|'<esc>e'
+Reenviar(2)|'b'
+Forward|'f'
+*Mensajes
+Siguiente n/leido|'<TAB>'
+Ant no leido|'<esc><TAB>'
+Anterior|'P'
+Marcar "nuevo"|'N'
+Marcar "importante"|'F'
+Desmarcar|'W'
+Borrar|'d'
+Editar|'e'
+*Hilos
+Próximo|'^N'
+Anterior|'^P'
+Marcar leido|'^R'
+Colapsar/expandir|'<esc>V'
+colps/expnd actual|'<esc>v'
+*Buscar
+En cuerpo|'<esc>b'
+regexp|'/'
+*Buzones
+Abrir RO|'<esc>c'
+Guardar cambios|'$'
+Buzones con nuevo|'.'
+Guardar mensaje|'C'
+Cambiar de buzón|'c'

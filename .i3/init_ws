@@ -1,0 +1,96 @@
+#!/bin/bash
+# To be called from inside i3-wm config file.
+# This is supossed to group all commands commonly run from i3 config file via
+# exec calls, as shell scripts are supossed more powerful and descriptive.
+#
+# Parameters	-w String with the name of the workspace to launch
+#		-l Preconfigured layout file if any. A .json file
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+I3MSG="$(which i3-msg)"
+I3CMD=					# command to launch with i3-msg
+WS=					# workspace to launch
+LAYOUT=					# preconfigured layout file
+declare -a COMMAND			# an array to store passed i3-msg commands
+
+. $HOME/sbin/script-funcs.sh
+
+# We want all messages sent to stderr which will commonly be
+# directed to .xsession-errors
+#
+exec 1>&2
+
+# Abort the script if i3-msg is not found
+#
+[[ -z $I3MSG ]] && \
+	report_msg "${0##*/}" "ERROR: i3-msg command not found. Check your system." && \
+	exit 1
+
+# Parse the command line. Abort on wrong options.
+# Note the begining of the error text, similar to report_msg.
+# Checking $? is a *must* as getopt throws 1 on failure (e.g. wrong
+# parameter) but we'll miss it if use "eval -- set $(getopt -o ..."
+# BTW *) should never be reached as -- comes first in the string
+# returned by getopt.
+TEMP="$(getopt -o 'w:l:c:i:' --long 'workspace,layout,command,i3-command:' -n " -- ${0##*/}" -- "$@")"
+[[ $? -ne 0 ]] && exit 1
+eval set -- "$TEMP"
+unset TEMP
+while true; do
+	case $1 in
+		"-w"|"workspace")	WS="workspace $2"
+					shift 2
+					continue
+					;;
+		"-l"|"layout")		LAYOUT="append_layout $2"
+					shift 2
+					continue
+					;;
+		"-c"|"command")		COMMAND+=( "$2" )
+					shift 2
+					continue
+					;;
+		"-i"|"i3-command")	COMMAND+=( "$I3MSG -t command $2" )
+					shift 2
+					continue
+					;;
+		"--")			shift
+					break
+					;;
+		*)			report_msg "${0##*/}" "ERROR: Wrong parameter $1. Aborting."
+					exit 1
+	esac
+done
+
+# Build i3-msg command
+#
+if [[ ! -z $WS ]]; then
+	[[ -z $I3CMD ]] && I3CMD="$WS" || I3CMD="$I3CMD; $WS"
+fi
+
+if [[ ! -z $LAYOUT ]]; then
+	[[ -z $I3CMD ]] && I3CMD="$LAYOUT" || I3CMD="$I3CMD; $LAYOUT"
+fi
+
+# Call i3-msg with prebuilt command line
+#
+if "$I3MSG" "$I3CMD"; then
+	report_msg "${0##*/}" "Launched $I3MSG $I3CMD"
+else
+	report_msg "${0##*/}" "ERROR: Failed to launch $I3MSG $I3CMD"
+	exit 1
+fi
+
+# Call commands one by one
+#
+i=0
+while (( i < ${#COMMAND[@]} )); do
+	if (${COMMAND[$i]} &); then
+		report_msg "${0##*/}" "Launched command: ${COMMAND[$i]}"
+	else
+		report_msg "${0##*/}" "Failed to launch ${COMMAND[$i]}"
+	fi
+	(( i++ ))
+done

@@ -1,0 +1,51 @@
+#!/bin/bash
+# Tiny bash script to launch pseudo-aleatory color schemes termite terminals
+#
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+_TERMITE="$(which termite)"
+_configdir="$HOME"/.config
+_termitedir="$_configdir"/termite
+declare -a _conf_files
+declare -a _COMMANDLINE
+
+# get *.config files in a directory and put them in an array
+# input:	1.- directory
+#		2.- string to be parsed
+#		3.- var name for the array in the main script
+# output:	none, fills a variable
+# returns:	0 on success, 1 on failure
+#
+get_files()
+{
+	declare -n _files=${3:-_FILES}
+	local i=0
+	for _name in $1/$2
+		do
+			_files[$i]=$_name
+			(( i++ ))
+		done
+}
+
+# main script
+#
+get_files "$_termitedir" "*.config" _conf_files
+
+# generate pseudo-random num lower than _conf_files size
+RANDOM=$(head -1 /dev/urandom | od -N 1 | awk '{ print $2 }')
+_rand=$(( RANDOM %= ${#_conf_files[@]} ))
+
+# check for file readability and launch termite or notify an error
+if [ -r "${_conf_files[$_rand]}" ]; then
+	_COMMANDLINE=( "-c" "${_conf_files[$_rand]}" )
+else
+	notify-send -u critical "termite_wrap failed" "${_conf_files[$_rand]}\nDo not exist or is not user readable. _rand index is $_rand (it should be in range 0 - $(( ${#_conf_files[@]}-1 )))"
+	exit 1
+fi
+# add the rest of the command line options
+_COMMANDLINE+=( "$@" )
+
+# launch the command
+"$_TERMITE" "${_COMMANDLINE[@]}"

@@ -1,0 +1,30 @@
+%Cmus cheat
+*Player
+Next|b
+Pause|c
+Play|x
+Previous|z
+Next|v
+*Modes
+toggle aaa|m
+toggle continue|C
+toogle play_library|M
+toggle play_sorted|o
+toggle repeat|r
+toggle repeat_current|^R
+toggle shuffle|s
+*Volume
+Vol up|] [ + =
+Vol down|} { -
+
+*Search
+Views 1-4|/ <words>
+|??<words> artist/album
+*Copying tracks
+copy to library (1-2)|a
+copy to playlist (3)|y
+append to queue (4)|e
+prepend to queue (4)|E
+*Removing tracks
+Remove (1-4)|D
+Delete file (5-6)|D

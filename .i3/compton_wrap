@@ -1,0 +1,43 @@
+#!/bin/bash
+# To run from i3-wm config file
+# Find if an instance of compton is running and launch a new instance if it's not.
+# Use parameter -f or --force to re-launch compton
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+. $HOME/sbin/script-funcs.sh
+
+COMPTON="$(which compton)"
+COMPTONPROC=$(pgrep -l compton |grep -v wrap); COMPTONPROC=${COMPTONPROC%\ *}
+
+# Parse the command line. Abort on wrong options.
+# Note the begining of the error text, similar to report_msg.
+# Checking $? is a *must* as getopt throws 1 on failure (e.g. wrong
+# parameter) but we'll miss it if use "eval -- set $(getopt -o ..."
+# BTW *) should never be reached as -- comes first in the string
+# returned by getopt.
+TEMP="$(getopt -o 'f' --long 'force' -n " -- ${0##*/}" -- "$@")"
+[[ $? -ne 0 ]] && exit 1
+eval set -- "$TEMP"
+unset TEMP
+while true; do
+	case $1 in
+		-f| --force)	[[ ! -z $COMPTONPROC ]] && \
+					report_msg "${0##*/}" "killing compton, PID $COMPTONPROC" && \
+					kill -9 "$COMPTONPROC" && \
+					COMPTONPROC=
+				break
+				;;
+		"--")		shift
+				break
+				;;
+		*)		report_msg "${0##*/}" "ERROR: Wrong parameter $1. Aborting."
+				exit 1
+				;;
+	esac
+done
+
+[[ -z $COMPTONPROC ]] && \
+	$COMPTON -b --config "$HOME"/.config/compton/compton.conf && \
+	report_msg "${0##*/}" "Running compton" 

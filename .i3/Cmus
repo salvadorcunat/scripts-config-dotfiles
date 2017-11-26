@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Launches an xterm  running cmus
+# Intended to be used on i3wm environment
+# Author boret
+# Returns: 0 on success, 1 on failure
+# Arguments: none
+#
+
+I3MSG=/usr/bin/i3-msg
+NOTIFY=/usr/bin/notify-send
+TMPFILE=/tmp/tmp_$$
+CAT=/bin/cat
+
+RC=0	# Return code
+
+#if ! $I3MSG 'exec --no-startup-id "/usr/bin/terminator -b -T Cmus -p floating -x /usr/bin/cmus"' 2> $TMPFILE
+if ! $I3MSG 'exec --no-startup-id "/usr/bin/cool-retro-term -p boret -e /usr/bin/cmus"' 2> $TMPFILE
+then
+	RC=1
+	$NOTIFY -u critical "$0 failed" "$($CAT $TMPFILE)"
+fi
+rm $TMPFILE
+exit $RC
