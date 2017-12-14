@@ -1,0 +1,8 @@
+#[HEAD]-- ExifTool $exifToolVersion ------------
+#[BODY]
+Archivo: $FileName
+Fecha: $DateTimeOriginal
+f/$Aperture, $ShutterSpeed, ISO $EXIF:ISO
+Flash: $Flash - Temp: $CameraTemperature
+Camara: $Model
+#[TAIL]----------------------------------

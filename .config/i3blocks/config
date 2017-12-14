@@ -1,0 +1,273 @@
+# i3blocks config file
+#
+# Please see man i3blocks for a complete reference!
+# The man page is also hosted at http://vivien.github.io/i3blocks
+#
+# List of valid properties:
+#
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+# Global properties
+#
+# The top properties below are applied to every block, but can be overridden.
+# Each block command defaults to the script name to avoid boilerplate.
+command=/home/boret/sbin/i3blocks/$BLOCK_NAME
+# full_text=
+full_text=
+color=#747c9d
+align=center
+separator_block_width=5
+separator=false
+
+# Volume indicator
+#
+# The first parameter sets the step (and units to display)
+# The second parameter overrides the mixer selection
+# See the script for details.
+[volume]
+full_text=
+#label=VOL
+label=♪
+min_width=VOL MUTE
+instance=Master
+#instance=PCM
+interval=once
+signal=10
+color=#8c9410
+
+[separator]
+color=#8c9410
+
+# Memory usage
+#
+# The type defaults to "mem" if the instance is not specified.
+[memory]
+label=MEM
+color=#109416
+interval=30
+full_text=
+
+[memory]
+label=SWAP
+instance=swap
+color=#489410
+interval=30
+full_text=
+
+[separator]
+color=#489410
+
+# Disk usage
+#
+# The directory defaults to $HOME if the instance is not specified.
+# The script may be called with a optional argument to set the alert
+# (defaults to 10 for 10%).
+[disk]
+label=
+interval=30
+color=#1025e7
+full_text=
+
+[disk]
+label=
+instance=/media/DATOS
+interval=60
+color=#107ae7
+full_text=
+
+[disk]
+label=
+interval=30
+instance=/dev/sda8
+interval=60
+color=#10dae7
+full_text=
+
+[separator]
+color=#10dae7
+
+# Superuser manually mounted media
+#
+[removable-disk]
+label=USBDisk1
+instance=/mnt/usbdisk1
+interval=15
+color=
+full_text=
+
+[removable-disk]
+label=USBDisk2
+instance=/mnt/usbdisk2
+interval=15
+color=
+full_text=
+
+# User mounted media usually by udiskie
+#
+#[removable-disk]
+#label=SDB1
+#instance=/dev/sdb1
+#interval=15
+#color=#107ae7
+#full_text=
+
+#[removable-disk]
+#label=SDC1
+#instance=/dev/sdc1
+#interval=15
+#color=#10dae7
+#full_text=
+
+#[separator]
+#color=#10dae7
+
+# Boret script
+[removable-media]
+interval=15
+full_text=
+
+[separator]
+color=#107ae7
+
+# Network interface monitoring
+#
+# If the instance is not specified, use the interface used for default route.
+# The address can be forced to IPv4 or IPv6 with -4 or -6 switches.
+[iface]
+#instance=wlan0
+color=#375389
+interval=10
+separator=false
+min_width=XXX.XXX.XXX.XXX
+full_text=
+
+[wifi]
+#instance=wlp3s0
+label=
+interval=10
+separator=false
+min_width=A XXXXXXXXXX 99%
+full_text=
+
+[bandwidth]
+#instance=eth0
+interval=5
+min_width=A 999K A 999K
+full_text=
+color=#375389
+
+[separator]
+color=#375389
+
+[bltth]
+label=  
+interval=10
+full_text=
+separator=false
+#color=#375389
+
+[separator]
+color=#375389
+
+# CPU usage
+#
+# The script may be called with -w and -c switches to specify thresholds,
+# see the script for details.
+#[cpu_usage]
+#label=  
+#interval=10
+#min_width=CPU: 100.00%
+#full_text=
+#color=#375389
+
+[cpu_usage_boret]
+label=  
+min_width=AA 99.99%
+interval=10
+
+[separator]
+color=#375389
+
+
+# Battery indicator
+#
+# The battery instance defaults to 0.
+[battery]
+full_text=
+min_width=100% AA (00:00)
+#instance=1
+interval=30
+
+[separator]
+color=#375389
+
+# Date Time
+#
+[time]
+command=date '+%Y-%m-%d %H:%M:%S'
+interval=5
+color=#375389
+full_text=
+
+[separator]
+color=#375389
+# Generic media player support
+#
+# This displays "ARTIST - SONG" if a music is playing.
+# Supported players are: spotify, vlc, audacious, xmms2, mplayer, and others.
+#[mediaplayer]
+#instance=cmus
+#interval=5
+#signal=10
+
+# OpenVPN support
+#
+# Support multiple VPN, with colors.
+#[openvpn]
+#interval=20
+
+# Temperature
+#
+# Support multiple chips, though lm-sensors.
+# The script may be called with -w and -c switches to specify thresholds,
+# see the script for details.
+#[temperature]
+#label=TEMP
+#interval=10
+
+# Key indicators
+#
+# Add the following bindings to i3 config file:
+#
+# bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+# bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
+
+[keyindicator]
+instance=CAPS
+interval=once
+signal=11
+separator=false
+full_text=
+
+[keyindicator]
+instance=NUM
+interval=once
+signal=11
+separator=false
+full_text=
+
+[separator]
+color=#222222

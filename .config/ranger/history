@@ -1,0 +1,50 @@
+cd ..
+cd  CHIP
+cd  .i3
+mkdir ibiza
+! tig --all
+shell tig --all
+shell git checkout master
+cd .config/ranger
+cd src
+cd  /media/boret
+mkdir battlestar_Galactica
+cd  /media
+mkdir T1
+mkdir T2
+cd  
+cd  .aMule
+cd  /mnt/boret
+cd /media/boret
+rename
+rename 
+cd  ../.i3
+rename format_cheat
+cd  ../sbin
+filter *.txt
+filter .txt
+cd  .vim
+cd  tests
+cd ~/sbin
+rename amc-progress
+rename amc-search
+help
+shell chmod a+x amc-*
+cd  src/crt
+cd /usr/share
+cd  doc
+cd .ssh
+cd /usr/local
+cd  src
+cd 
+cd .i3
+cd /etc
+search etc
+cd  /etc
+cd  .config
+cd  src/
+
+cd  ~/.i3
+cd .git
+cd  ..
+delete
