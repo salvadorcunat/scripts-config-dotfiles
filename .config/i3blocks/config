@@ -26,7 +26,7 @@
 # Each block command defaults to the script name to avoid boilerplate.
 command=/home/boret/sbin/i3blocks/$BLOCK_NAME
 # full_text=
-full_text=
+full_text=
 color=#747c9d
 align=center
 separator_block_width=5

@@ -304,8 +304,8 @@ bar {
 	strip_workspace_numbers yes
 #	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
 #	font pango:URW Gothic L 8
-	font pango:PowerlineSymbols 8
-#	font pango:FontAwesome 8
+#	font pango:PowerlineSymbols 8
+	font pango:FontAwesome 8
 }
 
 #
