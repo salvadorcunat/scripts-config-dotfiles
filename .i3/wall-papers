@@ -67,6 +67,8 @@ add_dlg()
 	check_rc $?
 	[[ $? -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
 	_file="$(cat "$tempfile")"
+	# save current path for next addition
+	_new_wp_dir="${_file%\/*}"
 	# confirmation dialog, last oportunity to get back
 	dialog $_options --backtitle "$_backtitle" \
 		--yesno "$_file is going to be added to wallpapers list.
