@@ -323,13 +323,12 @@ exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 #
 # Run compton_wrap once conky cheats have been called
 #
-exec --no-startup-id "count=0; \
-			while ! pgrep conky >/dev/null 2>&1; \
+exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
 			do \
 				echo ' -- i3 launch --> waiting for conky'; \
 				sleep 1; \
-				(( count++ )); \
-				if (( count > 5 )); \
+				count=$count+1; \
+				if [ $count -gt 5 ]; \
 					then echo ' -- i3 launch --> conky seems to have failed'; \
 					break; \
 				fi; \

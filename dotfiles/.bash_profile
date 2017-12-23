@@ -23,9 +23,12 @@ alias tig='tig --all'
 alias grep='grep --color'
 alias gtypist='gtypist esp.typ'
 
-/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
-/usr/bin/udiskie -s &
-
-
-source ~/.xsh
-
+# other stuff
+if [ ! -z "$DISPLAY" ]; then
+	source ~/.xsh
+	/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+	/usr/bin/udiskie -s &
+else
+	/usr/bin/udiskie -q &
+	fortune |cowsay -f r2d2
+fi
