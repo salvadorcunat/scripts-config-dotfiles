@@ -11,28 +11,9 @@ _termitedir="$_configdir"/termite
 declare -a _conf_files
 declare -a _COMMANDLINE
 
-# get *.config files in a directory and put them in an array
-# input:	1.- directory
-#		2.- string to be parsed
-#		3.- var name for the array in the main script
-# output:	none, fills a variable
-# returns:	0 on success, 1 on failure
-#
-get_files()
-{
-	declare -n _files=${3:-_FILES}
-	local i=0
-	for _name in $1/$2
-		do
-			_files[$i]=$_name
-			(( i++ ))
-		done
-}
-
 # main script
 #
-get_files "$_termitedir" "*.config" _conf_files
-
+_conf_files=( $(ls "$_termitedir"/*.config) )
 # generate pseudo-random num lower than _conf_files size
 RANDOM=$(head -1 /dev/urandom | od -N 1 | awk '{ print $2 }')
 _rand=$(( RANDOM %= ${#_conf_files[@]} ))
@@ -48,4 +29,4 @@ fi
 _COMMANDLINE+=( "$@" )
 
 # launch the command
-"$_TERMITE" "${_COMMANDLINE[@]}"
+"$_TERMITE" "${_COMMANDLINE[@]}" &

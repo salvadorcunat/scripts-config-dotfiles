@@ -1,4 +1,3 @@
-cd ..
 cd  CHIP
 cd  .i3
 mkdir ibiza
@@ -9,7 +8,6 @@ cd .config/ranger
 cd src
 cd  /media/boret
 mkdir battlestar_Galactica
-cd  /media
 mkdir T1
 mkdir T2
 cd  
@@ -36,15 +34,17 @@ cd  doc
 cd .ssh
 cd /usr/local
 cd  src
-cd 
 cd .i3
 cd /etc
 search etc
 cd  /etc
 cd  .config
 cd  src/
-
 cd  ~/.i3
 cd .git
 cd  ..
 delete
+
+cd  src/subsurface
+cd  /media
+cd 
