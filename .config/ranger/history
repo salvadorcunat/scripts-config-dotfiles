@@ -43,8 +43,8 @@ cd  src/
 cd  ~/.i3
 cd .git
 cd  ..
-delete
 
 cd  src/subsurface
 cd  /media
 cd 
+delete

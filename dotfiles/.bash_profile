@@ -32,3 +32,9 @@ else
 	/usr/bin/udiskie -q &
 	fortune |cowsay -f r2d2
 fi
+
+# set history size
+export HISTSIZE=10000
+
+# set personal libraries
+export LD_LIBRARY_PATH="$HOME"/src/install-root/lib:"$LD_LIBRARY_PATH"
