@@ -55,3 +55,6 @@ proml
 
 source ~/.xsh
 
+
+# added by travis gem
+[ -f /home/boret/.travis/travis.sh ] && source /home/boret/.travis/travis.sh

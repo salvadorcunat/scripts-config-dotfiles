@@ -333,5 +333,5 @@ exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
 					break; \
 				fi; \
 			done; \
-			sleep 2; \
+			sleep 3; \
 			/home/boret/.i3/compton_wrap"

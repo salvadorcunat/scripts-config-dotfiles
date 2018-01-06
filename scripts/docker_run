@@ -21,8 +21,8 @@ declare -a IMG_TAG=( $(docker images |awk '{printf "%s ", $2}') )
 declare -a IMG_ID=( $(docker images |awk '{printf "%s ", $3}') )
 _backtitle="dialog based Docker images launcher by boret"
 VOLUME=""
+CON_NAME=""
 COMMAND="docker run"
-
 tempfile=/tmp/test$$
 
 #############################################################################
@@ -57,19 +57,30 @@ get_result()
 
 volume_form()
 {
-$DIALOG --clear  --backtitle "$_backtitle" --title " Punto de montaje " \
-	--form 'Selecciona el punto de montaje en la imagen y el directorio local a montar' $((_H/2)) $((_W/2)) 3 \
+	$DIALOG --clear  --backtitle "$_backtitle" --title " Punto de montaje " \
+		--form 'Selecciona el punto de montaje en la imagen y el directorio local a montar' $((_H/2)) $((_W/2)) 3 \
 "Punto de montaje: "	1 1	/mnt/data	1 21 250 0 \
 "Carpeta local: "	2 1	/home/boret/src	2 21 250 0 \
 "Opciones de montaje:"	3 1	rw		3 21 250 0 \
 2> $tempfile
 
-get_result $?
+	get_result $?
 
-VOLUME="-v $(cut -d'
+	VOLUME="-v $(cut -d'
 ' -f2 $tempfile):$(cut -d'
 ' -f1 $tempfile):$(cut -d'
 ' -f3 $tempfile)"
+}
+
+name_form()
+{
+	$DIALOG --clear --backtitle "$_backtitle" --title " Nombre del contenedor " \
+		--inputbox 'Selecciona un nombre para el contenedor' $((_H/2)) $((_W/2)) "mi_contenedor" \
+		2> $tempfile
+
+	get_result $?
+
+	CON_NAME="$(cat $tempfile)"
 }
 
 # Load functions library
@@ -92,6 +103,7 @@ $DIALOG --clear --backtitle "$_backtitle" --title " Opciones " \
 	--checklist "" $((_H/2)) $((_W/2)) 8 \
 	"privileged" " " off \
 	"CAP_SYS_ADMIN" " " off \
+	"name"	"Give a name to the volume" off \
 	"v" "Mount a volume" off \
 	"i" "Interactive" on \
 	"t" "Tty" on 2> $tempfile
@@ -106,6 +118,9 @@ while [ $j -ne ${#OPTIONS[*]} ]; do
 		privileged)	COMMAND="$COMMAND --privileged"
 				;;
 		CAP_SYS_ADMIN)	COMMAND="$COMMAND -e CAP_SYS_ADMIN"
+				;;
+		name)		name_form
+				COMMAND="$COMMAND --name $CON_NAME"
 				;;
 		i)		COMMAND="$COMMAND -i"
 				;;
