@@ -148,10 +148,10 @@ menu_dlg()
 #
 abort_dlg()
 {
-	local _options="--clear"
-	[[ ! -z $2 ]] && _options+=" $2"
+	local _options=( --clear )
+	[[ ! -z $2 ]] && _options+=( $2 )
 
-	dialog $_options --backtitle "$_backtitle" \
+	dialog ${_options[@]} --backtitle "$_backtitle" \
 		--msgbox "${1:-Aborting}" $((_H / 2)) $((_W / 2))
 }
 
