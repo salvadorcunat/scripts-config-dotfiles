@@ -181,7 +181,7 @@ Por defecto se ejecuta un shell de bash." $((_H/2)) $((_W/2)) "/bin/bash" 2> $te
 
 	COMMAND="$COMMAND $(cat $tempfile)"
 	echo "Result for running container $CON_NAME" >>"$INPUT_F"
-	$COMMAND >>"$INPUT_F" 2>&1
+	$COMMAND & >>"$INPUT_F" 2>&1
 	echo "---------------------------------------------------" >>"$INPUT_F"
 	unset OPTIONS COMMAND VOLUME CON_NAME
 	(( i++ ))
