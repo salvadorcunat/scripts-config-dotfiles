@@ -1,0 +1,338 @@
+#
+# Config file for i3 when run in plasma5
+#
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference !
+
+set $mod Mod4
+set $_term /usr/bin/terminator
+set $alt_term $HOME/.i3/termite_wrap
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+#font pango:monospace 8
+#font pango:DejaVu Sans Mono 8
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+font pango:DejaVu Sans Mono 8
+
+# Before i3 v4.8, we used to recommend this one as the default:
+#font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec /usr/bin/konsole
+bindsym $mod+Shift+Return exec $_term -b -p boret
+bindsym $mod+Return exec $alt_term -t Terminal
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# start dmenu (a program launcher)
+# bindsym $mod+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+#bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
+bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -modi 'run,window,ssh' -show run"
+
+# start a xfce4 panel if needed or close it
+#bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"
+#bindsym $mod+Shift+p exec --no-startup-id "/usr/bin/xfce4-panel -q"
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+ntilde focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+ntilde move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# Necesary for i3blocks keyindicator
+bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+1 workspace 1: Init
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1: Init
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# swap visible workspaces between 2 monitors
+bindsym $mod+x exec "/home/boret/sbin/swap_wss eDP-1"
+
+# activate secondary monitor after plugging
+bindsym $mod+Shift+x exec "/home/boret/sbin/multi_screen"
+
+# move focused window to scratchpad
+bindsym $mod+Shift+minus move scratchpad
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# compton opacity control.
+# increments/reduces focused window opacity
+bindsym $mod+o exec "/usr/bin/compton-trans -c +5"
+bindsym $mod+Shift+o exec "/usr/bin/compton-trans -c -- -5"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym ntilde resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+#
+# Set workspaces for multimonitor
+#
+workspace 1 output eDP-1
+workspace 2 output eDP-1
+workspace 3 output eDP-1
+workspace 4 output eDP-1
+workspace 5 output eDP-1
+workspace 6 output eDP-1
+workspace 7 output HDMI-1
+workspace 8 output HDMI-1
+workspace 9 output HDMI-1
+workspace 10 output HDMI-1
+
+#
+# Run dunst if we are running i3 without a desktop manager
+#
+exec --no-startup-id "$HOME/.i3/dunst_wrap"
+
+#
+# Set second monitor, first
+#
+#exec --no-startup-id xrandr --output HDMI-1 --rotate normal --right-of eDP-1 --mode 1920x1080
+exec --no-startup-id "/home/boret/sbin/multi_screen"
+
+#
+# Window border
+#
+for_window [class="^Xfce4-terminal$"] border none
+for_window [class="^Terminator$"] border none
+for_window [class="^cool-retro-term$"] border none
+for_window [class="^Termite$"] border pixel 1
+for_window [class="^dolphin$"] border pixel 1
+#new_float pixel 1
+
+#
+# Gaps
+#
+#smart_gaps on
+smart_borders no_gaps
+gaps inner 5
+gaps outer 5
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+#
+# Cosas especiales en algunas ventanas
+#
+for_window [class="^Subsurface$" instance="^subsurface-mobile$"] floating enabled
+for_window [class="^Subsurface$"] floating enabled;border normal;floating_minimum_size 1000x650;floating_maximum_size 1092x720
+for_window [class="^feh$"] floating enabled
+for_window [class="^Evince$"] floating enabled
+for_window [title="^Cmus$"] floating enabled
+for_window [title="^Alsamixer$"] floating enabled
+for_window [title="^Wicd-curses$"] floating enabled
+for_window [title="^Test$"] floatig enabled
+for_window [title="^Mpstat$"] floating enabled
+for_window [class="^cool-retro-term$"] floating enable
+# for_window [title="mc"] floating enabled
+#for_window [class="^qterminal$"] floating enabled
+for_window [title="^Bluetoothctl$"] floating enabled
+
+# Avoid tiling popups, dropdown windows from plasma
+# for the first time, manually resize them, i3 will remember the setting for floating windows
+for_window [class="plasmashell"]    floating enable
+for_window [class="Plasma"]         floating enable; border none
+for_window [title="plasma-desktop"] floating enable; border none
+for_window [class="krunner"]        floating enable; border none
+for_window [class="Kmix"]           floating enable; border none
+for_window [class="Klipper"]        floating enable; border none
+for_window [class="Plasmoidviewer"] floating enable; border none
+no_focus [class="plasmashell"]
+no_focus [class="Conky"]
+
+# Plasma Integration
+# Try to kill the wallpaper set by Plasma (it takes up the entire workspace and hides everythiing)
+for_window [title="Escritorio — Plasma"] kill; floating enable; border none
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+	i3bar_command i3bar -t
+	status_command i3blocks -c "$HOME/.config/i3blocks/config-plasma"
+        tray_output primary
+	strip_workspace_numbers yes
+	font pango:FontAwesome 8
+}
+#
+# Launch initial workspace
+# Wait until plasmashell is opened (actually, advanced in opening) before launching
+# the workspace.
+#
+exec --no-startup-id "count=0; \
+			while ! pgrep lxqt-runner >/dev/null; \
+			do \
+				echo ' -- i3 launch --> waiting for lxqt to set up'; \
+				sleep 1; \
+				(( count++ )); \
+				if (( count > 20 )); \
+					then echo ' -- i3 launch --> lxqt seems to have failed'; \
+					break; \
+				fi; \
+			done; \
+	     /home/boret/.i3/init_ws -w '1: Init' \
+	     -l '/home/boret/.i3/testing_plasma.json' \
+	     -c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
+	     -c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \
+	     -c '/home/boret/.i3/fehbg_new' \
+	     -c '/usr/bin/dolphin' \
+	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
+#
+# Run compton_wrap once conky cheats have been called
+#
+exec --no-startup-id "count=0; \
+			while ! pgrep conky >/dev/null 2>&1; \
+			do \
+				echo ' -- i3 launch --> waiting for conky'; \
+				sleep 1; \
+				(( count++ )); \
+				if (( count > 5 )); \
+					then echo ' -- i3 launch --> conky seems to have failed'; \
+					break; \
+				fi; \
+			done; \
+			sleep 2; \
+			/home/boret/.i3/compton_wrap"
