@@ -195,6 +195,11 @@ workspace 9 output HDMI-1
 workspace 10 output HDMI-1
 
 #
+# Run dunst if we are running i3 without a desktop manager
+#
+exec --no-startup-id "$HOME/.i3/dunst_wrap"
+
+#
 # Set second monitor, first
 #
 #exec --no-startup-id xrandr --output HDMI-1 --rotate normal --right-of eDP-1 --mode 1920x1080
@@ -273,6 +278,7 @@ for_window [title="^Wicd-curses$"] floating enabled
 for_window [title="^Test$"] floatig enabled
 for_window [title="^Mpstat$"] floating enabled
 for_window [class="^cool-retro-term$"] floating enable
+for_window [class="^termite_floating$"] floating enable; border none
 # for_window [title="mc"] floating enabled
 #for_window [class="^qterminal$"] floating enabled
 for_window [title="^Bluetoothctl$"] floating enabled

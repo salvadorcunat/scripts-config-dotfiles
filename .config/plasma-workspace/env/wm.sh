@@ -1,5 +1,5 @@
 # Disable KWin and use i3gaps as WM
-export KDEWM="$HOME/.i3/i3-plasma"
+# export KDEWM="$HOME/.i3/i3-plasma"
 
 # Compositor (Animations, Shadows, Transparency)
 # xcompmgr -C

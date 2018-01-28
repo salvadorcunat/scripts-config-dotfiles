@@ -24,6 +24,7 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\| \+\ze\t/
 "
 " Añadido por Salva
+"
 autocmd FileType text setlocal textwidth=78
 highlight Normal ctermbg=none
 "
@@ -66,3 +67,7 @@ set t_Co=256
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+" gtypist
+"
+autocmd BufNewFile,BufRead *.typ setf gtypist

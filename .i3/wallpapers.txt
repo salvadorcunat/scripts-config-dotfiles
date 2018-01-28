@@ -2,7 +2,6 @@
 /home/boret/Descargas/blade_runner_2_2.jpg
 /home/boret/Descargas/blade_runner_6_2.jpg
 /home/boret/Descargas/Alien-Wallpaper-Creative-3K_2.jpg
-/home/boret/Descargas/high-xenomorph-poster-alien-resolution-backdrops_2.jpg
 /home/boret/Descargas/Alien.jpg
 /home/boret/.local/share/wallpapers/174170-2-deb.png
 /home/boret/.local/share/wallpapers/173852-debian-red_1.jpg
@@ -53,3 +52,4 @@
 /home/boret/Descargas/old_airplane_toy-wallpaper-1366x768.jpg
 /home/boret/Descargas/golden_compass-wallpaper-1366x768.jpg
 /home/boret/Descargas/old_map_2-wallpaper-1366x768.jpg
+/home/boret/Descargas/nebula_messier_78-2560x1600.jpg

@@ -191,6 +191,13 @@ workspace 9 output HDMI-1
 workspace 10 output HDMI-1
 
 #
+# Run dunst if we are running i3 without a desktop manager
+# x
+exec --no-startup-id "if [ $XDG_CURRENT_DESKTOP == i3-gaps ]; \
+		      then /usr/bin/dunst -c $HOME/.config/dunst/dunstrc & ; \
+		      fi"
+
+#
 # Set second monitor, first
 #
 #exec --no-startup-id xrandr --output HDMI-1 --rotate normal --right-of eDP-1 --mode 1920x1080

@@ -143,7 +143,7 @@ while (( i < ${#IMAGE[@]} )); do
 		"CAP_SYS_ADMIN" " " off \
 		"name"	"Give a name to the container" off \
 		"v" "Mount a volume" off \
-		"d" "Detach" off \
+		"d" "Detach" on \
 		"i" "Interactive" on \
 		"t" "Tty" on 2> $tempfile
 	get_result $?
@@ -180,11 +180,10 @@ Por defecto se ejecuta un shell de bash." $((_H/2)) $((_W/2)) "/bin/bash" 2> $te
 	get_result $?
 
 	COMMAND="$COMMAND $(cat $tempfile)"
-	echo "Result for running container $CON_NAME" >>"$INPUT_F"
-	$COMMAND & >>"$INPUT_F" 2>&1
-	echo "---------------------------------------------------" >>"$INPUT_F"
+	$DIALOG --clear --backtitle "$_backtitle" --title " docker_run result " \
+		--msgbox "$(echo "Result for running container $CON_NAME"; \
+			   $COMMAND 2>&1 & wait; \
+			   echo "---------------------------------------------------")" $((_H/2)) $((_W/2))
 	unset OPTIONS COMMAND VOLUME CON_NAME
 	(( i++ ))
 done
-$DIALOG --clear --backtitle "$_backtitle" --title " docker_run result " \
-	--textbox "$INPUT_F" 0 0

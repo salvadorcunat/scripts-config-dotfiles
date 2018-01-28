@@ -26,7 +26,7 @@ alias gtypist='gtypist esp.typ'
 # other stuff
 if [ ! -z "$DISPLAY" ]; then
 	source ~/.xsh
-	/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+	#/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
 	/usr/bin/udiskie -s &
 else
 	/usr/bin/udiskie -q &

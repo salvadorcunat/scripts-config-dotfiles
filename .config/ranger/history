@@ -1,10 +1,3 @@
-cd  CHIP
-cd  .i3
-mkdir ibiza
-! tig --all
-shell tig --all
-shell git checkout master
-cd .config/ranger
 cd src
 cd  /media/boret
 mkdir battlestar_Galactica
@@ -29,8 +22,6 @@ rename amc-search
 help
 shell chmod a+x amc-*
 cd  src/crt
-cd /usr/share
-cd  doc
 cd .ssh
 cd /usr/local
 cd  src
@@ -43,8 +34,17 @@ cd  src/
 cd  ~/.i3
 cd .git
 cd  ..
-
 cd  src/subsurface
 cd  /media
+cd  Descargas
+cd sbin
+cd /usr/local/bin
+cd /usr/share 
+cd /usr/share
+cd  doc
+cd /usr/share/doc/conky
+
 cd 
+cd  Documentos
 delete
+open_with vim

@@ -100,7 +100,7 @@ read_lines()
 	local IFS=$'\n' _array
 	declare -n _array=${2:-_LINES}
 	while read -r; do
-		_array=( ${_array[@]} $REPLY )
+		_array+=( $REPLY )
 	done <"$1"
 }
 
