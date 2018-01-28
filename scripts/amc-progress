@@ -9,7 +9,7 @@
 DIALOG="$(which dialog)"	#/usr/bin/dialog
 _sleep="$(which sleep)"		#/bin/sleep
 _AMC="$(which amulecmd)"
-_host="192.168.0.160"
+_host=$(ip -br address show |grep "$(ip route | grep default| cut -d" " -f5)" | awk '{print $3}' |sed s/\\/.*$//)
 _AMC_command="show dl"
 _backtitle="Amuled download progress"
 SIG_NONE=0		#
