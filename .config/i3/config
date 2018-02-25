@@ -312,6 +312,7 @@ bar {
 #	font pango:URW Gothic L 8
 #	font pango:PowerlineSymbols 8
 	font pango:FontAwesome 8
+	height 25
 }
 
 #

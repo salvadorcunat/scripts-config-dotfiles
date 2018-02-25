@@ -16,10 +16,10 @@
 # for debuging
 #trap 'set +x; sleep 1; set -x' DEBUG
 
-I3MSG=/usr/bin/i3-msg
+I3MSG=$(which i3-msg)
 TRMNL=$HOME/.i3/termite_wrap	# adjust to your preferred
-CONKY=/usr/bin/conky
-NOTIFY=/usr/bin/notify-send
+CONKY=$(which conky)
+NOTIFY=$(which notify-send)
 SLEEP=/bin/sleep		# GNU sleep permits float numbers
 TEMPFILE=/tmp/vim_ws_tmp.$$
 RC=0

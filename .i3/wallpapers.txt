@@ -53,3 +53,5 @@
 /home/boret/Descargas/golden_compass-wallpaper-1366x768.jpg
 /home/boret/Descargas/old_map_2-wallpaper-1366x768.jpg
 /home/boret/Descargas/nebula_messier_78-2560x1600.jpg
+/home/boret/Descargas/wp_NGC-7331.jpg
+/home/boret/Descargas/wp_NGC-1559.jpg

@@ -1,5 +1,5 @@
 #
-# Config file for i3 when run in plasma5
+# Config file for i3 when run in LXQT
 #
 # i3 config file (v4)
 #
@@ -44,10 +44,6 @@ bindsym $mod+Shift+q kill
 # installed.
 #bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -modi 'run,window,ssh' -show run"
-
-# start a xfce4 panel if needed or close it
-#bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"
-#bindsym $mod+Shift+p exec --no-startup-id "/usr/bin/xfce4-panel -q"
 
 # change focus
 bindsym $mod+j focus left
@@ -158,16 +154,16 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym ntilde resize grow width 10 px or 10 ppt
+        bindsym j resize shrink width 2 px or 2 ppt
+        bindsym k resize grow height 2 px or 2 ppt
+        bindsym l resize shrink height 2 px or 2 ppt
+        bindsym ntilde resize grow width 2 px or 2 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 2 px or 2 ppt
+        bindsym Down resize grow height 2 px or 2 ppt
+        bindsym Up resize shrink height 2 px or 2 ppt
+        bindsym Right resize grow width 2 px or 2 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -268,6 +264,7 @@ for_window [title="^Wicd-curses$"] floating enabled
 for_window [title="^Test$"] floatig enabled
 for_window [title="^Mpstat$"] floating enabled
 for_window [class="^cool-retro-term$"] floating enable
+for_window [class="^termite_floating$"] floating enable; border none
 # for_window [title="mc"] floating enabled
 #for_window [class="^qterminal$"] floating enabled
 for_window [title="^Bluetoothctl$"] floating enabled
@@ -334,5 +331,5 @@ exec --no-startup-id "count=0; \
 					break; \
 				fi; \
 			done; \
-			sleep 2; \
+			sleep 3; \
 			/home/boret/.i3/compton_wrap"
