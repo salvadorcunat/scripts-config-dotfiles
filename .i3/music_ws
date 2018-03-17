@@ -2,7 +2,6 @@
 
 TERMINAL="$HOME/.i3/termite_wrap"
 "$HOME"/.i3/init_ws -l "$HOME/.i3/music_ws.json" \
-	-c "$TERMINAL -t cmus -e cmus" \
-	-c "$TERMINAL -t Terminal"
+	-c "$TERMINAL -t cmus -e cmus"
 
 $TERMINAL -t alsamixer -e "alsamixer -g -c 0 -V -all"

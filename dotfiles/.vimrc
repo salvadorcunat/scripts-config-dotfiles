@@ -13,6 +13,7 @@ syntax on
 " colorscheme solarized
 " colorscheme darkblue
 colorscheme elflord
+"colorscheme wombat256
 set hls
 set is
 set nu
@@ -25,6 +26,9 @@ match ExtraWhitespace /\s\+$\| \+\ze\t/
 "
 " Añadido por Salva
 "
+" for powerline
+set encoding=utf-8
+let g:Powerline_symbols = 'fancy'
 autocmd FileType text setlocal textwidth=78
 highlight Normal ctermbg=none
 "
@@ -47,6 +51,8 @@ let g:airline#extensions#bufferline#overwrite_variables = 1
 let g:airline#extensions#branch#enabled = 1	"activa integracion de fugitive
 " let g:airline_theme='zenburn'
 let g:airline_theme='powerlineish'
+" let g:airline_theme='dark'
+ "let g:airline_theme='wombat'
 " let g:airline_theme='serene'
 " let g:airline_theme='tomorrow'
 " let g:airline_theme='xtermlight'
@@ -57,9 +63,10 @@ let g:airline_powerline_fonts=1
 let g:airline#extensions#capslock#enabled = 1
 
 " powerline
-" set rtp+=/usr/lib/python2.7/dist-packages/powerline/bindings/vim
+"set rtp+=/usr/share/powerline/bindings/vim
 set laststatus=2
 set showtabline=2
+set noshowmode
 set t_Co=256
 
 " Uncomment the following to have Vim jump to the last position when
