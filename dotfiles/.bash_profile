@@ -26,8 +26,13 @@ alias gtypist='gtypist esp.typ'
 # other stuff
 if [ ! -z "$DISPLAY" ]; then
 	source ~/.xsh
-	#/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
 	/usr/bin/udiskie -s &
+	case "$XDG_CURRENT_DESKTOP" in
+		*i3*|*spectrwm*)
+			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+			;;
+		*)	;;
+	esac
 else
 	/usr/bin/udiskie -q &
 	fortune |cowsay -f r2d2

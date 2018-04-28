@@ -300,8 +300,9 @@ for_window [title="Escritorio — Plasma"] kill; floating enable; border none
 	##font pango:PowerlineFont 10
 #}
 bar {
-	#font pango:FontAwesome 10
-	i3bar_command "/usr/share/powerline/bindings/lemonbar/powerline-lemonbar.py --i3 --height 14 -- -b -a 10  -f 'DejaVu Sans Mono for Powerline'"
+	font pango:FontAwesome 10
+	i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
+	#i3bar_command "/usr/share/powerline/bindings/lemonbar/powerline-lemonbar.py --i3 --height 16 -- -b -a 10  -f 'FontAwesome'"
 	#i3bar_command "/usr/share/powerline/bindings/lemonbar/powerline-lemonbar.py --i3 -- -b -a 10"
 }
 #

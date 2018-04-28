@@ -226,8 +226,8 @@ for_window [class="^dolphin$"] border pixel 1
 #
 #smart_gaps on
 smart_borders no_gaps
-gaps inner 15
-gaps outer 5
+gaps inner 10
+gaps outer 2
 set $mode_gaps Gaps: (o) outer, (i) inner
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
@@ -282,6 +282,7 @@ for_window [class="^termite_floating$"] floating enable; border none
 # for_window [title="mc"] floating enabled
 #for_window [class="^qterminal$"] floating enabled
 for_window [title="^Bluetoothctl$"] floating enabled
+for_window [title="^Mixer$"] floating enabled
 ## Avoid tiling popups, dropdown windows from plasma
 # for the first time, manually resize them, i3 will remember the setting for floating windows
 for_window [class="plasmashell"]    floating enable
@@ -302,19 +303,19 @@ for_window [title="Escritorio — Plasma"] kill; floating enable; border none
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	i3bar_command i3bar -t
+	#i3bar_command i3bar -t
 #	status_command i3status
-	status_command i3blocks
-#	status_command /home/boret/.i3/conky-i3bar
-	tray_output primary
-	strip_workspace_numbers yes
+	#status_command i3blocks
+	#tray_output primary
+	#strip_workspace_numbers yes
 #	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
 #	font pango:URW Gothic L 8
 #	font pango:PowerlineSymbols 8
-	font pango:FontAwesome 8
-	height 20
+	#font pango:FontAwesome 8
+	#height 20
+	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
+	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
 }
-
 #
 # Launch initial workspace
 #exec --no-startup-id "$HOME/.i3/init_ws -w '1: Init' -l $HOME/.i3/init_ws-3.json"
@@ -322,9 +323,9 @@ bar {
 
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 	     -l '/home/boret/.i3/testing.json' \
+	     -c '/home/boret/.i3/fehbg_new' \
 	     -c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
 	     -c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \
-	     -c '/home/boret/.i3/fehbg_new' \
 	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
 	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
 #

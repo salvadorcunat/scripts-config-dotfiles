@@ -2,16 +2,12 @@
 # i3 panel config. Powerline style.
 
 panel_fifo="/tmp/i3_lemonbar_${USER}"
-#font="-xos4-terminesspowerline-medium-r-normal--12-120-72-72-c-60-iso10646-1"
-#iconfont="-xos4-terminusicons2mono-medium-r-normal--12-120-72-72-m-60-iso8859-1"
 font="Arimo for Powerline-8"
-#font="DejaVu Sans Mono-8"
 #font="URW Gothic-8"
 iconfont="FontAwesome-8"
 monofont="DejaVu Sans Mono-8"
 
 res_w=$(xrandr | grep "current" | awk '{print $8a}')
-#snd_cha=$(amixer get Master | grep "Playback channels:" | awk '{if ($4 == "") {printf "%s: Playback", $3} else {printf "%s %s: Playback", $3, $4}}')
 geometry="${res_w}x16"
 
 # Alarm settings
@@ -39,7 +35,7 @@ color_ws_fg_inactive="#ffffff"
 color_ws_bg_active="#49dde7"
 color_ws_fg_active="$color_black"
 color_ws_bg_urgent="#FF0000"
-color_bg_vol="$color_black"				#"#5e6311"
+color_bg_vol="$color_black"
 color_fg_vol="#ffb588"
 
 # Char glyps for powerline fonts

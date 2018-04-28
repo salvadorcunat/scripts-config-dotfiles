@@ -41,6 +41,4 @@ done
 # Remove the trailing separator
 OUTPUT=${OUTPUT%}
 
-# Print the list and return 0
-#[[ -n $OUTPUT ]] &&
 echo "REM $OUTPUT #107ae7"

@@ -2,13 +2,9 @@
 #
 # Input parser for i3 bar
 # 14 ago 2015 - Electro7
-# 26 Mar 2018 - Boret
 # 15 Apr 2018 - Boret:	Added support for action buttons in some blocks.
 #			The output of lemonbar has to be piped through
 #			i3_lemonbar_output_parser.sh
-
-# for debugging
-#set -x
 
 # config
 . $(dirname $0)/i3_lemonbar_config
