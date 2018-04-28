@@ -1,0 +1,48 @@
+#!/bin/bash
+# Copyright (C) 2014 Alexander Keller <github@nycroth.com>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#------------------------------------------------------------------------
+# Variation on i3blocks' wifi script to fit our own lemonbar
+# status bar.
+# Boret  04/2018
+#------------------------------------------------------------------------
+
+INTERFACE="$(ip route | grep default| grep -v linkdown |cut -d" " -f5)"
+
+# Boret: Get access point ESSID
+APOINT=$(2>/dev/null iwconfig |grep ESSID | grep -v off |cut -d":" -f2 |sed s/\"//g)
+
+# If there is no active connection
+if [[ ! -d /sys/class/net/${INTERFACE}/wireless ]] ||
+	[[ "$(cat /sys/class/net/$INTERFACE/operstate)" = 'down' ]]; then
+	echo "WAPno_A.P. #720000"
+	exit 0
+fi
+
+QUALITY=$(grep $INTERFACE /proc/net/wireless | awk '{ print int($3 * 100 / 70) }')
+
+# background color
+if [[ $QUALITY -ge 80 ]]; then
+    bg_color="#006e34"
+elif [[ $QUALITY -lt 80 && $QUALITY -ge 60 ]]; then
+    bg_color="#716d00"
+elif [[ $QUALITY -lt 60 && $QUALITY -ge 40 ]]; then
+    bg_color="#734f00"
+elif [[ $QUALITY -lt 40 ]]; then
+    bg_color="#720000"
+fi
+
+echo "WAP$APOINT $QUALITY% $bg_color"

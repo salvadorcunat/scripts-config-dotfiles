@@ -1,0 +1,167 @@
+#!/bin/bash
+#
+# A dialog based script to run commands on running docker images
+#
+
+DIALOG=/usr/bin/dialog
+DOCKER=/usr/bin/docker
+_sleep="$(which sleep)"
+_term="$HOME/.i3/termite_wrap"
+
+DIALOG_OK=0					#
+DIALOG_CANCEL=1					#
+DIALOG_HELP=2					# Possible dialog return values
+DIALOG_EXTRA=3					# for $?
+DIALOG_ITEM_HELP=4				#
+DIALOG_ESC=255					#
+
+SIG_NONE=0					#
+SIG_HUP=1					#
+SIG_INT=2					# System signals for trap
+SIG_QUIT=3					#
+SIG_KILL=9					#
+SIG_TERM=15					#
+
+declare -a IMG_REPO=
+declare -a CONT_ID=
+declare -a CONT_NAME=
+declare -a CONTAINERS
+_backtitle="Dialog's based docker exec wrapper by Boret"
+
+tempfile=/tmp/temp_$$
+
+#############################################################################
+#				Trap signals				    #
+#############################################################################
+#trap 'set +x; $_sleep 0.5; set -x' DEBUG
+
+trap 'rm -f $tempfile $INPUT_F' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"
+
+. "$HOME"/sbin/script-funcs.sh
+
+
+# print a string for menu_dlg input
+#
+menu_str()
+{
+local _str=
+local j=0
+while (( j < ${#CONT_NAME[@]} ));
+do
+	_str="$_str:${CONT_NAME[$j]}:${CONT_ID[$j]}"
+	(( j++ ))
+done
+_str=${_str#*\:}
+echo "$_str"
+}
+
+# check the return code of a dialog item to abort script
+# parameters $1 = return code (usually $?)
+#
+get_result()
+{
+	case $1 in
+		$DIALOG_CANCEL|$DIALOG_ESC) clear
+					    echo "Abortado"
+					    exit 3
+					    ;;
+		*)			    return $1
+					    ;;
+	esac
+}
+
+user_form()
+{
+	declare -n _user=${1:-_USER}
+	$DIALOG --clear --backtitle "$_backtitle" --title " User selection dialog " \
+		--inputbox 'Select the user you want to run the command' $((_H/2)) $((_W/2)) \
+		2> $tempfile
+	get_result $?
+	_user="$(cat $tempfile)"
+}
+
+env_form()
+{
+	declare -n _env=${1:-_ENV_VARS}
+	$DIALOG --clear --backtitle "$_backtitle" --title " Environment Variables " \
+		--inputbox 'Add environment variables if needed.
+Use the format: Qt_DIR=/foo/bar BUILD_DIR=/abc/def' $((_H/2)) $((_W/2)) \
+		2> $tempfile
+	get_result $?
+	local VARS=( $(cat $tempfile) )
+	local j=0
+	while [ "$j" -lt "${#VARS[@]}" ]; do
+		_env[$j]="-e ${VARS[$j]}"
+		(( j++ ))
+	done
+}
+
+command_form()
+{
+
+	declare -n _cmd=${1:-_USER_CMD}
+	$DIALOG --clear --backtitle "$_backtitle" --title " Command " \
+		--inputbox 'Select the command to run in the contaier
+Defaults to bash shell' $((_H/2)) $((_W/2)) "bash" \
+		2> $tempfile
+	get_result $?
+	_cmd=( $(cat $tempfile) )
+}
+
+# Get running containers and place them in IMG_* variables
+#
+
+"$DOCKER" ps -a --format='{{.ID}};{{.Names}}' >"$tempfile"
+read_lines "$tempfile" CONTAINERS
+n=0
+while (( n < ${#CONTAINERS[@]} )); do
+	CONT_ID[$n]=${CONTAINERS[$n]%%\;*}
+	CONT_NAME[$n]=${CONTAINERS[$n]##*\;}
+	(( n++ ))
+done
+unset CONTAINERS
+
+[[ ${#CONT_ID[@]} = 0 ]] && report_msg "$0" "No docker images running.Aborting." && exit 3
+
+menu_dlg "$(menu_str)" CONT_SELECTED MENU_OPTS "Select the container:
+Press <ESC> or <Cancel> to exit"
+get_result $?
+
+declare -a COMMAND=( "docker" "exec" )
+get_term_size _H _W
+$DIALOG --clear --backtitle "$_backtitle" --title " Exec options for $CONT_SELECTED" \
+	--checklist "" $((_H/2)) $((_W/2)) 8 \
+	"privileged" " " off \
+	"user" "Run as user " off \
+	"env"	"Set environment vars" off \
+	"d" "Detach" off \
+	"i" "Interactive" on \
+	"t" "Tty" on \
+	"command" "Default to bash" on 2> $tempfile
+get_result $?
+declare -a OPTIONS=( $(cat "$tempfile") )
+n=0
+while (( n < ${#OPTIONS[@]} )); do
+	case ${OPTIONS[$n]} in
+		privileged)	COMMAND+=( "--privileged" )
+				;;
+		d)		COMMAND+=( "-d" )
+				;;
+		i)		COMMAND+=( "-i" )
+				;;
+		t)		COMMAND+=( "-t" )
+				;;
+		user)		user_form _USER
+				COMMAND+=( "--user=$_USER" )
+				;;
+		env)		env_form _ENV_VARS
+				COMMAND+=( ${_ENV_VARS[@]} )
+				;;
+		command)	command_form _USER_CMD
+				COMMAND+=( "$CONT_SELECTED" "${_USER_CMD[@]}" )
+	esac
+	(( n++ ))
+done
+
+clear
+"$_term" -t "Termite running in $CONT_SELECTED" --geometry 640x480 --class=termite_floating -e "${COMMAND[*]}" &

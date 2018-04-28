@@ -1,0 +1,46 @@
+#!/bin/bash
+# A script to show removable devices managed with udiskie
+# No need buttons interaction, as udiskie places an icon in the
+# task bar.
+# Depends:
+#	- udisks2 & udiskie for general usage
+#	- FontAwesome for the fancy symbols
+#
+# Boret 08/2017
+# Version 1.0
+#------------------------------------------------------------------------
+# Variation on i3blocks' removable-media script to fit our own lemonbar
+# status bar.
+# Boret  04/2018
+#------------------------------------------------------------------------
+
+# For debugging
+#set -x
+
+OUTPUT=
+# Do we have a traceable device?
+DISKS=$(udiskie-info -a |grep "sd[b-z]")
+DISKS="$DISKS $(udiskie-info -a |grep sr.)"
+
+# No we don't, return 0
+[[ -z "$DISKS" ]] && echo "REM" && exit 0
+
+# Yes we do.
+# Add the device to the list
+# Read its unused capacity and add it to the output too
+for i in $DISKS
+do
+	FREEMEM="$(df -m -h "$i" |grep "$i" | awk '{print $4}')"
+	# Do not show devices without capacity (not mounted)
+	[[ -z "$FREEMEM" ]] && continue
+	# If usb device add an usb symbol if cdrom add a cdrom symbol
+	[[ $i == *sd* ]] && OUTPUT="$OUTPUT "
+	[[ $i == *sr* ]] && OUTPUT="$OUTPUT "
+	OUTPUT="$OUTPUT ${i//\/dev\//} ${FREEMEM:--} "
+done
+# Remove the trailing separator
+OUTPUT=${OUTPUT%}
+
+# Print the list and return 0
+#[[ -n $OUTPUT ]] &&
+echo "REM $OUTPUT #107ae7"

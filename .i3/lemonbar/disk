@@ -1,0 +1,57 @@
+#!/bin/bash
+# Copyright (C) 2014 Julien Bonjean <julien@bonjean.info>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#------------------------------------------------------------------------
+# Variation on i3blocks' bandwidth script to fit our own lemonbar
+# status bar.
+# Boret  04/2018
+#------------------------------------------------------------------------
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+ALERT_LOW=10 # color will turn red under this value (default: 10%)
+_ARGV=( $@ )
+
+if (( ${#_ARGV[@]} != 1 )); then
+	while : ; do
+		i=0
+		while (( i < ${#_ARGV[@]} )); do
+			DIR="${_ARGV[$i]}"
+
+			df -h -P -l "$DIR" | awk -v alert_low=$ALERT_LOW -v disk="${_ARGV[$i]}" '
+			/\/.*/ {
+				# full text
+				free=$4
+				use=$5
+
+				# no need to continue parsing
+				exit 0
+			}
+
+			END {
+				gsub(/%$/,"",use)
+				if (100 - use < alert_low) {
+					# color
+					print "DSK " disk " " free " #FF0000"
+				} else {
+					print "DSK " disk " " free " -"
+				}
+			}
+			'
+			(( i++ ))
+		done
+		sleep 60
+	done
+fi

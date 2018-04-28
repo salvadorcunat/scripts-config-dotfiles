@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# Copyright 2017 Salvador Cuñat <salvador.cunat@gmail.com>
+#
+# Licensed under the terms of the GNU GPL v3, or any later version.
+#------------------------------------------------------------------------
+# Variation on i3blocks' cpu_usage_boret script to fit our own lemonbar
+# status bar.
+# Boret  04/2018
+#------------------------------------------------------------------------
+
+# Fix a locale. To avoid locale dependant issues
+#
+export LC_ALL='C'
+
+# Get average idle time percentage and change "," to "."
+# substitution could probably be avoided and done in awk, but i'm too lazy
+#
+IDLE=$(mpstat 1 1 |grep -a "Average" |awk '{printf $12}')
+IDLE=${IDLE//,/.}
+
+# So, use percentage is 100 - $IDLE
+#
+RESULT=$(echo "100-($IDLE)" |bc -l)
+
+# Get an integer result for bash comparisons and remove the trailing
+# ".00" from bc
+#
+RESULT_PERCENT=$(echo "scale=0; $RESULT*100" |bc -l)
+RESULT_PERCENT=${RESULT_PERCENT%.*}
+
+# Show colors
+#
+if [ "$RESULT_PERCENT" -ge 6600 ]; then
+	bg_color="#720000"	# red for greater loads
+	fg_color="#ffffff"	# white foreground on red bg
+elif [ "$RESULT_PERCENT" -ge 3300 ]; then
+	bg_color="#734f00"	# yellow for medium loads
+	fg_color="#000000"	# black fg on yellow bg
+else
+	bg_color="#006e34"	# green up to 33% average loads
+	fg_color="#ffffff"	# white fg on green bg
+fi
+
+echo "CPU$RESULT% $bg_color $fg_color"

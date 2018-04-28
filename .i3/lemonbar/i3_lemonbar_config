@@ -1,0 +1,60 @@
+#!/bin/bash
+# i3 panel config. Powerline style.
+
+panel_fifo="/tmp/i3_lemonbar_${USER}"
+#font="-xos4-terminesspowerline-medium-r-normal--12-120-72-72-c-60-iso10646-1"
+#iconfont="-xos4-terminusicons2mono-medium-r-normal--12-120-72-72-m-60-iso8859-1"
+font="Arimo for Powerline-8"
+#font="DejaVu Sans Mono-8"
+#font="URW Gothic-8"
+iconfont="FontAwesome-8"
+monofont="DejaVu Sans Mono-8"
+
+res_w=$(xrandr | grep "current" | awk '{print $8a}')
+#snd_cha=$(amixer get Master | grep "Playback channels:" | awk '{if ($4 == "") {printf "%s: Playback", $3} else {printf "%s %s: Playback", $3, $4}}')
+geometry="${res_w}x16"
+
+# Alarm settings
+cpu_alert=75                        # % cpu use
+net_alert=5                         # K net use
+
+# color definitions
+color_back="#FF1D1F21"              # Default background
+color_fore="#FFC5C8C6"              # Default foreground
+color_head="#FFB5BD68"              # Background for first element
+color_sec_b1="#FF282A2E"            # Background for section 1
+color_sec_b2="#FF454A4F"            # Background for section 2
+color_sec_b3="#FF60676E"            # Background for section 3
+color_icon="#FF979997"              # For icons
+color_mail="#FFCE935F"              # Background color for mail alert
+color_chat="#FFCC6666"              # Background color for chat alert
+color_cpu="#FF5F819D"               # Background color for cpu alert
+color_net="#FF5E8D87"               # Background color for net alert
+color_disable="#FF1D1F21"           # Foreground for disable elements
+color_wsp="#FF8C9440"               # Background for selected workspace
+color_black="#000000"
+color_white="#ffffff"
+color_ws_bg_inactive="#20165c"
+color_ws_fg_inactive="#ffffff"
+color_ws_bg_active="#49dde7"
+color_ws_fg_active="$color_black"
+color_ws_bg_urgent="#FF0000"
+color_bg_vol="$color_black"				#"#5e6311"
+color_fg_vol="#ffb588"
+
+# Char glyps for powerline fonts
+sep_left=""                        # Powerline separator left
+sep_right=""                       # Powerline separator right
+sep_l_left=""                      # Powerline light separator left
+sep_l_right=""                     # Powerline light sepatator right
+
+# Icon glyphs from FontAwesome.
+# Some other are script provided.
+icon_cpu=""                        # CPU icon
+icon_vol="Ô"                        # Volume icon
+icon_hd=""                         # HD / icon
+icon_home=""                       # HD /home icon
+icon_datos=""			    # HD /media/DATOS
+icon_prog=""                       # Window icon
+icon_wsp=""			    # Workspace icon
+icon_wap=""			    # Wifi Access Point
