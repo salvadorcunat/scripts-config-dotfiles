@@ -12,9 +12,12 @@ declare _blob
 #
 exec 1> >(tee "$_tempfile") 2>&1
 
-# Blacklisted directories
+# source funcs file
 #
-_exclude="subsurface-android subsurface-companion subsurface_gtk subsurface_QT subsurface-web"
+. "$HOME"/sbin/script-funcs.sh
+
+# For debuging
+#trap 'set +x; /bin/sleep 0.25; set -x' DEBUG
 
 # Colors for fancy output
 #
@@ -23,9 +26,6 @@ LIGHT_RED="\033[1;31m"
 GREEN="\033[0;32m"
 WHITE="\033[1;37m"
 DEFAULT="\033[0m"
-
-# For debuging
-#trap 'set +x; /bin/sleep 0.25; set -x' DEBUG
 
 # remove tempfile on good exit
 trap 'rm -f $_tempfile' 0
@@ -101,6 +101,14 @@ is_updated_dir()
 	return 0
 }
 
+# Blacklisted directories
+#
+declare -a _LINES
+_blacklist=."$(basename $0)"; _blacklist="${_blacklist%???}_blacklist"
+read_lines "${0%/*}/$_blacklist" _LINES
+_exclude="${_LINES[*]}"
+unset _LINES _blacklist
+
 # main
 #
 for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
@@ -118,7 +126,7 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 			if has_submodule "$_SRCDIR/$_dir"; then
 				git -C "$_SRCDIR/$_dir" submodule update
 			fi
-			notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
+			[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
 			echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
 		else
 			echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"

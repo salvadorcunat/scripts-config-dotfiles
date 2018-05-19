@@ -50,8 +50,10 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -modi 'run,window,ssh' -show run"
 
 # start a xfce4 panel if needed or close it
-bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"
-bindsym $mod+Shift+p exec --no-startup-id "/usr/bin/xfce4-panel -q"
+#bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"
+#bindsym $mod+Shift+p exec --no-startup-id "/usr/bin/xfce4-panel -q"
+bindsym $mod+p exec --no-startup-id "/usr/bin/lxqt-panel"
+bindsym $mod+Shift+p exec --no-startup-id "killall lxqt-panel"
 
 # change focus
 bindsym $mod+j focus left
@@ -275,8 +277,9 @@ for_window [class="^Evince$"] floating enabled
 for_window [title="^Cmus$"] floating enabled
 for_window [title="^Alsamixer$"] floating enabled
 for_window [title="^Wicd-curses$"] floating enabled
-for_window [title="^Test$"] floatig enabled
+for_window [title="^Test$"] floating enabled
 for_window [title="^Mpstat$"] floating enabled
+for_window [title="^fetchscr$"] border none
 for_window [class="^cool-retro-term$"] floating enable
 for_window [class="^termite_floating$"] floating enable; border none
 # for_window [title="mc"] floating enabled
@@ -322,24 +325,25 @@ bar {
 
 
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
-	     -l '/home/boret/.i3/testing.json' \
+	     -l '/home/boret/.i3/testing_2.json' \
 	     -c '/home/boret/.i3/fehbg_new' \
-	     -c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
-	     -c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \
 	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
 	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
+	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
+	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \
 #
 # Run compton_wrap once conky cheats have been called
 #
-exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
-			do \
-				echo ' -- i3 launch --> waiting for conky'; \
-				sleep 1; \
-				count=$count+1; \
-				if [ $count -gt 5 ]; \
-					then echo ' -- i3 launch --> conky seems to have failed'; \
-					break; \
-				fi; \
-			done; \
-			sleep 3; \
-			/home/boret/.i3/compton_wrap"
+#exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
+			#do \
+				#echo ' -- i3 launch --> waiting for conky'; \
+				#sleep 1; \
+				#count=$count+1; \
+				#if [ $count -gt 5 ]; \
+					#then echo ' -- i3 launch --> conky seems to have failed'; \
+					#break; \
+				#fi; \
+			#done; \
+			#sleep 3; \
+exec --no-startup-id "sleep 2s; /home/boret/.i3/compton_wrap"
+exec --no-startup-id "sleep 3s; terminator -T 'fetchscr' -p 'transparent' -e 'screenfetch -p'"

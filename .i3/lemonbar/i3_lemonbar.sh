@@ -68,6 +68,6 @@ done &
 
 #### LOOP FIFO
 "${_pwd}"/i3_lemonbar_parser.sh <"${panel_fifo}" \
-	| lemonbar -n "boret_lemonbar" -a 15 -f "${font}" -f "${iconfont}" -f "${monofont}" -g "${geometry}" &
+	| lemonbar -b -n "boret_lemonbar" -a 15 -f "${font}" -f "${iconfont}" -f "${monofont}" -g "${geometry}" &
 
 wait
