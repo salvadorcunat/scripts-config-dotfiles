@@ -10,6 +10,8 @@ _I3MSG="$(which i3-msg)"
 _AMIXER="$(which amixer)"
 _STEP="5%"
 
+. $(dirname $0)/i3_lemonbar_config
+
 # Audio device.
 # Return "Capture" if the device is a capture device
 capability() {
@@ -39,6 +41,23 @@ while read -r _line; do
 			;;
 		vol_down*)
 			"$_AMIXER" -q -D "default" sset "Master" "$(capability)" ${_STEP}- unmute
+			;;
+		umount*)
+			# catch click on removable media block. format the device name and print a
+			# string to lemonbar fifo to launch a warning block
+			_disk="${_line#*_}"; _disk="${_disk%\ *}"; _disk="${_disk#*\ }"; _disk="${_disk#??}"
+			printf "%s\n" "WARN_detach_${_disk}" >"${panel_fifo}"
+			unset _disk
+			;;
+		detach*)
+			# catch umount confirmation; umount the passed device and send a string to
+			# lemonbar fifo to remove the warning block
+			udiskie-umount --detach /dev/"${_line##*_}"
+			printf "%s\n" "WARN_" >"${panel_fifo}"
+			;;
+		warn_cancel)
+			# catch warning cancel; send a string to lemonbar fifo to remove warning block
+			printf "%s\n" "WARN_" >"${panel_fifo}"
 			;;
 	esac
 done

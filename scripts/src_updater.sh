@@ -74,6 +74,11 @@ has_submodule()
 
 # Return 0 if repo $1 is updated or there is no remote (just local)
 # Put the preferred repo and the brach in $2 and $3 (globally declared)
+# Return codes:	0	Updated
+#		1	Needs to be updated
+#		2	git describe failed
+#		3	git fetch failed
+#		4	no remote (this is the main repo)
 #
 is_updated_dir()
 {
@@ -87,16 +92,18 @@ is_updated_dir()
 	_branch="$(git -C "$1" branch |grep '*' |cut -d" " -f2)"
 	_remotes=( $(git -C "$1" remote) )
 	# If we don't have a remote, return "updated"
-	[[ -z $_remotes ]] && return 0
+	[[ -z $_remotes ]] && return 4
 	# try to get the correct remote
 	_remote="$(preferred_remote "${_remotes[*]}")"
-	git -C "$1" fetch "$_remote" "$_branch" 2>/dev/null
+	git -C "$1" fetch "$_remote" "$_branch" 2>/dev/null || return 3
 	# Get branch and remote shas
-	_branch_sha="$(git -C "$1" describe --tags "$_branch")"; _branch_sha="${_branch_sha##*-g}";
-	_remote_sha="$(git -C "$1" describe --tags "$_remote/$_branch")"; _remote_sha="${_remote_sha##*-g}";
+	_branch_sha="$(cat "$1"/.git/"$(cut -d" " -f2 <"$1"/.git/HEAD)")"
+	_remote_sha="$(cut -f1 <"$1"/.git/FETCH_HEAD)"
 
 	if [[ -n $_remote_sha ]] && [[ -n $_branch_sha ]]; then
 		[[ "$_remote_sha" != "$_branch_sha" ]] && return 1
+	else
+		return 2
 	fi
 	return 0
 }
@@ -119,18 +126,26 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 		continue
 	fi
 	if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
-		if ! is_updated_dir "$_SRCDIR/$_dir" _repo _blob; then
-			echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
-			git -C "$_SRCDIR/$_dir" pull "$_repo" "$_blob" \
-				|| aborting "${0##*/}" "Couldn't update (pull) $_dir"
-			if has_submodule "$_SRCDIR/$_dir"; then
-				git -C "$_SRCDIR/$_dir" submodule update
-			fi
-			[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
-			echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
-		else
-			echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
-		fi
+		is_updated_dir "$_SRCDIR/$_dir" _repo _blob
+		case "$?" in
+			0)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
+				;;
+			1)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
+				git -C "$_SRCDIR/$_dir" pull "$_repo" "$_blob" \
+					|| aborting "${0##*/}" "Couldn't update (pull) $_dir"
+				if has_submodule "$_SRCDIR/$_dir"; then
+					git -C "$_SRCDIR/$_dir" submodule update
+				fi
+				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
+				echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
+				;;
+			2)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
+				;;
+			3)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Git fetch failed, check connection or remote.${DEFAULT}"
+				;;
+			4)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}No remotes. Is this a main repo?${DEFAULT}"
+				;;
+		esac
 	else
 		echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
 	fi

@@ -98,7 +98,7 @@ while read -r line ; do
 			bg_col=${color_back}
 			fg_col=${line##*\ }
 			rmedia=${line%$fg_col}; rmedia=${rmedia#????}
-			rmedia="%{F${bg_col}}${sep_left}%{F${fg_col} B${bg_col} T2}${rmedia}"
+			rmedia="%{F${bg_col}}${sep_left}%{F${fg_col} B${bg_col} T2}%{A:umount_${rmedia}:}${rmedia}%{A}"
 			;;
 		IFC*)
 			# Wifi interface - internal IP
@@ -159,11 +159,25 @@ while read -r line ; do
 			fg_col="${color_black}"
 			numl="%{F$2 T2}${sep_left}%{F${fg_col} B$2 T1} $1 "
 			;;
+		WARN*)
+			# Warning block. The warning line should be formated:
+			# WARN_action_arguments, where "action" is the next action to catch with
+			# output parser and "args" the action arguments. E.g. WARN_detach_sdb1
+			# right click cancels warning
+			# left click confirms action
+			_args="${line##*_}"
+			_cmd="${line#?????}"; _cmd=${_cmd%_${_args}}
+			if [ -n "$_args" ]; then
+				warning="%{F${color_warn} B- T2}${sep_left}%{F${color_white} B${color_warn} T2}%{A1:${_cmd}_${_args}:}%{A3:warn_cancel:} ${_cmd} ${_args} %{A}%{A}%{F${color_warn} B- T2}${sep_right}"
+			else
+				unset warning
+			fi
+			;;
 	esac
 
 	# Set date/time format out of the case construct to catch the
 	# initial value
 	_date_time="%{F${color_back} T2}${sep_left}%{B${color_back} F${color_fore} T1}$(pad_str "$(date +"%a %d-%b %R")" 18)"
 	# And finally, output
-	printf "%s\n" "%{l}${wsp}${title} %{r}${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
+	printf "%s\n" "%{l}${wsp}${title} %{r}${warning} ${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
 done

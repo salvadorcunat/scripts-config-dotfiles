@@ -37,6 +37,7 @@ color_ws_fg_active="$color_black"
 color_ws_bg_urgent="#FF0000"
 color_bg_vol="$color_black"
 color_fg_vol="#ffb588"
+color_warn="#cf1429"
 
 # Char glyps for powerline fonts
 sep_left=""                        # Powerline separator left
