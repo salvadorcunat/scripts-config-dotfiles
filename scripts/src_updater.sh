@@ -5,6 +5,7 @@
 _SRCDIR="$1"
 _tempfile="/tmp/$(basename $0)_$$"
 _mail="salvador.cunat@gmail.com"
+_log="true"
 declare _repo
 declare _blob
 
@@ -30,11 +31,22 @@ DEFAULT="\033[0m"
 # remove tempfile on good exit
 trap 'rm -f $_tempfile' 0
 
+# Report and logging utility
+#
+report_msg()
+{
+	echo -e "$1" "$2"
+	if [ "$_log" == "true" ]; then
+		logger --id="$$" -t "$USER-$1" -- "$2"
+	fi
+}
+
 # Abort utility
 #
 aborting()
 {
-	echo -e "-- ${WHITE}${1}${DEFAULT} --> ${LIGHT_RED}${2}. Aborting.${DEFAULT}"
+	report_msg "$1" "$2. Aborted"
+	[[ -n $DISPLAY ]] && notify-send -u critical "$1" "${2#*\ }.\nAborted."
 	exit 1
 }
 
@@ -108,6 +120,14 @@ is_updated_dir()
 	return 0
 }
 
+# Check internet connectivity. Abort if none, as we can't update anything.
+#
+check_connect
+case $? in
+	1)	aborting "${0##*/}" "-- No default route. Check your network settings" ;;
+	2)	aborting "${0##*/}" "-- Local route but no internet access. Check your network settings" ;;
+esac
+
 # Blacklisted directories
 #
 declare -a _LINES
@@ -122,15 +142,15 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 	_dir=${_dir%/}
 	#echo -e "-- ${GREEN}Trying${DEFAULT} --> ${WHITE}${_dir}${DEFAULT}"
 	if is_excluded_dir "$_dir"; then
-		echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
+		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
 		continue
 	fi
 	if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
 		is_updated_dir "$_SRCDIR/$_dir" _repo _blob
 		case "$?" in
-			0)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
+			0)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
 				;;
-			1)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
+			1)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
 				git -C "$_SRCDIR/$_dir" pull "$_repo" "$_blob" \
 					|| aborting "${0##*/}" "Couldn't update (pull) $_dir"
 				if has_submodule "$_SRCDIR/$_dir"; then
@@ -139,15 +159,15 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
 				echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
 				;;
-			2)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
+			2)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
 				;;
-			3)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Git fetch failed, check connection or remote.${DEFAULT}"
+			3)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Git fetch failed, check connection or remote.${DEFAULT}"
 				;;
-			4)	echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}No remotes. Is this a main repo?${DEFAULT}"
+			4)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}No remotes. Is this a main repo?${DEFAULT}"
 				;;
 		esac
 	else
-		echo -e "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
+		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
 	fi
 done
 

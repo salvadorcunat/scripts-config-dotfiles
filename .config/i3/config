@@ -326,6 +326,7 @@ bar {
 
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 	     -l '/home/boret/.i3/testing_2.json' \
+	     -c '/usr/bin/conky -c /home/boret/.i3/conky_motorhead.conf' \
 	     -c '/home/boret/.i3/fehbg_new' \
 	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
 	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
@@ -334,16 +335,16 @@ exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 #
 # Run compton_wrap once conky cheats have been called
 #
-#exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
-			#do \
-				#echo ' -- i3 launch --> waiting for conky'; \
-				#sleep 1; \
-				#count=$count+1; \
-				#if [ $count -gt 5 ]; \
-					#then echo ' -- i3 launch --> conky seems to have failed'; \
-					#break; \
-				#fi; \
-			#done; \
-			#sleep 3; \
-exec --no-startup-id "sleep 2s; /home/boret/.i3/compton_wrap"
-exec --no-startup-id "sleep 3s; terminator -T 'fetchscr' -p 'transparent' -e 'screenfetch -p'"
+exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
+			do \
+				echo ' -- i3 launch --> waiting for conky'; \
+				sleep 1; \
+				count=$count+1; \
+				if [ $count -gt 5 ]; \
+					then echo ' -- i3 launch --> conky seems to have failed'; \
+					break; \
+				fi; \
+			done; \
+			sleep 1; \
+			/home/boret/.i3/compton_wrap -f"
+#exec --no-startup-id "sleep 3s; terminator -T 'fetchscr' -p 'transparent' -e 'screenfetch -p -c 15,9 -a /home/boret/motorhead_ascii_2'"
