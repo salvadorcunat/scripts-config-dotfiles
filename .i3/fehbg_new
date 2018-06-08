@@ -1,17 +1,31 @@
 #!/bin/bash
-# WARNING: feh --bg-fill overwrites .fehbg each time it runs. This way we need
-# a different name for this script.
-# parameters: none
-# output: none
-# returns: 0 on success, 65 on failure.
+
+_usage="
+
+ $ fehbg_new [-h|--help] [-d|--delay [n]]
+
+ Set a random backgroung image using feh. Can change the image randomly if we
+ set a time lapse
+
+ WARNING: This script loops forever. Run it in backgroung.
+ WARNING: feh --bg-fill overwrites .fehbg each time it runs. This way we need
+ a different name for this script.
+
+ parameters:	-d/--delay: Delay (same units in sleep command)
+		-h/--help:  This help
+ output: none
+ returns: 0 on success, 65 on failure.
+"
 
 # for debuging pourposes
 #trap 'set +x; sleep 1; set -x' DEBUG
 
 _file="$HOME/.i3/wallpapers.txt"	# file containing the list of wallpapers
 _wp=
-_notify=$(which notify-send)		# notify command or simple echo if not installed
-. $HOME/sbin/script-funcs.sh
+_sleep="$(which sleep)"
+_delay=					# Delay. Default to 15 minutes
+_notify="$(which notify-send)"		# notify command or simple echo if not installed
+. "$HOME"/sbin/script-funcs.sh
 
 # Reporting messages and errors format.
 # Put a report in the screen and send another to stderr, which should
@@ -26,29 +40,59 @@ report2screen()
 	$_notify -u "$1" "$2" "$3"
 }
 
-# to get the upper randomize limit, get the number of lines in $_file,
-# if _max is not set, default to 1 to avoid infinite looping in randomize()
-if [[ -s $_file ]] && [[ -r $_file ]]
-	then
-		_max=$(wc -l "$_file" |cut -d" " -f1)
+# Is there another script running? Kill it.
+_prev="$(pgrep -o "$(basename "$0")")"
+[[ -n $_prev ]] && [[ $_prev != "$$" ]] && kill -9 "$_prev"
+unset _prev
+
+# Read parameters if any
+while [[ $# -gt 0 ]];do
+	case "$1" in
+		-d|--delay)	_delay="${2:-15m}"
+				if [[ -n $2 ]]; then
+					shift 2
+				else
+					shift
+				fi
+				;;
+		*)		echo "$_usage"
+				exit 0
+				;;
+	esac
+done
+
+# loop forever
+while : ; do
+
+	# to get the upper randomize limit, get the number of lines in $_file,
+	# if _max is not set, default to 1 to avoid infinite looping in randomize()
+	if [[ -s $_file ]] && [[ -r $_file ]]
+		then
+			_max=$(wc -l "$_file" |cut -d" " -f1)
+		else
+			report2screen critical "$0" "Failed to read $_file.\nCheck it and its permissions"
+			exit 65
+	fi
+	let _max=${_max:-1}
+
+	# randomized number, is the line to read from $_file
+	_idx=$(randomize 1 $(( _max + 1 )))
+
+	# set the background reading the line given by $_idx. if fails to read $_file
+	# set a default string to check, notify failure and exit.
+	_wp=$(sed -n "$_idx"p <"$_file")
+	if [[ ! -z $_wp ]]
+		then
+			feh --bg-fill "$_wp" || \
+				report2screen critical "$0" "failed to run feh --bg-fill $_wp"
+		else
+			report2screen -u critical "$0" "failed to read $_file or index $_idx is wrong"
+			exit 65
+	fi
+
+	if [[ -n $_delay ]]; then
+		"$_sleep" "$_delay"
 	else
-		report2screen critical "$0" "Failed to read $_file.\nCheck it and its permissions"
-		exit 65
-fi
-let _max=${_max:-1}
-
-# randomized number, is the line to read from $_file
-_idx=$(randomize 1 $(( _max + 1 )))
-
-# set the background reading the line given by $_idx. if fails to read $_file
-# set a default string to check, notify failure and exit.
-_wp=$(sed -n "$_idx"p <"$_file")
-if [[ ! -z $_wp ]]
-	then
-		feh --bg-fill "$_wp" || \
-			report2screen critical "$0" "failed to run feh --bg-fill $_wp"
-	else
-		report2screen -u critical "$0" "failed to read $_file or index $_idx is wrong"
-		exit 65
-fi
-
+		break
+	fi
+done

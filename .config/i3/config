@@ -327,7 +327,7 @@ bar {
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 	     -l '/home/boret/.i3/testing_2.json' \
 	     -c '/usr/bin/conky -c /home/boret/.i3/conky_motorhead.conf' \
-	     -c '/home/boret/.i3/fehbg_new' \
+	     -c '/home/boret/.i3/fehbg_new -d 20m' \
 	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
 	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
 	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \

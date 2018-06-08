@@ -18,7 +18,6 @@ exec 1> >(tee "$_tempfile") 2>&1
 . "$HOME"/sbin/script-funcs.sh
 
 # For debuging
-#trap 'set +x; /bin/sleep 0.25; set -x' DEBUG
 
 # Colors for fancy output
 #
@@ -37,7 +36,7 @@ report_msg()
 {
 	echo -e "$1" "$2"
 	if [ "$_log" == "true" ]; then
-		logger --id="$$" -t "$USER-$1" -- "$2"
+		logger --id="$$" -t "$USER-$1" -- "$(sed -e 's/.033..\;3.m//g' -e 's/.033..m//g' <<< "$2")"
 	fi
 }
 
@@ -99,9 +98,23 @@ is_updated_dir()
 	declare -n _remote="${2:-origin}"
 	local _branch_sha
 	local _remote_sha
+	local -n _current_br="${4}"
+
+	# Try to be smart about tracking branches
+	_tr_branch="$(git -C "$1" branch -r |grep -- '->' |sed s/^.*\ \-\>\ .*\\///)"
 
 	# Get local branch and remote
 	_branch="$(git -C "$1" branch |grep '*' |cut -d" " -f2)"
+	if [[ $_branch != "$_tr_branch" ]]; then
+		case "$_branch" in
+			"(HEAD")	_current_br="$(cut -f1 <"$1"/.git/FETCH_HEAD)"
+					;;
+			*)		_current_br="${_branch:-master}"
+					;;
+		esac
+		_branch="${_tr_branch:-master}"
+	fi
+
 	_remotes=( $(git -C "$1" remote) )
 	# If we don't have a remote, return "updated"
 	[[ -z $_remotes ]] && return 4
@@ -109,11 +122,19 @@ is_updated_dir()
 	_remote="$(preferred_remote "${_remotes[*]}")"
 	git -C "$1" fetch "$_remote" "$_branch" 2>/dev/null || return 3
 	# Get branch and remote shas
-	_branch_sha="$(cat "$1"/.git/"$(cut -d" " -f2 <"$1"/.git/HEAD)")"
-	_remote_sha="$(cut -f1 <"$1"/.git/FETCH_HEAD)"
+	if [[ -f "$1"/.git/refs/heads/"$_branch" ]]; then
+		_branch_sha="$(cat "$1"/.git/refs/heads/"$_branch")"
+	else
+		_branch_sha="$(cat "$1"/.git/"$(cut -d" " -f2 <"$1"/.git/HEAD)")"
+	fi
+	if [[ -f "$1"/.git/refs/remotes/origin/"$_branch" ]]; then
+		_remote_sha="$(cat "$1"/.git/refs/remotes/origin/"$_branch")"
+	else
+		_remote_sha="$(cut -f1 <"$1"/.git/FETCH_HEAD)"
+	fi
 
 	if [[ -n $_remote_sha ]] && [[ -n $_branch_sha ]]; then
-		[[ "$_remote_sha" != "$_branch_sha" ]] && return 1
+		[[ "$_remote_sha" != "$_branch_sha" ]]  && return 1
 	else
 		return 2
 	fi
@@ -146,16 +167,25 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 		continue
 	fi
 	if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
-		is_updated_dir "$_SRCDIR/$_dir" _repo _blob
+		is_updated_dir "$_SRCDIR/$_dir" _repo _tr_blob _curr_blob
 		case "$?" in
 			0)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
 				;;
 			1)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
-				git -C "$_SRCDIR/$_dir" pull "$_repo" "$_blob" \
+				# not in traking branch? stash changes if any, move to it, pull and restore branch
+				if [[ "$_tr_blob" != "$_curr_blob" ]]; then
+					git -C "$_SRCDIR/$_dir" stash && _stashed=1
+					git -C "$_SRCDIR/$_dir" checkout "$_tr_blob"
+				fi
+				git -C "$_SRCDIR/$_dir" pull "$_repo" master \
 					|| aborting "${0##*/}" "Couldn't update (pull) $_dir"
 				if has_submodule "$_SRCDIR/$_dir"; then
 					git -C "$_SRCDIR/$_dir" submodule update
 				fi
+				# restore directory's previous state
+				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop && unset _stashed
+				[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
+
 				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
 				echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
 				;;
@@ -170,5 +200,6 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
 	fi
 done
-
+# Remove color sequences from _tempfile before mailing it
+sed -i '{s/\x1b..\;3.m//g ; s/\x1b..m//g}' "$_tempfile"
 mail -s "${0##*/} log $(date +"%F %T")" "$_mail" <"$_tempfile"
