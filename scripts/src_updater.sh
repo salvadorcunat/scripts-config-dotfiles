@@ -4,6 +4,7 @@
 #
 _SRCDIR="$1"
 _tempfile="/tmp/$(basename $0)_$$"
+_MAIL="false"
 _mail="salvador.cunat@gmail.com"
 _log="true"
 declare _repo
@@ -149,7 +150,17 @@ case $? in
 	2)	aborting "${0##*/}" "-- Local route but no internet access. Check your network settings" ;;
 esac
 
-# Blacklisted directories
+# Check CLI parameters
+#
+while [ "$#" -gt 0 ]; do
+	case "$1" in
+		-m|--mail)	_MAIL="true"
+				shift ;;
+		*)		break ;;
+	esac
+done
+
+#Blacklisted directories
 #
 declare -a _LINES
 _blacklist=."$(basename $0)"; _blacklist="${_blacklist%???}_blacklist"
@@ -177,8 +188,10 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 					git -C "$_SRCDIR/$_dir" stash && _stashed=1
 					git -C "$_SRCDIR/$_dir" checkout "$_tr_blob"
 				fi
-				git -C "$_SRCDIR/$_dir" pull "$_repo" master \
-					|| aborting "${0##*/}" "Couldn't update (pull) $_dir"
+				if ! git -C "$_SRCDIR/$_dir" pull "$_repo" master ; then
+					report_msg "${0##*/}" "--------- ${_dir} --> Pull failed. Check it out"
+					continue
+				fi
 				if has_submodule "$_SRCDIR/$_dir"; then
 					git -C "$_SRCDIR/$_dir" submodule update
 				fi
@@ -202,4 +215,4 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 done
 # Remove color sequences from _tempfile before mailing it
 sed -i '{s/\x1b..\;3.m//g ; s/\x1b..m//g}' "$_tempfile"
-mail -s "${0##*/} log $(date +"%F %T")" "$_mail" <"$_tempfile"
+[[ $_MAIL = "true" ]] && mail -s "${0##*/} log $(date +"%F %T")" "$_mail" <"$_tempfile"

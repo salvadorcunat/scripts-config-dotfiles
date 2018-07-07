@@ -315,7 +315,7 @@ exec --no-startup-id "count=0; \
 			do \
 				echo ' -- i3 launch --> waiting for lxqt to set up'; \
 				sleep 1; \
-				count=$count+1; \
+				count=$(( count + 1 )); \
 				if [ $count -gt 20 ]; \
 					then echo ' -- i3 launch --> lxqt seems to have failed'; \
 					break; \
@@ -335,7 +335,7 @@ exec --no-startup-id "count=0; \
 			do \
 				echo ' -- i3 launch --> waiting for conky'; \
 				sleep 1; \
-				count=$count+1; \
+				count=$(( count + 1 )); \
 				if [ $count -gt 5 ]; \
 					then echo ' -- i3 launch --> conky seems to have failed'; \
 					break; \
