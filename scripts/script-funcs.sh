@@ -190,3 +190,21 @@ is_running()
 		return 0
 	fi
 }
+
+# check_connect()
+# Checks internet connection by pinging a remote server
+# Output: none
+# Return code:	0 If machine can reach internet
+#		1 If there is no default route
+#		2 If 1.1.1.1 can't be reached
+#
+check_connect()
+{
+	if ! ip route |grep -q default; then
+		return 1
+	fi
+	if ! sudo ping -q -c 1 -W 2 1.1.1.1 >/dev/null; then
+		return 2
+	fi
+	return 0
+}

@@ -33,7 +33,7 @@ tempfile=/tmp/temp_$$
 #############################################################################
 #				Trap signals				    #
 #############################################################################
-trap 'set +x; $_sleep 0.5; set -x' DEBUG
+#trap 'set +x; $_sleep 0.5; set -x' DEBUG
 
 trap 'rm -f $tempfile $INPUT_F' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"
 
@@ -116,9 +116,7 @@ read_lines "$tempfile" CONTAINERS
 n=0
 while (( n < ${#CONTAINERS[@]} )); do
 	CONT_ID[$n]=${CONTAINERS[$n]%%\;*}
-	#echo "CONT_ID[$n] = ${CONT_ID[$n]}"
 	CONT_NAME[$n]=${CONTAINERS[$n]##*\;}
-	#echo "CONT_NAME[$n] = ${CONT_NAME[$n]}"
 	(( n++ ))
 done
 unset CONTAINERS
