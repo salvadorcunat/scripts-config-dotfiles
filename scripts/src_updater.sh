@@ -19,6 +19,8 @@ exec 1> >(tee "$_tempfile") 2>&1
 . "$HOME"/sbin/script-funcs.sh
 
 # For debuging
+#_sleep="$(which sleep)"		#/bin/sleep
+#trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 # Colors for fancy output
 #
@@ -80,7 +82,7 @@ preferred_remote()
 #
 has_submodule()
 {
-	[[ ! -f "$0"/.gitmodules ]] && return 1
+	[[ ! -f "$1"/.gitmodules ]] && return 1
 	return 0
 }
 
@@ -99,7 +101,7 @@ is_updated_dir()
 	declare -n _remote="${2:-origin}"
 	local _branch_sha
 	local _remote_sha
-	local -n _current_br="${4}"
+	declare -n _current_br="${4}"
 
 	# Try to be smart about tracking branches
 	_tr_branch="$(git -C "$1" branch -r |grep -- '->' |sed s/^.*\ \-\>\ .*\\///)"
@@ -114,6 +116,8 @@ is_updated_dir()
 					;;
 		esac
 		_branch="${_tr_branch:-master}"
+	else
+		_current_br="$_branch"
 	fi
 
 	_remotes=( $(git -C "$1" remote) )
@@ -185,18 +189,21 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 			1)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
 				# not in traking branch? stash changes if any, move to it, pull and restore branch
 				if [[ "$_tr_blob" != "$_curr_blob" ]]; then
-					git -C "$_SRCDIR/$_dir" stash && _stashed=1
+					git -C "$_SRCDIR/$_dir" status -s -uno |grep -q ' M '
+					if (( $? == 0 ))	; then
+						git -C "$_SRCDIR/$_dir" stash && _stashed=1
+					fi
 					git -C "$_SRCDIR/$_dir" checkout "$_tr_blob"
 				fi
-				if ! git -C "$_SRCDIR/$_dir" pull "$_repo" master ; then
-					report_msg "${0##*/}" "--------- ${_dir} --> Pull failed. Check it out"
+				if ! git -C "$_SRCDIR/$_dir" pull "$_repo" "$_tr_blob" ; then
+					report_msg "${0##*/}" "--------- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Pull failed. Check it out${DEFAULT}"
 					continue
 				fi
 				if has_submodule "$_SRCDIR/$_dir"; then
 					git -C "$_SRCDIR/$_dir" submodule update
 				fi
 				# restore directory's previous state
-				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop && unset _stashed
+				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
 				[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
 
 				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
@@ -212,6 +219,7 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 	else
 		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
 	fi
+	unset _repo _tr_blob _curr_blob _stashed
 done
 # Remove color sequences from _tempfile before mailing it
 sed -i '{s/\x1b..\;3.m//g ; s/\x1b..m//g}' "$_tempfile"

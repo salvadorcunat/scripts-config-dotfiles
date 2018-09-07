@@ -203,7 +203,7 @@ check_connect()
 	if ! ip route |grep -q default; then
 		return 1
 	fi
-	if ! sudo ping -q -c 1 -W 2 1.1.1.1 >/dev/null; then
+	if ! sudo ping -q -c 1 -W 10 1.1.1.1 >/dev/null; then
 		return 2
 	fi
 	return 0

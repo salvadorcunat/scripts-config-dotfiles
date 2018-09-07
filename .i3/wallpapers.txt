@@ -56,3 +56,5 @@
 /home/boret/Descargas/wp_NGC-7331.jpg
 /home/boret/Descargas/wp_NGC-1559.jpg
 /home/boret/Descargas/wp_motorhead.jpg
+/home/boret/Descargas/wp_ergodox_ez_august.png
+/home/boret/Descargas/wp_ergodox_ez_july.png
