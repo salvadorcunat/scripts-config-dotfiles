@@ -66,3 +66,10 @@ if [ -f $(which powerline-daemon) ]; then
   export POWERLINE_BASH_SELECT=1
   . /usr/share/powerline/bindings/bash/powerline.sh
 fi
+
+# set aliases
+alias tig='tig --all'
+alias grep='grep --color'
+alias gtypist='gtypist esp.typ'
+alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"
+

@@ -18,11 +18,6 @@ fi
 # set default editor to vim
 export EDITOR=/usr/bin/vim.nox
 
-# set aliases
-alias tig='tig --all'
-alias grep='grep --color'
-alias gtypist='gtypist esp.typ'
-
 # other stuff
 if [ ! -z "$DISPLAY" ]; then
 	source ~/.xsh
