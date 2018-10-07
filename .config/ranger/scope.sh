@@ -24,7 +24,7 @@ width="$2"   # Width of the preview pane (number of fitting characters)
 height="$3"  # Height of the preview pane (number of fitting characters)
 cached="$4"  # Path that should be used to cache image previews
 
-maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
+maxln=1000    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 
 # Find out something about the file:
 mimetype=$(file --mime-type -Lb "$path")
@@ -65,6 +65,7 @@ case "$extension" in
         try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
     # HTML Pages:
     htm|html|xhtml)
+        try links2 -dump "$path" && { dump | trim | fmt -s -w "$width"; exit 4; }
         try w3m    -dump "$path" && { dump | trim | fmt -s -w "$width"; exit 4; }
         try lynx   -dump "$path" && { dump | trim | fmt -s -w "$width"; exit 4; }
         try elinks -dump "$path" && { dump | trim | fmt -s -w "$width"; exit 4; }
@@ -74,7 +75,7 @@ esac
 case "$mimetype" in
     # Syntax highlight for text files:
     text/* | */xml)
-        try highlight --out-format=ansi "$path" && { dump | trim; exit 5; } || exit 2;;
+        try highlight -J 150 -V --out-format=ansi "$path" && { dump | trim; exit 5; } || exit 2;;
     # Ascii-previews of images:
     #image/*)
     #    img2txt --gamma=1.0 --width="$width" "$path" && exit 4 || exit 1;;

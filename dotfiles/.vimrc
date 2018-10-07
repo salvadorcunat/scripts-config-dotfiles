@@ -78,3 +78,6 @@ endif
 " gtypist
 "
 autocmd BufNewFile,BufRead *.typ setf gtypist
+
+"Gitgutter
+"let g:gitgutter_highlight_lines = 1

@@ -71,7 +71,7 @@ info	--auto-rotate --auto-zoom --borderless --draw-tinted -g 800x600 \
 	--sort mtime --image-bg black \
 	--info "exiftool -p ~/.config/feh/exiftool_out.fmt %F"
 
-info_border	--auto-rotate --auto-zoom --draw-tinted -g 800x600 \
+info_border	--auto-rotate --scale-down --draw-tinted -g 800x600 \
 	--sort mtime --image-bg black \
 	--info "exiftool -p ~/.config/feh/exiftool_out.fmt %F"
 

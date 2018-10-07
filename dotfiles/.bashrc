@@ -68,7 +68,6 @@ if [ -f $(which powerline-daemon) ]; then
 fi
 
 # set aliases
-alias tig='tig --all'
 alias grep='grep --color'
 alias gtypist='gtypist esp.typ'
 alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"

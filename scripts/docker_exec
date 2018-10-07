@@ -164,4 +164,4 @@ while (( n < ${#OPTIONS[@]} )); do
 done
 
 clear
-"$_term" -t "Termite running in $CONT_SELECTED" --geometry 640x480 --class=termite_floating -e "${COMMAND[*]}" &
+"$_term" -t "Termite running in $CONT_SELECTED" --class=termite_floating -e "${COMMAND[*]}" &

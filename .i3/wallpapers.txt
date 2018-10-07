@@ -34,7 +34,6 @@
 /home/boret/Descargas/wp_barco_9.jpg
 /home/boret/Descargas/wp_death_1.jpg
 /home/boret/Descargas/wp_galactica_1.jpg
-/home/boret/Descargas/wp_galactica_2.jpg
 /home/boret/Descargas/wp_galactica_3.jpg
 /home/boret/Descargas/wp_mundos_1.jpg
 /home/boret/Descargas/wp_paisaje_1.jpg

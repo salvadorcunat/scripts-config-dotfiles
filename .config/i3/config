@@ -137,7 +137,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+x exec "/home/boret/sbin/swap_wss eDP-1"
 
 # activate secondary monitor after plugging
-bindsym $mod+Shift+x exec "/home/boret/sbin/multi_screen"
+bindsym $mod+Shift+x exec "/home/boret/sbin/multi_screen -m"
 
 # move focused window to scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -185,16 +185,16 @@ bindsym $mod+r mode "resize"
 #
 # Set workspaces for multimonitor
 #
-workspace 1 output eDP-1
-workspace 2 output eDP-1
-workspace 3 output eDP-1
-workspace 4 output eDP-1
-workspace 5 output eDP-1
-workspace 6 output eDP-1
-workspace 7 output HDMI-1
-workspace 8 output HDMI-1
-workspace 9 output HDMI-1
-workspace 10 output HDMI-1
+#workspace 1 output eDP-1
+#workspace 2 output eDP-1
+#workspace 3 output eDP-1
+#workspace 4 output eDP-1
+#workspace 5 output eDP-1
+#workspace 6 output eDP-1
+#workspace 7 output HDMI-1
+#workspace 8 output HDMI-1
+#workspace 9 output HDMI-1
+#workspace 10 output HDMI-1
 
 #
 # Run dunst if we are running i3 without a desktop manager
@@ -205,7 +205,7 @@ exec --no-startup-id "$HOME/.i3/dunst_wrap"
 # Set second monitor, first
 #
 #exec --no-startup-id xrandr --output HDMI-1 --rotate normal --right-of eDP-1 --mode 1920x1080
-exec --no-startup-id "/home/boret/sbin/multi_screen"
+exec --no-startup-id /home/boret/sbin/multi_screen --multi
 
 #
 # Lanza el fondo
@@ -280,6 +280,7 @@ for_window [title="^Wicd-curses$"] floating enabled
 for_window [title="^Test$"] floating enabled
 for_window [title="^Mpstat$"] floating enabled
 for_window [title="^fetchscr$"] border none
+for_window [title="^motorhead$"] floating enable
 for_window [class="^cool-retro-term$"] floating enable
 for_window [class="^termite_floating$"] floating enable; border none
 # for_window [title="mc"] floating enabled
@@ -318,6 +319,7 @@ bar {
 	#height 20
 	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
 	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
+	output HDMI-1
 }
 #
 # Launch initial workspace
@@ -325,9 +327,10 @@ bar {
 
 
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
-	     -l '/home/boret/.i3/testing_2.json' \
-	     -c '/home/boret/.i3/fehbg_new -d 20m' \
+	     -l '/home/boret/.i3/testing.json' \
+	     -c '/home/boret/.i3/fehbg_new -d 10m' \
 	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
+	     -c '/home/boret/.i3/termite_wrap -t Terminal' \
 	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
 	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
 	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \

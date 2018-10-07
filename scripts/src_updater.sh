@@ -2,9 +2,9 @@
 
 # globl variables
 #
-_SRCDIR="$1"
 _tempfile="/tmp/$(basename $0)_$$"
 _MAIL="false"
+_VERBOSE="false"
 _mail="salvador.cunat@gmail.com"
 _log="true"
 declare _repo
@@ -37,7 +37,9 @@ trap 'rm -f $_tempfile' 0
 #
 report_msg()
 {
-	echo -e "$1" "$2"
+	if [ "$_VERBOSE" == "true" ]; then
+		echo -e "$1" "$2"
+	fi
 	if [ "$_log" == "true" ]; then
 		logger --id="$$" -t "$USER-$1" -- "$(sed -e 's/.033..\;3.m//g' -e 's/.033..m//g' <<< "$2")"
 	fi
@@ -160,9 +162,13 @@ while [ "$#" -gt 0 ]; do
 	case "$1" in
 		-m|--mail)	_MAIL="true"
 				shift ;;
+		-v|--verbose)	_VERBOSE="true"
+				shift ;;
 		*)		break ;;
 	esac
 done
+
+_SRCDIR="$1"
 
 #Blacklisted directories
 #
@@ -203,8 +209,8 @@ for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 					git -C "$_SRCDIR/$_dir" submodule update
 				fi
 				# restore directory's previous state
-				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
 				[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
+				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
 
 				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
 				echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
