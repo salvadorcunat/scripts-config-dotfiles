@@ -319,7 +319,6 @@ bar {
 	#height 20
 	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
 	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
-	output HDMI-1
 }
 #
 # Launch initial workspace

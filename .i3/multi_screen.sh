@@ -9,8 +9,14 @@ Tiny script to manage connected heads.
 Parameters: One single parameter meaning the task to do:
 	-d --desktop : Turn off laptop screen and set external
 	-l --laptop : Turn off external screen and set laptop one
-	-m --multi: Multi screen mode set an external head at the right of
-	            laptop screen.
+	-m --multi: Multi screen mode set external heads left, right or both
+		    of laptop screen. Defaults to external at the right of
+		    laptop's, but can be changed. Keep in mind that laptop
+		    is "0" usually. E.g.:
+		    multi_screen.sh -m 1 0  will place external head left of
+		    laptop's screen.
+		    multi_screen -m 0 1 2   will place 1 at the center, with 0
+		    and 2 in the left and right sides.
 "
 XRANDR=/usr/bin/xrandr
 NOTIFY=/usr/bin/notify-send
@@ -63,6 +69,40 @@ set_unique ()
 	fi
 
 }
+
+#
+# Set multi head.
+# Params: 2 or 3 depending of heads number.
+#	- If 2 params: $2 is at right of $1.
+#	- If 3 params: $2 is at center; $1 at left and $3 at right.
+# Return: nothing; exit script on failure.
+set_multi ()
+{
+	case "$#" in
+		2)	if $XRANDR --output "${_MONITORS["$2"]}" --rotate 'normal' --right-of "${_MONITORS["$1"]}" --mode "${_MODES["$2"]}" 2> $TMPFILE
+			then
+				report2screen normal "${0##*/}" "Multi screen operations enabled\\n${_MONITORS["$2"]} at the right of ${_MONITORS["$1"]} with resolution ${_MODES["$2"]}"
+			else
+				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
+				exit 1
+			fi ;;
+		3)	if $XRANDR --output "${_MONITORS["$3"]}" --rotate 'normal' --right-of "${_MONITORS["$2"]}" --mode "${_MODES["$3"]}" 2> $TMPFILE
+			then
+				report2screen normal "${0##*/}" "Multi screen operations enabled\\n${_MONITORS["$3"]} at the right of ${_MONITORS["$2"]} with resolution ${_MODES["$3"]}"
+			else
+				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$($XRANDR |grep -e \ connected)"
+				exit 1
+			fi
+			if $XRANDR --output "${_MONITORS["$1"]}" --rotate 'normal' --left-of "${_MONITORS["$2"]}" --mode "${_MODES["$1"]}" 2> $TMPFILE
+			then
+				report2screen normal "${0##*/}" "Multi screen operations enabled\\n${_MONITORS["$1"]} at the left of ${_MONITORS["$2"]} with resolution ${_MODES["$1"]}"
+			else
+				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$($XRANDR |grep -e \ connected)"
+				exit 1
+			fi ;;
+	esac
+}
+
 # Reporting messages and errors format.
 # Put a report in the screen and send another to stderr, which should
 # be printed to .xsession-errors
@@ -90,7 +130,7 @@ if [[ -z ${_MONITORS[1]} ]]; then
 fi
 
 # Read CLI parameters
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
 	report2screen  critical "${0##*/}" "Bad parameters. Aborting."
 	RC=2
 	exit $RC
@@ -113,14 +153,12 @@ case "$1" in
 				RC=1
 				exit $RC
 			fi ;;
-	-m|--multi)	if $XRANDR --output "${_MONITORS[1]}" --rotate 'normal' --right-of "${_MONITORS[0]}" --mode "${_MODES[1]}" 2> $TMPFILE
-			then
-				report2screen normal "${0##*/}" "Multi screen operations enabled\\n${_MONITORS[1]} at the right of ${_MONITORS[0]} with resolution ${_MODES[1]}"
-			else
-				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
-				RC=1
-				exit $RC
-			fi ;;
+	-m|--multi)	case "$#" in
+				4)	set_multi "$2" "$3" "$4" ;;
+				3)	set_multi "$2" "$3" ;;
+				2)	report2screen critical "${0##*/}" "multi\\nWrong number of parameters\\nSet two monitors at least." && exit 1 ;;
+				*)	set_multi 0 1 ;;
+			esac ;;
 	*)		echo "$_usage"
 			RC=0
 			exit $RC ;;
