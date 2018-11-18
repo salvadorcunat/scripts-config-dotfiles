@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# Open vim with passed arguments, and a predefined cheat-sheet with vim
+# shortcuts in an i3 container, right of the terminal.
+#
+# Requires conky, termite and libnotify-bin (last two may be changed to
+# different preferences changing this script)
+#
+# Uses a config file for conky, containing vim's commands and shortcuts and
+# formatting conky output, ~/.i3/conky_vim_cheat.conf. Change this file to your
+# preferences and system settings. Personally, I edit this file over the time
+# to remove memorized commands or shortcuts and add new ones. Keep in mind
+# that screen space is limited and reducing the font size is also limited.
+#
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+I3MSG=$(command -v i3-msg)
+TRMNL=$(command -v termite_wrap)	# adjust to your preferred
+CONKY=$(command -v conky)
+NOTIFY=$(command -v notify-send)
+SLEEP=$(command -v /bin/sleep)		# GNU sleep permits float numbers
+TEMPFILE=/tmp/vim_ws_tmp.$$
+RC=0
+
+trap 'rm -f $TEMPFILE; reset' 0		# Remove tempfile on good exit and reset temrinal
+
+# Display an error warning and the tempfile. Do not remove
+# tempfile on error for forencsics tasks
+notify_error()
+{
+	RC=64
+	$NOTIFY -u critical "Ha fallado $1" "Return code = $RC\\n$(cat "$2")"
+}
+
+# Begin main
+#
+
+# We don't want clear backgrounds while showing cheat-sheet so kill current
+# fehbg_new and run another in dark mode. Get current running feh command
+# to restore system on exit.
+FEH=( $(pgrep -anf feh |sed s/.*[0-9]\ //) )
+"$HOME"/.i3/fehbg_new --dark -d 10m &
+
+# Open a new container right of current one
+$I3MSG -t run_command open >/dev/null 2>&1
+$I3MSG -t run_command resize set width 180  >/dev/null 2>&1
+
+# Launch a conky item with a vim commands cheat sheet, abort on error
+$I3MSG -t run_command exec "$CONKY -DD -c $HOME/.i3/conky_vim_cheat.conf >>$TEMPFILE" >/dev/null 2>&1 &
+$SLEEP 0.50
+CONKYPROC=$(pgrep -n -f vim_cheat)
+if [ -z "$CONKYPROC" ]; then
+	notify_error "$CONKY" "$TEMPFILE"
+	exit $RC
+fi
+
+# Return focus to the terminal and launch vim
+$I3MSG -t run_command focus left >/dev/null 2>&1
+vim "$@" &
+$SLEEP 0.50
+TERMPROC=$(pgrep -n vim)
+if [ -z "$TERMPROC" ]; then
+	notify_error "$TRMNL" "$TEMPFILE"
+	exit $RC
+fi
+
+# Keep the script waiting until vim is closed
+while [ -d "/proc/$TERMPROC" ]; do
+	$SLEEP 2
+done
+
+# Kill conky and restore previous fehbg command
+kill -9 "$CONKYPROC"
+eval set -- "${FEH[@]}"
+if [ "$1" == "/bin/bash" ]; then
+	shift
+fi
+
+/bin/bash "$@"  &
+exit $RC
