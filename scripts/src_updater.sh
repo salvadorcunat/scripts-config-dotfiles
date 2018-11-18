@@ -1,12 +1,25 @@
 #!/bin/bash
-
+#
+_usage="
+###                                                                        ###
+# Update git repos in directoris passed as CLI parameters.                   #
+# Options:	-v|--verbose	show messages if running on terminal         #
+#		-m|--mail	send a log file to an e-mail                 #
+#		-l|--log	records messages to syslog                   #
+#		-h|--help	show this help                               #
+# examples:                                                                  #
+#	src_updater.sh -v ~/src ~/.vim/bundle                                #
+#	update git repos in ~/src and ~/.vim/bundle dirs, while outputting   #
+#	to stdout if run from command line.                                  #
+###                                                                        ###
+"
 # globl variables
 #
 _tempfile="/tmp/$(basename $0)_$$"
 _MAIL="false"
 _VERBOSE="false"
 _mail="salvador.cunat@gmail.com"
-_log="true"
+_log="false"
 declare _repo
 declare _blob
 
@@ -37,10 +50,13 @@ trap 'rm -f $_tempfile' 0
 #
 report_msg()
 {
-	if [ "$_VERBOSE" == "true" ]; then
+	# Send messages to stdout if set and running from CLI
+	# [ -t 1 ] checks if stdout is attached to a terminal
+	if [[ "$_VERBOSE" == "true" && -t 0 ]]; then
 		echo -e "$1" "$2"
 	fi
-	if [ "$_log" == "true" ]; then
+	# Log messages to syslog if not running from CLI or manually set
+	if [[ "$_log" == "true" || ! -t 0 ]]; then
 		logger --id="$$" -t "$USER-$1" -- "$(sed -e 's/.033..\;3.m//g' -e 's/.033..m//g' <<< "$2")"
 	fi
 }
@@ -148,14 +164,6 @@ is_updated_dir()
 	return 0
 }
 
-# Check internet connectivity. Abort if none, as we can't update anything.
-#
-check_connect
-case $? in
-	1)	aborting "${0##*/}" "-- No default route. Check your network settings" ;;
-	2)	aborting "${0##*/}" "-- Local route but no internet access. Check your network settings" ;;
-esac
-
 # Check CLI parameters
 #
 while [ "$#" -gt 0 ]; do
@@ -164,11 +172,21 @@ while [ "$#" -gt 0 ]; do
 				shift ;;
 		-v|--verbose)	_VERBOSE="true"
 				shift ;;
+		-l|--log)	_log="true"
+				shift;;
+		-h|--help)	echo "$_usage" && exit 0
+				;;
 		*)		break ;;
 	esac
 done
 
-_SRCDIR="$1"
+# Check internet connectivity. Abort if none, as we can't update anything.
+#
+check_connect
+case $? in
+	1)	aborting "${0##*/}" "-- No default route. Check your network settings" ;;
+	2)	aborting "${0##*/}" "-- Local route but no internet access. Check your network settings" ;;
+esac
 
 #Blacklisted directories
 #
@@ -178,54 +196,61 @@ read_lines "${0%/*}/$_blacklist" _LINES
 _exclude="${_LINES[*]}"
 unset _LINES _blacklist
 
-# main
+# Assume any other param is a directory to update
 #
-for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
-	_dir=${_dir%/}
-	#echo -e "-- ${GREEN}Trying${DEFAULT} --> ${WHITE}${_dir}${DEFAULT}"
-	if is_excluded_dir "$_dir"; then
-		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
-		continue
-	fi
-	if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
-		is_updated_dir "$_SRCDIR/$_dir" _repo _tr_blob _curr_blob
-		case "$?" in
-			0)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
-				;;
-			1)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
-				# not in traking branch? stash changes if any, move to it, pull and restore branch
-				if [[ "$_tr_blob" != "$_curr_blob" ]]; then
-					git -C "$_SRCDIR/$_dir" status -s -uno |grep -q ' M '
-					if (( $? == 0 ))	; then
-						git -C "$_SRCDIR/$_dir" stash && _stashed=1
-					fi
-					git -C "$_SRCDIR/$_dir" checkout "$_tr_blob"
-				fi
-				if ! git -C "$_SRCDIR/$_dir" pull "$_repo" "$_tr_blob" ; then
-					report_msg "${0##*/}" "--------- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Pull failed. Check it out${DEFAULT}"
-					continue
-				fi
-				if has_submodule "$_SRCDIR/$_dir"; then
-					git -C "$_SRCDIR/$_dir" submodule update
-				fi
-				# restore directory's previous state
-				[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
-				(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
+while [ $# -gt 0 ]; do
 
-				[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
-				echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
-				;;
-			2)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
-				;;
-			3)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Git fetch failed, check connection or remote.${DEFAULT}"
-				;;
-			4)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}No remotes. Is this a main repo?${DEFAULT}"
-				;;
-		esac
-	else
-		report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
-	fi
-	unset _repo _tr_blob _curr_blob _stashed
+	_SRCDIR="$1"
+
+	# main
+	#
+	for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
+		_dir=${_dir%/}
+		if is_excluded_dir "$_dir"; then
+			report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
+			continue
+		fi
+		if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
+			is_updated_dir "$_SRCDIR/$_dir" _repo _tr_blob _curr_blob
+			case "$?" in
+				0)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${GREEN}Up to date${DEFAULT}"
+					;;
+				1)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${BLUE}Not updated ... Pulling${DEFAULT}"
+					# not in traking branch? stash changes if any, move to it, pull and restore branch
+					if [[ "$_tr_blob" != "$_curr_blob" ]]; then
+						git -C "$_SRCDIR/$_dir" status -s -uno |grep -q ' M '
+						if (( $? == 0 ))	; then
+							git -C "$_SRCDIR/$_dir" stash && _stashed=1
+						fi
+						git -C "$_SRCDIR/$_dir" checkout "$_tr_blob"
+					fi
+					if ! git -C "$_SRCDIR/$_dir" pull "$_repo" "$_tr_blob" ; then
+						report_msg "${0##*/}" "--------- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Pull failed. Check it out${DEFAULT}"
+						continue
+					fi
+					if has_submodule "$_SRCDIR/$_dir"; then
+						git -C "$_SRCDIR/$_dir" submodule update
+					fi
+					# restore directory's previous state
+					[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
+					(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
+
+					[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
+					echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
+					;;
+				2)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
+					;;
+				3)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Git fetch failed, check connection or remote.${DEFAULT}"
+					;;
+				4)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}No remotes. Is this a main repo?${DEFAULT}"
+					;;
+			esac
+		else
+			report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Not a git repo${DEFAULT}"
+		fi
+		unset _repo _tr_blob _curr_blob _stashed
+	done
+	shift
 done
 # Remove color sequences from _tempfile before mailing it
 sed -i '{s/\x1b..\;3.m//g ; s/\x1b..m//g}' "$_tempfile"

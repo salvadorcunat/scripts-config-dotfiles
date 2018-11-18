@@ -3,10 +3,9 @@
 # A dialog based script to run commands on running docker images
 #
 
-DIALOG=/usr/bin/dialog
-DOCKER=/usr/bin/docker
-_sleep="$(which sleep)"
-_term="$HOME/.i3/termite_wrap"
+DIALOG="$(command -v dialog)" || { echo "Can't find dialog binary. Exiting" && exit 1; }
+DOCKER="$(command -v docker)" || { echo "Can't find docker binary. Exiting" && exit 1; }
+_term="$(command -v termite_wrap)" || { echo "Can't find termite_wrap. Exiting" && exit 1; }
 
 DIALOG_OK=0					#
 DIALOG_CANCEL=1					#
@@ -33,6 +32,7 @@ tempfile=/tmp/temp_$$
 #############################################################################
 #				Trap signals				    #
 #############################################################################
+#_sleep="$(command -v sleep)"
 #trap 'set +x; $_sleep 0.5; set -x' DEBUG
 
 trap 'rm -f $tempfile $INPUT_F' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"

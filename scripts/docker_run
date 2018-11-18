@@ -3,7 +3,7 @@
 # A dialog based script to run locally stored docker images
 #
 
-DIALOG=/usr/bin/dialog
+DIALOG="$(command -v dialog)" || { echo "Can't find dialog binary. Aborting." && exit 1; }
 
 DIALOG_OK=0					#
 DIALOG_CANCEL=1					#

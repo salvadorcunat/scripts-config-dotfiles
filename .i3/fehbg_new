@@ -41,13 +41,16 @@ report2screen()
 }
 
 # Is there another script running? Kill it.
-_prev="$(pgrep -o "$(basename "$0")")"
+_prev="$(pgrep -of "$(basename "$0")")"
 [[ -n $_prev ]] && [[ $_prev != "$$" ]] && kill -9 "$_prev"
 unset _prev
 
 # Read parameters if any
 while [[ $# -gt 0 ]];do
 	case "$1" in
+		--dark)         _file="$HOME"/.i3/wallpapers-dark.txt
+				shift
+				;;
 		-d|--delay)	_delay="${2:-15m}"
 				if [[ -n $2 ]]; then
 					shift 2

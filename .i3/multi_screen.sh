@@ -18,15 +18,15 @@ Parameters: One single parameter meaning the task to do:
 		    multi_screen -m 0 1 2   will place 1 at the center, with 0
 		    and 2 in the left and right sides.
 "
-XRANDR=/usr/bin/xrandr
-NOTIFY=/usr/bin/notify-send
+. $HOME/sbin/script-funcs.sh
+
+XRANDR="$(command -v xrandr)"; [[ -z $XRANDR ]] && report_msg "${0##*/}"  "xrandr not avaliable" >&2 && exit 1
+NOTIFY="$(command -v notify-send)"; [[ -z $NOTIFY ]] && report_msg "${0##*/}" "notify_send not avaliable" >&2
 TMPFILE=/tmp/tmp_$$
 RC=0
 declare -a _MONITORS
 declare -a _MODES
 trap 'rm -f $TMPFILE' 0 1 2
-
-. $HOME/sbin/script-funcs.sh
 
 # get preferred mode for monitors
 # parameters	1.- global variable to store the modes, default to _MODES
@@ -113,7 +113,7 @@ set_multi ()
 report2screen()
 {
 	report_msg "$2" "$3" >&2
-	$NOTIFY -u "$1" "$2" "$3"
+	[[ ! -z $NOTIFY ]] && $NOTIFY -u "$1" "$2" "$3"
 }
 
 # Create an array with avaliable _MONITORS

@@ -13,18 +13,12 @@ append|:w >><archivo>
 linea|[esc] d[num]d
 palabra|w
 h/fin linea|$
-*Reemplazar
-|[esc] r[caracter]
-*Cambiar
-linea|[esc] c[num]d
 palabra|w
 h/fin linea|$
 *Fold
 |[esc] v <seleccionar texto> zf
 Unfold|zo
 Refold|zc
-*Busqueda parentesis
-|% (situado sobre parentesis)
 *Posición
 anterior|CTRL-O
 última|CTRL-I

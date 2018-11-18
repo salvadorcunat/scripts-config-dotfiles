@@ -5,7 +5,6 @@
 # Boret 04/2018 : Actually uses lemonbar-xft from
 # https://github.com/krypt-n/bar.git as regular lemonbar fails miserbly
 # to work with fontconfig.
-
 _pwd="$(dirname "$0")"
 . "${_pwd}"/i3_lemonbar_config
 #set -x
@@ -16,17 +15,19 @@ mkfifo "${panel_fifo}"
 
 ### EVENTS METERS
 
-# Window title, "WIN"
-xprop -spy -root _NET_ACTIVE_WINDOW | sed -un 's/.*\(0x.*\)/WIN\1/p' > "${panel_fifo}" &
-
 # Background scripts which have their own delay time if any, and don't fit
-# well with the 1 second delay set in this script.
+# well with the 1 second delay set in this script."
+
+# Run this once out of loop to get colors
+"${_pwd}"/heads > "${panel_fifo}" &
 
 # i3 Workspaces, "WSP"
 # TODO : Restarting I3 breaks the IPC socket con. :(
 # Boret: Do not run if not on i3wm
 if [[ $(basename "${DESKTOP_SESSION}") == *i3* ]]; then
 	"${_pwd}"/i3_workspaces.pl > "${panel_fifo}" &
+# Window title, "WIN"
+xprop -spy -root _NET_ACTIVE_WINDOW | sed -un 's/.*\(0x.*\)/WIN\1/p' > "${panel_fifo}" &
 fi
 
 # Boret battery
@@ -60,6 +61,9 @@ while :; do
 
 	# Boret numlock
 	"${_pwd}"/keyindicator NUM > "${panel_fifo}"
+
+	# Boret heads
+	"${_pwd}"/heads > "${panel_fifo}"
 
 	# Finally, wait 1 second
 	sleep 1s;

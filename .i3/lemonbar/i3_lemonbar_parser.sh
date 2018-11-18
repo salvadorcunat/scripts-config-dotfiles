@@ -27,25 +27,63 @@ pad_str()
       fi
       printf "%s" "$padded"
 }
-
 # initial values for global variables
 last_bg="${color_ws_bg_inactive}"
 
 # parser
 while read -r line ; do
 	case ${line} in
+		HEAD*)
+			# Connected monitors
+			heads="%{F${color_ws_fg_inactive} B${color_ws_bg_inactive} T2}$(pad_str ${icon_heads} 3)%{T2}"
+			last_bg_head="${color_ws_bg_inactive}"
+			set -- ${line#????}
+			while [ $# -gt 0 ] ; do
+				_screen=${1%????}
+				_status=${1##*_}
+				case $_status in
+					CON)
+						# If consecutive screens are connected, use light separator instead of usual hard one
+						if [ "${last_bg_head}" == "${color_ws_bg_active}" ]; then
+							full_sep="${heads}%{F${color_back} B${last_bg_head}}${sep_l_right}"
+						else
+							full_sep="${heads}%{F${color_ws_bg_inactive} B${color_ws_bg_active}}${sep_right}"
+						fi
+						heads="${full_sep}%{F${color_back} B${color_ws_bg_active} T1}$(pad_str "${_screen}" 7)%{T2}"
+						last_bg_head="${color_ws_bg_active}"
+						#last_bg="$last_bg_head"
+						;;
+					DIS)
+						heads="${heads}%{F${last_bg_head} B${color_head_dis_bg}}${sep_right}%{F${color_fore} B${color_head_dis_bg} T1}$(pad_str "${_screen}" 7)%{T2}"
+						last_bg_head="${color_head_dis_bg}"
+						#last_bg="${last_bg_head}"
+						;;
+				esac
+				shift
+			done
+			# force a workspaces reload
+			echo "${ws_line}" >${panel_fifo}
+			;;
 		WSP*)
 			# I3 Workspaces
-			wsp="%{F${color_ws_fg_inactive} B${color_ws_bg_inactive} T2}$(pad_str ${icon_wsp} 3)%{T2}"
+			wsp="%{F${last_bg_head} B${color_ws_bg_inactive}}${sep_right}%{F${color_ws_fg_inactive} B${color_ws_bg_inactive} T2}$(pad_str ${icon_wsp} 3)%{T2}"
 			last_bg="${color_ws_bg_inactive}"
-			set -- ${line#???}
+			ws_line=${line}
+			set -- ${ws_line#???}
 			while [ $# -gt 0 ] ; do
 				case $1 in
-					FOC*)
-						wsp="${wsp}%{F${last_bg} B${color_ws_bg_active}}${sep_right}%{F${color_ws_fg_active} B${color_ws_bg_active} T1}$(pad_str "${1#???}" 3)%{T2}"
-						last_bg="${color_ws_bg_active}"
+					FOC*|ACT*)
+						# If consecutive workspaces are active, use light separator instead of usual hard one
+						if [ "${last_bg}" == "${color_ws_bg_active}" ]; then
+							full_sep="${wsp}%{F${color_ws_bg_inactive} B${color_ws_bg_active}}${sep_l_right}"
+						else
+							full_sep="${wsp}%{F${last_bg} B${color_ws_bg_active}}${sep_right}"
+						fi
+						wsp="${full_sep}%{F${color_ws_fg_active} B${color_ws_bg_active} T1}%{A:change_ws ${1#???}:}$(pad_str "${1#???}" 3)%{A}%{T2}"
+						last_bg_ws="${color_ws_bg_active}"
+						last_bg="${last_bg_ws}"
 						;;
-					INA*|ACT*)
+					INA*)
 						# If consecutive workspaces are inactive, use light separator instead of usual hard one
 						if [ "${last_bg}" == "${color_ws_bg_inactive}" ]; then
 							full_sep="${wsp}%{F${color_ws_bg_active} B${color_ws_bg_inactive}}${sep_l_right}"
@@ -53,15 +91,19 @@ while read -r line ; do
 							full_sep="${wsp}%{F${last_bg} B${color_ws_bg_inactive}}${sep_right}"
 						fi
 						wsp="${full_sep}%{F${color_ws_fg_inactive} B${color_ws_bg_inactive} T1}%{A:change_ws ${1#???}:}$(pad_str "${1#???}" 3)%{A}%{T2}"
-						last_bg="${color_ws_bg_inactive}"
+						last_bg_ws="${color_ws_bg_inactive}"
+						last_bg="${last_bg_ws}"
 						;;
 					URG*)
 						wsp="${wsp}%{F${last_bg} B${color_ws_bg_urgent}}${sep_right}%{F${color_ws_fg_inactive} B${color_ws_bg_urgent} T1}%{A:change_ws ${1#???}:}$(pad_str "${1#???}" 3)%{A}%{T2}"
-						last_bg="${color_ws_bg_urgent}"
+						last_bg_ws="${color_ws_bg_urgent}"
+						last_bg="${last_bg_ws}"
 						;;
 				esac
 				shift
 			done
+			# force a windows reload
+			echo "$(xprop -root _NET_ACTIVE_WINDOW | sed -un 's/.*\(0x.*\)/WIN\1/p')" >"${panel_fifo}"
 			;;
 		WIN*)
 			# window title
@@ -179,5 +221,5 @@ while read -r line ; do
 	# initial value
 	_date_time="%{F${color_back} T2}${sep_left}%{B${color_back} F${color_fore} T1}$(pad_str "$(date +"%a %d-%b %R")" 18)"
 	# And finally, output
-	printf "%s\n" "%{l}${wsp}${title} %{r}${warning} ${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
+	printf "%s\\n" "%{l}%{B-}   ${heads}${wsp}${title} %{r}${warning} ${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
 done

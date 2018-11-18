@@ -4,7 +4,7 @@
 # If you just want to run an image use docker_run instead.
 #
 
-DIALOG=/usr/bin/dialog
+DIALOG="$(command -v dialog)"  || { echo "Can't find dialog" && exit 1; }
 
 DIALOG_OK=0					#
 DIALOG_CANCEL=1					#

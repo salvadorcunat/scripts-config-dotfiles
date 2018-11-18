@@ -19,9 +19,6 @@ if [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
-# Alias
-alias ls="ls --color=auto"
-
 # Set readline mode to vim [boret]
 set -o vi
 
@@ -69,6 +66,7 @@ fi
 
 # set aliases
 alias grep='grep --color'
-alias gtypist='gtypist esp.typ'
 alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"
+alias ls="ls --color=auto"
+alias vimcat="vimcat +n --"
 

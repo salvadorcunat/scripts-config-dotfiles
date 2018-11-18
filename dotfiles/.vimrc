@@ -17,6 +17,7 @@ colorscheme elflord
 set hls
 set is
 set nu
+set cul
 " The default blue is just impossible to see on a black terminal
 highlight Comment ctermfg=Brown
 " clearly point out when someone have trailing spaces
@@ -81,3 +82,26 @@ autocmd BufNewFile,BufRead *.typ setf gtypist
 
 "Gitgutter
 "let g:gitgutter_highlight_lines = 1
+
+" Ale
+let g:ale_sign_warning = ''
+"let g:ale_sign_error = ''
+let g:ale_sign_error = ''
+let g:ale_set_highlights = 0
+let g:airline#extensions#ale#enabled = 1
+let g:ale_open_list = 1                           "Keep list opened while linting. Use mapped key
+let g:ale_list_window_size = 5
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_enter = 0                       "Do not lint on openning. Use mapped key
+let g:ale_linters = {
+\	'c': ['gcc','cppcheck'],
+\	'cpp': ['cppcheck'],
+\	'sh': ['shellcheck']
+\}
+let g:ale_sh_shellcheck_exclusions = 'SC2164'
+nmap <F9> : ALEToggle<CR>
+
+" Tagbar
+nmap <F8> :TagbarToggle<CR>
+
