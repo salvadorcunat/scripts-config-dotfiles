@@ -78,5 +78,6 @@ if [ "$1" == "/bin/bash" ]; then
 	shift
 fi
 
-/bin/bash "$@"  &
+/bin/bash "$@" 2>&1 &
+clear
 exit $RC

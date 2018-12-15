@@ -69,4 +69,4 @@ alias grep='grep --color'
 alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"
 alias ls="ls --color=auto"
 alias vimcat="vimcat +n --"
-
+alias crt='cool-retro-term -p boret'
