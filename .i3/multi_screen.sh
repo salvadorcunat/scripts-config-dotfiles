@@ -7,6 +7,7 @@
 _usage="
 Tiny script to manage connected heads.
 Parameters: One single parameter meaning the task to do:
+	-f --force: Do not check for connected heads (this has to be the first param)
 	-d --desktop : Turn off laptop screen and set external
 	-l --laptop : Turn off external screen and set laptop one
 	-m --multi: Multi screen mode set external heads left, right or both
@@ -23,6 +24,7 @@ Parameters: One single parameter meaning the task to do:
 XRANDR="$(command -v xrandr)"; [[ -z $XRANDR ]] && report_msg "${0##*/}"  "xrandr not avaliable" >&2 && exit 1
 NOTIFY="$(command -v notify-send)"; [[ -z $NOTIFY ]] && report_msg "${0##*/}" "notify_send not avaliable" >&2
 TMPFILE=/tmp/tmp_$$
+_force="false"
 RC=0
 declare -a _MONITORS
 declare -a _MODES
@@ -54,6 +56,13 @@ get_modes ()
 #
 set_unique ()
 {
+	# Check if there is more than one monitor
+	if [[ -z ${_MONITORS[1]} && $_force == "false" ]]; then
+		report2screen  normal "${0##*/}" "There is just one monitor. No multi screen posibility"
+		RC=2
+		exit $RC
+	fi
+
 	local i=0
 
 	while [ "$i" -lt ${#_MONITORS[@]} ]; do
@@ -78,6 +87,12 @@ set_unique ()
 # Return: nothing; exit script on failure.
 set_multi ()
 {
+	if [[ -z ${_MONITORS[1]} && $_force == "false" ]]; then
+		report2screen  normal "${0##*/}" "There is just one monitor. No multi screen posibility"
+		RC=2
+		exit $RC
+	fi
+
 	case "$#" in
 		2)	if $XRANDR --output "${_MONITORS["$2"]}" --rotate 'normal' --right-of "${_MONITORS["$1"]}" --mode "${_MODES["$2"]}" 2> $TMPFILE
 			then
@@ -102,7 +117,6 @@ set_multi ()
 			fi ;;
 	esac
 }
-
 # Reporting messages and errors format.
 # Put a report in the screen and send another to stderr, which should
 # be printed to .xsession-errors
@@ -122,47 +136,47 @@ _MONITORS=( $($XRANDR |grep " connected" |cut -d" " -f1) )
 # Create an array with preferred _MONITORS resolutions
 get_modes _MODES
 
-# Check if there is more than one monitor
-if [[ -z ${_MONITORS[1]} ]]; then
-	report2screen  normal "${0##*/}" "There is just one monitor. No multi screen posibility"
-	RC=2
-	exit $RC
-fi
-
 # Read CLI parameters
 if [ $# -lt 1 ]; then
 	report2screen  critical "${0##*/}" "Bad parameters. Aborting."
 	RC=2
 	exit $RC
 fi
-
-case "$1" in
-	-d|--desktop)	if set_unique 1
-			then
-				report2screen normal "${0##*/}" "Multi screen operations:\\n${_MONITORS[1]} set as primary monitor with resolution ${_MODES[1]}.\\nLaptop screen ${_MONITORS[0]} turned off"
-			else
-				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
-				RC=1
-				exit $RC
-			fi ;;
-	-l|--laptop)	if set_unique 0
-			then
-				report2screen normal "${0##*/}" "Multi screen operations:\\n${_MONITORS[0]} set as primary monitor with resolution ${_MODES[0]}.\\nExternal screen ${_MONITORS[1]} turned off"
-			else
-				report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
-				RC=1
-				exit $RC
-			fi ;;
-	-m|--multi)	case "$#" in
-				4)	set_multi "$2" "$3" "$4" ;;
-				3)	set_multi "$2" "$3" ;;
-				2)	report2screen critical "${0##*/}" "multi\\nWrong number of parameters\\nSet two monitors at least." && exit 1 ;;
-				*)	set_multi 0 1 ;;
-			esac ;;
-	*)		echo "$_usage"
-			RC=0
-			exit $RC ;;
-esac
+i=0
+while (( $# > 0 )); do
+	case "$1" in
+		-d|--desktop)	if set_unique 1
+				then
+					report2screen normal "${0##*/}" "Multi screen operations:\\n${_MONITORS[1]} set as primary monitor with resolution ${_MODES[1]}.\\nLaptop screen ${_MONITORS[0]} turned off"
+				else
+					report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
+					RC=1
+					exit $RC
+				fi
+				break ;;
+		-l|--laptop)	if set_unique 0
+				then
+					report2screen normal "${0##*/}" "Multi screen operations:\\n${_MONITORS[0]} set as primary monitor with resolution ${_MODES[0]}.\\nExternal screen ${_MONITORS[1]} turned off"
+				else
+					report2screen critical "${0##*/}" "$(cat $TMPFILE)\\n$(XRANDR |grep -e \ connected)"
+					RC=1
+					exit $RC
+				fi
+				break ;;
+		-m|--multi)	case "$#" in
+					4)	set_multi "$2" "$3" "$4" ;;
+					3)	set_multi "$2" "$3" ;;
+					2)	report2screen critical "${0##*/}" "multi\\nWrong number of parameters\\nSet two monitors at least." && exit 1 ;;
+					*)	set_multi 0 1 ;;
+				esac
+				break ;;
+		-f|--force)	_force="true"
+				shift ;;
+		*)		echo "$_usage"
+				RC=0
+				exit $RC ;;
+	esac
+done
 
 # Are we running i3_lemonbar script? Reinit it.
 # i3_lemonbar.sh reads screen size at init. we need a reload to adjust to new size.

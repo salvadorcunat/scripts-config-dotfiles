@@ -6,10 +6,14 @@
 # Press CTL-C to end script and quit.
 #
 
-DIALOG="$(which dialog)"	#/usr/bin/dialog
-_sleep="$(which sleep)"		#/bin/sleep
-_AMC="$(which amulecmd)"
-_host=$(ip -br address show |grep "$(ip route | grep default| cut -d" " -f5)" | awk '{print $3}' |sed s/\\/.*$//)
+# Source functions library for get_term_size()
+. "$HOME"/sbin/script-funcs.sh
+
+DIALOG="$(command -v dialog)" ; [[ -z $DIALOG ]] && { echo "Can't find dialog. Aborted."; exit 1; }	#/usr/bin/dialog
+
+_sleep="$(command -v sleep)"		#/bin/sleep
+_AMC="$(command -v amulecmd)"; [[ -z $_AMC ]] && { echo "Can't find amulecmd. Aborted."; exit 1; }
+_host="$(get_ip)"; [[ -z $_host ]] && { echo "Can't get active IP. Aborted."; exit 1; }
 _AMC_command="show dl"
 _backtitle="Amuled download progress"
 SIG_NONE=0		#
@@ -22,10 +26,7 @@ _signal="$SIG_NONE"
 # For debuging
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
-trap '_signal=2' "$SIG_INT" "$SIG_KILL"
-
-# Source functions library for get_term_size()
-. "$HOME"/sbin/script-funcs.sh
+trap '_signal=2; reset' "$SIG_INT" "$SIG_KILL"
 
 # check for amuled
 if ! is_running "amuled_(-f)" "$_backtitle"; then
@@ -85,5 +86,3 @@ while (( _signal == 0 )) ; do
 	# do not loop too fast
 	"$_sleep" 1.75
 done
-# reset the terminal on exit
-reset

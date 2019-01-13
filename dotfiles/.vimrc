@@ -105,3 +105,9 @@ nmap <F9> : ALEToggle<CR>
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
 
+" SuperTab
+" Default selecting keys are <tab> and <s-tab>.
+" Then <c-tab> to insert true tabs. Sadly, <c-tab> is also used by termite, so
+" we can't use this combination in vim.
+let g:SuperTabMappingForward = '<c-space>'
+let g:SuperTabMappingBackward = '<s-c-space>'

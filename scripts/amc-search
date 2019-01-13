@@ -4,25 +4,25 @@
 # Call it without parameters or with the string you want to search
 # for. Remember to quote the parameter.
 #
-DIALOG="$(which dialog)"	#/usr/bin/dialog
-_sleep="$(which sleep)"		#/bin/sleep
-_AMC="$(which amulecmd)"
-_host="192.168.0.160"
+
+# Source functions library
+. "$HOME"/sbin/script-funcs.sh
+
+DIALOG="$(command -v dialog)" ; [[ -z $DIALOG ]] && { echo "Can't find dialog. Aborted."; exit 1; }	#/usr/bin/dialog
+
+_sleep="$(command -v sleep)"		#/bin/sleep
+_AMC="$(command -v amulecmd)"; [[ -z $_AMC ]] && { echo "Can't find amulecmd. Aborted."; exit 1; }
+_host="$(get_ip)"; [[ -z $_host ]] && { echo "Can't get active IP. Aborted."; exit 1; }
 _AMC_command="search global"
 _backtitle='Dialog based, amuled search command'
 
-DIALOG_OK=0					#
-DIALOG_CANCEL=1					#
-DIALOG_HELP=2					# Possible dialog return values
-DIALOG_EXTRA=3					# for $?
-DIALOG_ITEM_HELP=4				#
-DIALOG_ESC=255					#
+DIALOG_CANCEL=1					# Possible dialog return values
+DIALOG_ESC=255					# for $?
 
 SIG_NONE=0					#
 SIG_HUP=1					#
 SIG_INT=2					# System signals for trap
 SIG_QUIT=3					#
-SIG_KILL=9					#
 SIG_TERM=15					#
 
 _tempfile="/tmp/test_$$"
@@ -32,9 +32,6 @@ _templist="/tmp/test_list_$$"
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 trap 'rm -f $_tempfile $_templist; reset' "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"
-
-# Source functions library
-. "$HOME"/sbin/script-funcs.sh
 
 # Do some stuff if received some return codes.
 # This function has to be changed on every script where it is used, to fit
@@ -61,13 +58,46 @@ check_rc()
 	esac
 }
 
+# Exchange two elements  in an array
+# Args:	1 - array name (defined global)
+#	2 - First element index
+#	3 - Second element index
+#
+exchange()
+{
+	declare -n _array=${1}
+
+	local _tmp="${_array[$2]}"
+	_array[$2]="${_array[$3]}"
+	_array[$3]="$_tmp"
+	unset _tmp
+}
+
+# Bubble sort based on sources num (greatest number first)
+bubble_sort()
+{
+	local num_elements=${#_sources[@]}
+	local i
+	for (( last = num_elements - 1; last > 0; last-- )); do
+		for (( i = 0; i < last; i++ )); do
+			if (( _sources[i] < _sources[(( i+1 ))] )); then
+				exchange _sources $i $((i+1))
+				exchange _order $i $((i+1))
+				exchange _name $i $((i+1))
+				exchange _size $i $((i+1))
+			fi
+		done
+	done
+}
+
+
 # Run an amuled search, formats the result for next dialog,
 # and sends numérical sequence to stdout for the gauge.
 # Places the formatted list in a global temp file.
 process_search()
 {
 	$_sleep 0.50
-	echo 65	# for gauge
+	echo 25	# for gauge
 
 	# get the search result, format it and present in a menu to select
 	# a new download
@@ -80,7 +110,7 @@ process_search()
 		exit 1
 	fi
 
-	echo 85	# for gauge
+	echo 45	# for gauge
 
 	declare -a _order
 	declare -a _name
@@ -95,7 +125,10 @@ process_search()
 		(( i++ ))
 	done
 	unset _lines
-	echo 95 # for gauge
+	echo 75 # for gauge
+
+	bubble_sort
+	echo 95
 
 	# Build a list formated for menu
 	i=0
@@ -177,17 +210,17 @@ while : ; do
 	i=0
 	_dwld_str="results"
 	while (( i < ${#_result[@]} )); do
-		_dwld_str="$_dwld_str\ndownload ${_result[$i]}"
+		_dwld_str="$_dwld_str\\ndownload ${_result[$i]}"
 		(( i++ ))
 	done
-	_dwld_str="$_dwld_str\nquit\n"
+	_dwld_str="$_dwld_str\\nquit\\n"
 	echo -e "$_dwld_str" |"$_AMC" -h "$_host" >/dev/null 2>&1
 
 	# Display a message and end
 	get_term_size _H _W
 	if ! $DIALOG --clear --backtitle "$_backtitle" \
-		--yesno "File queued.\n\n
-You can follow the download using the script amc-progress.\n
+		--yesno "File queued.\\n\\n
+You can follow the download using the script amc-progress.\\n
 Do you want to search for another file?" $(( (_H*3)/4 )) $(( (_W*3)/4 )) \
 	2>$_tempfile ; then
 		abort_dlg "Have a nice day."
