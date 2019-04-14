@@ -7,6 +7,7 @@ _usage="
 #		-m|--mail	send a log file to an e-mail                 #
 #		-l|--log	records messages to syslog                   #
 #		-h|--help	show this help                               #
+#		-b|--build	call after-update.sh script (if any)         #
 # examples:                                                                  #
 #	src_updater.sh -v ~/src ~/.vim/bundle                                #
 #	update git repos in ~/src and ~/.vim/bundle dirs, while outputting   #
@@ -104,6 +105,30 @@ has_submodule()
 	return 0
 }
 
+# Re-build a source directory. But only if we have a local script named
+# after-update.sh
+# Return:	0 - If built and correct
+#		1 - No after-update.sh --> Do not build
+#		2 - Couldn't cd into repo dir
+#		3 - Build failed
+#		4 - Couldn't get back to original directory
+#
+re-build()
+{
+	local _orig_dir="$(pwd)"
+	[[ ! -x "$1/after-update.sh" ]] && \
+		return 1
+	cd "$1" || \
+		return 2
+	report_msg "Building" " ---- $WHITE${1##*/}$DEFAULT"
+	./after-update.sh
+	local rc="$?"
+	cd "$_orig_dir" || \
+		return 4
+	[[ $rc -ne 0 ]] && return 3
+	return "$rc"
+}
+
 # Return 0 if repo $1 is updated or there is no remote (just local)
 # Put the preferred repo and the brach in $2 and $3 (globally declared)
 # Return codes:	0	Updated
@@ -174,6 +199,8 @@ while [ "$#" -gt 0 ]; do
 				shift ;;
 		-l|--log)	_log="true"
 				shift;;
+		-b|--build)	_build="true"
+				shift;;
 		-h|--help)	echo "$_usage" && exit 0
 				;;
 		*)		break ;;
@@ -229,8 +256,16 @@ while [ $# -gt 0 ]; do
 						continue
 					fi
 					if has_submodule "$_SRCDIR/$_dir"; then
+						git -C "$_SRCDIR/$_dir" pull --recurse-submodules=yes
 						git -C "$_SRCDIR/$_dir" submodule update
 					fi
+					re-build "$_SRCDIR/$_dir"
+					case $? in
+						0)	report_msg "${GREEN}Building done$DEFAULT" ;;
+						2)	report_msg "Couldn't cd into $_SRCDIR/$dir" "${LIGHT_RED}Not Built$DEFAULT";;
+						3)	report_msg "Build failed" "${LIGHT_RED} Check output$DEFAULT" ;;
+						4)	report_msg "${LIGHT_RED}Couldn't get back to prevous directory. Be careful.${DEFAULT}";;
+					esac
 					# restore directory's previous state
 					[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
 					(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop

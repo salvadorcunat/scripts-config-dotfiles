@@ -77,6 +77,9 @@ get_result()
 #                                Main body                                  #
 #############################################################################
 while : ; do
+	IMG_REPO=( $(docker images |awk '{printf "%s ", $1}'))
+	IMG_TAG=( $(docker images |awk '{printf "%s ", $2}') )
+	IMG_ID=( $(docker images |awk '{printf "%s ", $3}') )
 
 	get_term_size _H _W
 

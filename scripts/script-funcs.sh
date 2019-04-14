@@ -176,7 +176,7 @@ is_running()
 	if ! "$_pgrep" "$_program" >/dev/null 2>&1
 	then
 		$_dialog --clear --backtitle "$2" \
-			--yesno "$_path_program is not running.\nDo you want to init it?\n" 0 0 
+			--yesno "$_path_program is not running.\nDo you want to init it?\n" "$_h" "$_w"
 		_rc="$?"
 		case "$_rc" in
 			0)	if ! "$_path_program" "$_prog_parms" >/dev/null 2>&1; then
@@ -216,24 +216,24 @@ get_ip()
 {
 	# Use the provided interface, otherwise the device used for the default route.
 	IF=$(ip route | awk '/^default/ { print $5 ; exit }')
-	
+
 	# if there's no ifce, try to find one UP except loopback
 	if [[ ! -n $IF ]] || [[ $IF == 'link' ]]; then
 		IF=`ip link |grep "state UP" |grep -v LOOPB |awk -F": " '{print $2}'`
 	fi
-	
+
 	# Without connection the corresponding block should not be displayed.
 	[[ ! -d /sys/class/net/${IF} ]] && exit
-	
+
 	case $1 in
 		-4)	AF=inet ;;
 		-6)	AF=inet6 ;;
 		*)	AF=inet6? ;;
 	esac
-	
+
 	# if no interface is found, use the first device with a global scope
 	IPADDR=$(ip addr show $IF | perl -n -e "/$AF ([^\/]+).* scope global/ && print \$1 and exit")
-	
+
 	# Print something only if we have an ip address
 [[ -n "$IPADDR" ]] && echo "$IPADDR"
 }

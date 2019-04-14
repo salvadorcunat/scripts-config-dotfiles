@@ -67,6 +67,9 @@ while (1) {
 			$full_text .= ' ';
 			$color = "#5c0303\n";
 			system "/usr/bin/notify-send --urgency=critical 'BATERIA BAJA' 'Batería inferior al 5%. Conecta el cargador urgentemente'";
+		# Shutdown con la batería al 2% para evitar cierres bruscos
+		} elsif ($percent < 2) {
+			system "sudo shutdown -h now";
 		}
 	} else {
 		$full_text .= ' ';

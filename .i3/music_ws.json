@@ -4,7 +4,7 @@
 "border": "none",
 "floating": "auto_off",
 "layout": "splitv",
-"percent": 0.5,
+"percent": 0.3,
 "type": "con",
       "nodes": [
           {
