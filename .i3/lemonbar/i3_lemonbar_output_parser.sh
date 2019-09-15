@@ -9,6 +9,7 @@ _TERMINATOR="$(which terminator)"
 _I3MSG="$(which i3-msg)"
 _AMIXER="$(which amixer)"
 _STEP="5%"
+_BLTMAN="$(command -v blueman-manager)"
 
 . $(dirname $0)/i3_lemonbar_config
 
@@ -29,6 +30,12 @@ while read -r _line; do
 			;;
 		change_ws*)
 			"$_I3MSG" workspace "${_line##*\ }" &
+			;;
+		blt_man*)
+			"$_BLTMAN" &
+			;;
+		blt_term*)
+			"$_TERMINATOR" -b -T "Bluetoothctl" -p floating -e "sudo bluetoothctl" 2>/dev/null &
 			;;
 		vol_mixer*)
 			"$_TERMINATOR" -b -T "Mixer" -p floating -e "alsamixer -g -c 0 -V -all" &

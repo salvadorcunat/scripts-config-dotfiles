@@ -123,7 +123,7 @@ while read -r line ; do
 			case ${disk} in
 				"/")
 					bg_col="${bg_col/-/\#21746b}"
-					dsk1="%{F${bg_col} B-}${sep_left}%{F${fg_col} B${bg_col} T2}$(pad_str "${icon_hd} ${free}" 8)"
+					dsk1="%{F${bg_col} T2}${sep_left}%{F${fg_col} B${bg_col} T2}$(pad_str "${icon_hd} ${free}" 8)"
 					;;
 				"/home")
 					bg_col="${bg_col/-/\#1f4d52}"
@@ -163,6 +163,13 @@ while read -r line ; do
 			bdw=${line#???}
 			[[ ${bdw} != "down" ]] && bdw=$(pad_str "${bdw}" 14)
 			bdw="%{F${bg_col} T2}${sep_left}%{F${fg_col} B${bg_col} T3}%{A:bdwidth:}${bdw}%{A}"
+			;;
+		BLT*)
+			# Bluetooth
+			bg_col=${line##*\ }
+			fg_col="${color_white}"
+			blt_ap=${line#???}; blt_ap=${blt_ap%\ *}; [ "$blt_ap" != "" ] && blt_ap=$(pad_str "${blt_ap}" 2)
+			bluetooth="%{F${bg_col} T2}${sep_left}%{F${fg_col} B${bg_col} T2}%{A1:blt_man:}%{A3:blt_term:}$(pad_str "${icon_blt}" 3)%{T1}"${blt_ap}"%{A}%{A}"
 			;;
 		CPU*)
 			# Cpu load.
@@ -221,5 +228,5 @@ while read -r line ; do
 	# initial value
 	_date_time="%{F${color_back} T2}${sep_left}%{B${color_back} F${color_fore} T1}$(pad_str "$(date +"%a %d-%b %R")" 18)"
 	# And finally, output
-	printf "%s\\n" "%{l}%{B-}   ${heads}${wsp}${title} %{r}${warning} ${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
+	printf "%s\\n" "%{l}%{B-}   ${heads}${wsp}${title} %{r}${warning} ${bluetooth} ${dsk1}${dsk2}${dsk3} ${rmedia} ${ifc} ${wifi} ${bdw} ${cpu} ${bat} ${_vol} ${_date_time} ${caps} ${numl} %{B-}  "
 done

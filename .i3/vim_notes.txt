@@ -1,7 +1,6 @@
-*Movimientos raros
-Modo normal|w -- fin palabra
-|e -- w sin espac
-|$ -- fin linea
+*Pestañas
+Avanzar|Ctrl+PgUp
+Retroc|Ctrl+PgDown
 *Dividir pantalla
 |:split (mismo archivo)
 |:new archivo.txt (otro archivo)
@@ -11,8 +10,6 @@ diferente|:w <archivo>
 append|:w >><archivo>
 *Borrar
 linea|[esc] d[num]d
-palabra|w
-h/fin linea|$
 palabra|w
 h/fin linea|$
 *Fold

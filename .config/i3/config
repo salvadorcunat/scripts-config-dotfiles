@@ -47,7 +47,7 @@ bindsym $mod+Shift+q kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 #bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
-bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -modi 'run,window,ssh' -show run"
+bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -show drun -show-icons"
 
 # start a xfce4 panel if needed or close it
 #bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"
@@ -220,15 +220,16 @@ exec --no-startup-id /home/boret/sbin/multi_screen --multi 1 0
 for_window [class="^Xfce4-terminal$"] border none
 for_window [class="^Terminator$"] border none
 for_window [class="^cool-retro-term$"] border none
-for_window [class="^Termite$"] border pixel 1
-for_window [class="^dolphin$"] border pixel 1
+for_window [class="^Termite$"] border none
+for_window [class="^dolphin$"] border none
 #new_float pixel 1
 
 #
 # Gaps
 #
 #smart_gaps on
-smart_borders no_gaps
+#smart_borders no_gaps
+smart_borders on
 gaps inner 10
 #gaps outer 10
 gaps left 15
@@ -274,6 +275,11 @@ mode "$mode_gaps_outer" {
 }
 
 #
+# Rounded borders
+#
+#border_radius 8
+
+#
 # Cosas especiales en algunas ventanas
 #
 for_window [class="^Subsurface$" instance="^subsurface-mobile$"] floating enabled
@@ -299,6 +305,7 @@ for_window [title="^Mixer$"] floating enabled
 for_window [class="plasmashell"]    floating enable
 for_window [class="Plasma"]         floating enable; border none
 for_window [title="plasma-desktop"] floating enable; border none
+for_window [title="xeraconect"]     floating enable; border none
 for_window [class="krunner"]        floating enable; border none
 for_window [class="Kmix"]           floating enable; border none
 for_window [class="Klipper"]        floating enable; border none

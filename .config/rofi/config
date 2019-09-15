@@ -1,11 +1,11 @@
 "Enabled modi" Set from: Default
-rofi.modi:                           window,run,ssh
+rofi.modi:                           window,run,ssh,drun
 "Window width" Set from: Default
-rofi.width:                          900
+rofi.width:                          600
 "Number of lines" Set from: Default
 rofi.lines:                          1
 "Number of columns" Set from: Default
-rofi.columns:                        8
+rofi.columns:                        2
 "Font to use" Set from: Default
 rofi.font:                           mono 9
 rofi.color-enable	true
@@ -30,7 +30,7 @@ rofi.xoffset:                        0
 "Always show number of lines" Set from: Default
 rofi.fixed-num-lines:                true
 "Terminal to use" Set from: Default
-rofi.terminal:                       /usr/bin/terminator
+rofi.terminal:                       /home/boret/sbin/termite_wrap
 "Ssh client to use" Set from: Default
 rofi.ssh-client:                     ssh
 "Ssh command to execute" Set from: Default
@@ -40,7 +40,7 @@ rofi.run-command:                    {cmd}
 "Command to get extra run targets" Set from: Default
 rofi.run-list-command:               
 "Run command to execute that runs in shell" Set from: Default
-rofi.run-shell-command:              {terminal} -p boret -e {cmd}
+rofi.run-shell-command:              {terminal} -e {cmd}
 "Command executed on accep-entry-custom for window modus" Set from: Default
 rofi.window-command:                 xkill -id {window}
 "Disable history in run/ssh" Set from: Default
@@ -222,4 +222,4 @@ rofi.display-windowcd:
 "The display name of this browser" Set from: Default
 rofi.display-combi:                  
 #include "/usr/share/rofi/themes//gruvbox-dark-hard.theme"
-rofi.theme: /usr/share/rofi/themes//arthur.rasi
+rofi.theme: /home/boret/.config/rofi/themes/appsmenu.rasi

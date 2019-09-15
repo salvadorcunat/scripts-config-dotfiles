@@ -28,7 +28,7 @@ SIG_TERM=15					#
 _tempfile="/tmp/test_$$"
 _templist="/tmp/test_list_$$"
 
-# For debuging
+#For debuging
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 trap 'rm -f $_tempfile $_templist; reset' "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"

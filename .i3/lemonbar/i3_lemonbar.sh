@@ -65,6 +65,9 @@ while :; do
 	# Boret heads
 	"${_pwd}"/heads > "${panel_fifo}"
 
+	# Boret bluetooth
+	"${_pwd}"/bltth > "${panel_fifo}"
+
 	# Finally, wait 1 second
 	sleep 1s;
 
@@ -72,6 +75,6 @@ done &
 
 #### LOOP FIFO
 "${_pwd}"/i3_lemonbar_parser.sh <"${panel_fifo}" \
-	| lemonbar -b -n "boret_lemonbar" -a 15 -f "${font}" -f "${iconfont}" -f "${monofont}" -g "${geometry}" &
+	| lemonbar -b -n "boret_lemonbar" -a 25 -f "${font}" -f "${iconfont}" -f "${monofont}" -g "${geometry}" &
 
 wait

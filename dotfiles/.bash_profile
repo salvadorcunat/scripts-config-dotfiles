@@ -22,7 +22,7 @@ export EDITOR=/usr/bin/vim.nox
 if [ ! -z "$DISPLAY" ]; then
 	source ~/.xsh
 	/usr/bin/udiskie -s &
-	case "$XDG_CURRENT_DESKTOP" in
+	case "$DESKTOP_SESSION" in
 		*i3*|*spectrwm*)
 			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
 			;;
