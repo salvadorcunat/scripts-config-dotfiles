@@ -1,13 +1,7 @@
 *Pestañas
 Avanzar|Ctrl+PgUp
 Retroc|Ctrl+PgDown
-*Dividir pantalla
-|:split (mismo archivo)
-|:new archivo.txt (otro archivo)
-*Escribir archivo
-diferente|:w <archivo>
-|:saveas <archivo>
-append|:w >><archivo>
+Nueva|:tabnew
 *Borrar
 linea|[esc] d[num]d
 palabra|w

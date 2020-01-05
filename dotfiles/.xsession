@@ -27,6 +27,10 @@ xsetroot -solid "#333333"
 # Enable core dumps in case something goes wrong
 ulimit -c unlimited
 
+# Modify sddm.conf to get a different theme in next run
+/home/boret/sbin/sddm_theme.sh || \
+	echo "$(date) sddm_theme.sh failed" >&2
+
 # Start i3 and log to ~/.i3/logfile
 printf "%s\n" "**********************************************************************
 Starting at $(date)

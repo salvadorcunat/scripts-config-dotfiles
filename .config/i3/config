@@ -324,15 +324,16 @@ bar {
 	#i3bar_command i3bar -t
 #	status_command i3status
 	#status_command i3blocks
-	#tray_output primary
+	#tray_output none
 	#strip_workspace_numbers yes
 #	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
 #	font pango:URW Gothic L 8
-#	font pango:PowerlineSymbols 8
+	#font pango:PowerlineSymbols 8
 	#font pango:FontAwesome 8
 	#height 20
 	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
 	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
+	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic disk:root cpu memory battery pasink pasource system -p root.path=/ -t dracula-powerline
 }
 #
 # Launch initial workspace
