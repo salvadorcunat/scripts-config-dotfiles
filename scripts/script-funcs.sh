@@ -237,3 +237,24 @@ get_ip()
 	# Print something only if we have an ip address
 [[ -n "$IPADDR" ]] && echo "$IPADDR"
 }
+
+# Reporting messages and errors format.
+# Put a report in the screen and send another to stderr, which should
+# be printed to .xsession-errors
+# Parameters	1.- report level for notify-send, e.g. normal
+#		2.- header for notify send, usually the program name
+#		3.- tex message
+#
+report2screen()
+{
+	local _LOG=$(command -v logger)
+	local _NOTIFY=$(command -v notify-send)
+	if [ -n "$_LOG" ]; then
+		"$_LOG" -s --pid=$$ "$2 --> $3"
+	else
+		report_msg "$2" "$3" >&2
+	fi
+	if [ -n $_NOTIFY ]; then
+	       	$_NOTIFY -u "$1" "$2" "$3"
+	fi
+}

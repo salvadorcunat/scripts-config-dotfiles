@@ -26,7 +26,6 @@ while read -r _line; do
 			"$_CRT" -e wicd-curses &
 			;;
 		cpu_load)
-			#"$_TERMINATOR" -b -T "Mpstat" -p floating --geometry=700x120 -e 'mpstat -P ALL 1' &
 			"$_TERMINATOR" -b -T "Mpstat" -p floating -e 'gotop' &
 			;;
 		change_ws*)

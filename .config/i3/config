@@ -95,7 +95,8 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+#bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space exec "/home/boret/.i3/i3-zoom"
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle

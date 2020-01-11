@@ -23,7 +23,6 @@ Parameters: One single parameter meaning the task to do:
 . $HOME/sbin/script-funcs.sh
 
 XRANDR="$(command -v xrandr)"; [[ -z $XRANDR ]] && report_msg "${0##*/}"  "xrandr not avaliable" >&2 && exit 1
-NOTIFY="$(command -v notify-send)"; [[ -z $NOTIFY ]] && report_msg "${0##*/}" "notify_send not avaliable" >&2
 TMPFILE=/tmp/tmp_$$
 _force="false"
 RC=0
@@ -180,18 +179,6 @@ set_multi ()
 				exit 1
 			fi ;;
 	esac
-}
-# Reporting messages and errors format.
-# Put a report in the screen and send another to stderr, which should
-# be printed to .xsession-errors
-# Parameters	1.- report level for notify-send, e.g. normal
-#		2.- header for notify send, usually the program name
-#		3.- tex message
-#
-report2screen()
-{
-	report_msg "$2" "$3" >&2
-	[[ ! -z $NOTIFY ]] && $NOTIFY -u "$1" "$2" "$3"
 }
 
 # Create an array with avaliable _MONITORS
