@@ -1,0 +1,5 @@
+#!/bin/bash
+if pgrep dunst; then
+	exit 0
+fi
+[[ $XDG_CURRENT_DESKTOP == i3-gaps ]] && /usr/bin/dunst -c "$HOME"/.config/dunst/dunstrc &

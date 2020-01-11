@@ -1,0 +1,118 @@
+#!/usr/bin/perl
+#
+# Little perl script which swaps two visible i3 workspaces while multimonitor
+# working.
+# V1.0: this version doesn't depend on just two monitors, and always swaps
+# the visible WS in main screen with the focused one in the secondary screen.
+# To launch the script get focus on the WS in secondary monitor and press $mod+x.
+#
+# V2.0: Do not hardcode the name of the main screen. Take it from i3-msg. Working
+# in my laptop. Pending try in another machines.
+#
+# V3.0: Get the monitor from the command line, if not set, try to figure it out.
+#
+# Author: boret
+# Arguments: main screen (e.g. HDMI-1)
+# returns: 0 on succes, 1 on failure. Notify failure vía notify-send command
+
+use JSON;
+use IO::Socket::UNIX;
+
+$wss = new JSON::XS;
+$screens = new JSON::XS;
+
+#
+# i3-ipc code. Socket opening and subroutine from i3 doc page
+#
+
+chomp(my $path = qx(i3 --get-socketpath));
+my $sock = IO::Socket::UNIX->new(Peer => $path);
+
+sub format_ipc_command {
+    my ($msg) = @_;
+    my $len;
+    # Get the real byte count (vs. amount of characters)
+    { use bytes; $len = length($msg); }
+    return "i3-ipc" . pack("LL", $len, 0) . $msg;
+}
+
+#
+# Get currently opened workspaces
+#
+$ws_vector = $wss->decode(`/usr/local/bin/i3-msg -t get_workspaces`);
+
+#
+# Get avaliable monitors
+#
+$scr_vector = $screens->decode(`/usr/local/bin/i3-msg -t get_outputs`);
+
+#
+# Define main monitor on the laptop
+# If it is not set via command line, try to figure it out.
+# If it hasn't been marked "primary" (e.g. xrandr), we can't know
+# so send a notice and end script gracefully;
+#
+if ($ARGV[0]) {
+	$work_screen = $ARGV[0];
+} else {
+	$i = 0;
+	while ($i < @$scr_vector) {
+		if ($$scr_vector[$i]->{"active"} && $$scr_vector[$i]->{"primary"}) {
+			$work_screen = $$scr_vector[$i]->{"name"};
+			last;
+		}
+		$i++;
+	}
+	if (!$work_screen) {
+		system('/usr/bin/notify-send -u critical "swap_wss_ipc ERROR" "No argument set for the command, and no primary screen set."');
+		exit 1;
+	}
+}
+#
+# Workspaces may be visible or not, and may be focused or not.
+# The logic here is: We have a hardcoded main screen. Run the length
+# of the opened workspaces, if the focused WS is in the main screen
+# abort. If it is not, register its name and its output.
+#
+for ($i = 0; $i < @$ws_vector; $i++) {
+	if ($$ws_vector[$i]->{"focused"} == 1) {
+		if ($$ws_vector[$i]->{"output"} eq $work_screen) {
+			# if focused ws is in main screen, abort
+			system('/usr/bin/notify-send -u normal "swap_wss_ipc FAILED" "Focus the work space you want to swap to main screen and launch the script."');
+			exit 1;
+		} else {
+			$active_ws = $$ws_vector[$i]->{"name"};
+			$act_output = $$ws_vector[$i]->{"output"};
+			last;
+		}
+	}
+}
+
+#
+# Finally  get the name of the WS visible in main screen
+#
+$i = 0;
+while ($i < @$scr_vector) {
+	if ($$scr_vector[$i]->{"name"} eq $work_screen) {
+		$main_ws = $$scr_vector[$i]->{"current_workspace"};
+		last;
+	}
+	$i++;
+}
+
+#
+# swap visible workspaces between monitors
+#
+$sock->write(format_ipc_command("workspace $active_ws; move workspace to output $work_screen"));
+$sock->write(format_ipc_command("workspace $main_ws; move workspace to output $act_output"));
+
+#
+# put focus on usual work output (laptop)
+#
+$sock->write(format_ipc_command("focus output $work_screen"));
+
+#
+# exit
+#
+$sock->close;
+exit 0;

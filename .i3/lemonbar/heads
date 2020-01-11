@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Output an string in the form HEAD_monitorname_CON or _DIS to be processed
+# with i3_lemonbar_parser to show attached heads to a computer; _CON or _DIS
+# should change background color on lemonbar.
+#
+
+# check for xrandr
+XRANDR=$(command -v xrandr); [[ -z $XRANDR ]] && exit 1
+
+declare -a _MONITORS
+declare -a _STATUS
+
+_MONITORS=( $($XRANDR |grep "connected" |cut -d" " -f1) )
+_STATUS=( $($XRANDR |grep "connected" |cut -d" " -f2) )
+
+i=0
+while (( i < ${#_MONITORS[@]} )); do
+	_output="$_output ${_MONITORS[$i]}_"
+	if [ "${_STATUS[$i]}" == "disconnected" ]; then
+		_output="${_output}DIS "
+	else
+		_output="${_output}CON "
+	fi
+	(( i++ ))
+done
+echo "HEAD $_output"

@@ -1,0 +1,173 @@
+#!/bin/bash
+
+DIALOG_OK=0					#
+DIALOG_CANCEL=1					#
+
+SIG_NONE=0					#
+SIG_HUP=1					#
+SIG_INT=2					# System signals for trap
+SIG_QUIT=3					#
+SIG_KILL=9					#
+SIG_TERM=15
+
+tempfile=/tmp/wp_tmp_$$
+_wp_repo=$HOME/.i3/wallpapers.txt		# wallpapers list file, edit if needed
+
+# for debuging
+#trap "set +x; sleep 1; set -x" DEBUG
+
+trap 'rm -f $tempfile; reset' 0 "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM" "$SIG_KILL"
+
+. "$HOME"/sbin/script-funcs.sh
+
+# txt2menu_rofi()
+# Reads a text file and creates an array with its lines.
+# Then builds an string in format "linenum: line separator linenum: ..."
+# Separator should be the one used in dialog's menu item.
+# parameters:	1.- A file name
+#		2.- Separator char
+#		3.- external variable name
+# output:	none, passes the resulting string in var $3
+# returns:	0 on success, 15 on failure
+#
+txt2menu_rofi()
+{
+	local IFS=$'\n' _array _str
+	declare -a _array
+	_array=( $(cat "$1" ) ) || return 15
+	declare -n _str=${3:-RET_STR}
+
+	j=0
+	while [ $j -lt ${#_array[*]} ]; do
+		_str="$_str$(( j+1 )): ${_array[$j]##*\/}$2"
+		(( j++ ))
+		done
+	# strip the trailing separator char
+	_str=${_str%${2}}
+}
+
+abort_dlg()
+{
+	rofi -markup -e	"$(printf "%s\\n%s" "<span color='red'><b>$1</b></span>" "<span>$2</span>")"
+}
+
+# "add a wallpaper" dialog
+# select a file and append it to the wallpapers repo
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+add_dlg()
+{
+	local rc=0
+	local _path="$HOME/Descargas"
+	while [ -d "$_path" ] && [ "$rc" -eq "0" ]; do
+		_sel="$(ls -1ac "$_path" |rofi -no-lazy-grab -dmenu -theme themes/test_1.rasi -p 'Select' -mesg "<span><b>Select the wallpaper to add</b></span>")"
+		rc=$?
+		_path="$_path/$_sel"
+	done
+	[[ $rc -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	# confirmation dialog, last oportunity to get back
+	_conf="$(printf "%s\\n%s" "Yes" "No" |rofi -no-lazy-grab -no-custom -dmenu -theme themes/test.rasi -mesg "<span color='red'><b>Please confirm adding ${_path} to list</b></span>")"
+	rc=$?
+	[[ "$rc" -eq "$DIALOG_OK" ]] && [[ "$_conf" == "Yes" ]] && echo "$_path" >>"$_wp_repo"
+	rc=$?
+	return $rc
+}
+
+# "remove a wallpaper" dialog
+# select an entry from the wallpapers file list and remove it
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+rmv_dlg()
+{
+	local rc=0
+	local _string=""
+	txt2menu_rofi "$_wp_repo" "\\n" _string || \
+		{ abort_dlg "Doublecheck $_wp_repo and its permissions"; return 1; }
+	_sel="$(echo -e "$_string" |rofi -no-lazy-grab -no-custom -dmenu -theme themes/test.rasi -mesg "<span><b>Select the file to remove from list</b></span>")"
+	# if cancel pressed, abort
+	rc=$?
+	[[ $rc -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	# confirmation dialog, last oportunity to get back
+	_conf="$(printf "%s\\n%s" "Yes" "No" |rofi -no-lazy-grab -no-custom -dmenu -theme themes/test.rasi -mesg "<span color='red'><b>Please confirm removing ${_sel#*:\ } from list</b></span>")"
+	rc=$?
+	# get leading number
+	_sel=${_sel%:\ *}
+	if [ "$rc" -eq "$DIALOG_OK" ] && [ "$_conf" == "Yes" ]; then
+		sed "$_sel"d <"$_wp_repo" >/tmp/tmplist_$$ || abort_dlg "Error" "remove failed."
+		mv -f /tmp/tmplist_$$ "$_wp_repo" || abort_dlg "Error" "file $_wp_repo couldn't be modified"
+	fi
+	return $rc
+}
+
+# 'select a wallpaper' dialog
+# select an entry from the wallpapers file list and set it as background
+# parameters:	none
+# output:	none
+# returns:	the return code from the yesno dialog
+#
+select_dlg()
+{
+	local rc=0
+	local _string=""
+	txt2menu_rofi "$_wp_repo" "\\n" _string
+	_sel="$(echo -e "$_string" |rofi -no-lazy-grab -no-custom -dmenu -theme themes/test.rasi -mesg "<span><b>Select the wallpaper to apply</b></span>")"
+	# if cancel pressed, abort
+	rc=$?
+	[[ $rc -eq $DIALOG_CANCEL ]] && return $DIALOG_CANCEL
+	# get leading number
+	_sel=${_sel%:\ *}
+	# no confirmation needed, report error if any
+	feh --bg-fill "$(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
+		abort_dlg "Error: feh failed." "$(cat $tempfile)"
+	return $rc
+}
+
+# Main script
+#
+
+# If rofi isn't installed fallback to dialog script
+# and exit
+#
+if (! command -v rofi >/dev/null 2>&1); then
+	"$HOME/.i3/wall-papers"
+	exit 0
+fi
+
+_sel=
+rc=0
+
+# sanity check
+#
+if [[ ! -s $_wp_repo ]] || [[ ! -r $_wp_repo ]] || [[ ! -w $_wp_repo ]]; then
+	abort_dlg "Sanity checks failed." "Doublecheck $_wp_repo and its permissions"
+	exit 1
+fi
+
+# endless loop
+#
+while [ "$rc" -eq "0" ] ; do
+	_sel=$(echo -e "1: Random wallpaper\\n2: Select a wallpaper\\n3: Add a wallpaper to the list\\n4: Remove a wallpaper from the list\\n5: Quit" |rofi -no-lazy-grab -no-custom -dmenu -theme themes/test.rasi -mesg "<span><b>Select an option</b></span>")
+	rc=$?
+	# get leading number
+	_sel=${_sel%:\ *}
+	case $_sel in
+		1)	if ! ~/.i3/fehbg_new; then
+				abort_dlg "fehbg_new failed." "Doublecheck $_wp_repo and its permissions"
+			fi
+			;;
+		2)	select_dlg
+			;;
+		3)	add_dlg
+			;;
+		4)	rmv_dlg
+			;;
+		5)	abort_dlg "Good bye"
+			exit 0
+			;;
+		*)	;;
+	esac
+done

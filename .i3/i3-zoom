@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+#
+# Tiny script aimed to be used in i3, as a replacement for simple
+# "floating toogle" key binding.
+# The script makes focused window float, then re-escales it to 2/3 screen
+# size (or size pased as parameter  WWWxHHH) and centers it.
+# If focused window is floating, tiles it.
+# Depends on i3-msg, xwininfo amd xdotool.
+#
+
+# get screen size
+_sizeX=$(xwininfo -root |grep Width| awk '{print $2}')
+_sizeY=$(xwininfo -root |grep Height| awk '{print $2}')
+
+# set sane default scaling window values = 2/3 of screen size
+_win_s_X=$(( _sizeX * 2 / 3 ))
+_win_s_Y=$(( _sizeY * 2 / 3 ))
+
+# substitute the scaling values if set in command line
+if [ -n "$1" ]; then
+	_win_s_X=${1%%x*}
+	_win_s_Y=${1##*x}
+fi
+
+i3-msg -q "border 1pixel; floating toggle; resize set $_win_s_X $_win_s_Y"
+
+# get theoretical upper left window point.
+_init_win_pos_X="$(xwininfo -id "$(xdotool getactivewindow)" | grep 'Absolute upper-left X' |awk '{print $4}')"      #$(( _sizeX * 30 / 100 ))
+_init_win_pos_Y="$(xwininfo -id "$(xdotool getactivewindow)" | grep 'Absolute upper-left Y' |awk '{print $4}')"      #$(( _sizeY * 30 / 100 ))
+
+i3-msg -q "move left $(( _init_win_pos_X - ((_sizeX - _win_s_X) / 2))); move up $(( _init_win_pos_Y - ((_sizeY - _win_s_Y) / 2)))"
+

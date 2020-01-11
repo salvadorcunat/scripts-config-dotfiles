@@ -1,0 +1,64 @@
+
+#!/bin/bash
+#
+# Try to add a block to display and manage bluetooth connections.
+# Right button will launch a bluetoothctl instance in a terminal.
+# Left button will launch blueman-manager.
+# Meanwhile the block will display the remote device if connected
+# or the name of the local device if it's not.
+#
+# Version: 2.0  03-11-2016
+# Version: 2.1  25-08-2019 fit for lemonbar
+# Salvador Cuñat Garrigues
+
+#
+# Global variable definition
+#
+BLUEMAN=$(command -v blueman-manager)
+TERMINAL=$(command -v terminator)
+INIT=~/sbin/hci_init
+IFACE_INFO=$(hciconfig -a)
+HCI=`echo $IFACE_INFO  |sed s/:.*$//`
+L_NAME=""
+COLOR=#375389
+
+#
+# Set color of the block depending on rssi value readed from hcitool
+#
+set_color () {
+	if [[ $1 -ge -5 ]]; then
+		COLOR=#006e34				# mate greenish for good connection
+	elif [[ $1 -lt -5 && $1 -ge -15 ]]; then
+		COLOR=#6b6e00				# mate yellowish for intermediate
+	else
+		COLOR=#6e3a00				# mate redish for poor connections
+	fi
+}
+
+#
+# Set up bluetooth if it is still down. If up do nothing.
+#
+echo $IFACE_INFO |grep -q DOWN
+[[ $? -eq 0 ]] && sudo $INIT $HCI $L_NAME
+
+#
+# Get the MAC of the remote device if we are connected
+#
+R_MAC=`hcitool -i $HCI conn| cut -d" " -f3 |sed s/^.*Con.*:$//`
+
+#
+# If we have a connection, get the remote name and the transmision quality.
+# If we don't, just show the name of the local device.
+#
+if [[ -n $R_MAC ]]; then
+	FULL_TEXT=`hcitool info $R_MAC |grep Name |sed s/^.*Name:\ //`
+	LQ=`hcitool rssi $R_MAC |cut -d" " -f4`
+	set_color $LQ
+else
+	FULL_TEXT=$L_NAME
+fi
+
+#
+# Return the values to lemonbar
+#
+echo "BLT$FULL_TEXT $COLOR"
