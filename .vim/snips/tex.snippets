@@ -1,0 +1,106 @@
+snippet beamhead "Set a default Beamer header" b
+%/* vim: cindent tabstop=2 shiftwidth=2
+
+\documentclass[aspectratio=${1:169},${2:14}pt,xcolor=table]{beamer}
+\mode<presentation>
+{
+	\usetheme[blockcolors=${3:plain},	%normal, reversed, plain,
+	tone=blue,			%blue, teal, red, green, pink, orange
+	usefootline=${4:plain},		%none, plain, infolines, reversed,
+					%clearbg, split. miniframes
+	frametitlelayout=${5:reversed},	%boxes, lines, reversed, blockwithlogo
+	sidebarplain={left}{0}{.11\paperwidth}{.7\paperheight},	%simple sidebar
+	%sidebarmnf={right}{.11\textwidth}{.90},		%sidebar with miniframes
+	titlepagestyle=${6:centered},	%none, centered, line
+	]{${7:boretmade}}		% beamer theme
+	\setbeamercovered{transparent}
+	\setbeamercolor{background canvas}{bg=}
+}
+
+\def\myTitlePageBg{${8}}      % background image for title and end pages
+\def\myPagesBg{${9}}   % background image por regular pages
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{booktabs}
+\usepackage{pgfplotstable} % Generates table from .csv
+\usepackage{siunitx} % Formats the units and values
+\sisetup{
+	round-mode          = places, % Rounds numbers
+	round-precision     = 2, % to 2 places
+}
+
+\usepackage{background}
+\mybackground[\myTitlePageBg]
+
+\title[${10:Shorttitle}]{${11:Title}}
+\date{Valencia, \today}
+\author[${12:Rosa Negueroles}]{${13:Dr. Rosa Negueroles Albuixech}}
+
+% Logos:
+% Uncomment and modify next line if you want to add a logo in the footline
+%\logoinfootline{logo_file.jpg}[1][0.5]
+% If using frame title style "blockwithlogo" uncoment to set file and position
+%\logoinframetitle{logo_file.jpg}[left]        % left/right - optional default left
+%
+% Uncomment and modify next lines if you want to add a logo out of the footline or
+% there is no footline at all
+%\pgfdeclareimage[height=1.0cm]{university-logo}{logo_la_fe_1}
+%\logo{\pgfuseimage{university-logo}}
+
+\begin{document}
+
+\end{document}
+endsnippet
+
+snippet mtabletext "For an mTableStyle mostly text" b
+\mTableStyle{${1:boret}}{|L{.15\linewidth}|m{.40\linewidth}|m{.25\linewidth}|}%
+	{${2:header1};${3:header2};${4:header3}}%
+	{\bf {${5:item1a}};
+	%\tableitemize% <-- mandatory
+	%\begin{itemize}
+		%\item %
+		${6:item2a};
+	%\end{itemize};
+	%\tableitemize% <-- mandatory
+	%\begin{itemize}
+		%\item %
+		${7:item3a}}|
+	%\end{itemize}}|
+endsnippet
+
+snippet tablepgf "Make a table from tsv text file" b
+\pgfplotstableread{${1:test_1.csv}}\loadedtable			%load the table in a variable
+\begin{table}[ht]
+	\tablestyle[${2:boret}]
+	\scriptsize
+	\begin{center}
+		\pgfplotstabletypeset[
+			multicolumn names, 			% allows to have multicolumn names
+			header=true,	 			%
+			col sep=${3:tab},	 		% the seperator in our .csv file
+			columns={${4:SEXO, FR, ...}},		% mandatory: names of columns in csv file
+			columns/${5:SEXO}/.style={string type},	% signals text columns the other are nums
+		]{\loadedtable} % filename/path to file
+	\end{center}
+\end{table}
+endsnippet
+
+snippet graphpgf "Make a graph from a csv text file" b
+\pgfplotstableread{${1:test_1.csv}}\loadedtable			%load the table in a variable
+\pgfplotstablesort[sort key=${2:PCR}]{\pcrsorted}{\loadedtable}	%sort loaded table into another one
+\begin{figure}[htpb]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.5, transform shape]
+			\begin{axis}[xlabel=${3:PCR inicial}, ylabel=${4:PCR 6 meses}]
+				\addplot[only marks, scatter, mark size=5pt] table[y=${5:PCR-6M}, x=${6:PCR}]{\pcrsorted};		%load data from sorted table.
+				\addplot+[draw=green, mark size=7pt] coordinates{(28.40,1.67)};	 %sigle point (average in this case)
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+endsnippet
