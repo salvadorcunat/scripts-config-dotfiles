@@ -1,6 +1,54 @@
 [global_config]
   enabled_plugins = CustomCommandsMenu, APTURLHandler, LaunchpadBugURLHandler
 [keybindings]
+[profiles]
+  [[default]]
+    cursor_color = "#aaaaaa"
+  [[boret]]
+    icon_bell = False
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_color = "#ffffff"
+    font = Monospace 9
+    foreground_color = "#d3d7cf"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_infinite = True
+    use_system_font = False
+  [[floating]]
+    background_darkness = 0.82
+    background_type = transparent
+    cursor_color = "#839496"
+    font = Ubuntu Mono derivative Powerline 10
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_infinite = True
+    use_system_font = False
+  [[mail]]
+    icon_bell = False
+    background_color = "#300a24"
+    background_darkness = 0.93
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    font = Monospace Italic 9
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_infinite = True
+    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
+    use_system_font = False
+  [[transparent]]
+    icon_bell = False
+    background_darkness = 0.0
+    background_type = transparent
+    cursor_shape = underline
+    cursor_color = "#aaaaaa"
+    font = Ubuntu Mono derivative Powerline Italic 10
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    exit_action = hold
+    use_system_font = False
 [layouts]
   [[default]]
     [[[child1]]]
@@ -11,51 +59,3 @@
       parent = ""
       type = Window
 [plugins]
-[profiles]
-  [[default]]
-    cursor_color = "#aaaaaa"
-  [[boret]]
-    background_darkness = 0.9
-    background_type = transparent
-    cursor_color = "#ffffff"
-    font = Monospace 9
-    foreground_color = "#d3d7cf"
-    icon_bell = False
-    scrollback_infinite = True
-    scrollbar_position = hidden
-    show_titlebar = False
-    use_system_font = False
-  [[floating]]
-    background_darkness = 0.82
-    background_type = transparent
-    cursor_color = "#839496"
-    font = Monospace Italic 9
-    scrollback_infinite = True
-    scrollbar_position = hidden
-    show_titlebar = False
-    use_system_font = False
-  [[mail]]
-    background_color = "#300a24"
-    background_darkness = 0.93
-    background_type = transparent
-    cursor_color = "#aaaaaa"
-    font = Monospace Italic 9
-    foreground_color = "#ffffff"
-    icon_bell = False
-    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
-    scrollback_infinite = True
-    scrollbar_position = hidden
-    show_titlebar = False
-    use_system_font = False
-  [[transparent]]
-    background_darkness = 0.0
-    background_type = transparent
-    cursor_color = "#aaaaaa"
-    cursor_shape = underline
-    exit_action = hold
-    font = Ubuntu Mono derivative Powerline Italic 10
-    foreground_color = "#ffffff"
-    icon_bell = False
-    scrollbar_position = hidden
-    show_titlebar = False
-    use_system_font = False

@@ -233,10 +233,10 @@ for_window [class="^dolphin$"] border none
 smart_borders on
 gaps inner 10
 #gaps outer 10
-gaps left 15
-gaps right 15
-gaps top 10
-gaps bottom 10
+gaps left 5
+gaps right 5
+gaps top 5
+gaps bottom 5
 
 set $mode_gaps Gaps: (o) outer, (i) inner
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
@@ -323,6 +323,7 @@ for_window [title="Escritorio — Plasma"] kill; floating enable; border none
 # finds out, if available)
 bar {
 	#i3bar_command i3bar -t
+	#position top
 #	status_command i3status
 	#status_command i3blocks
 	#tray_output none
@@ -330,11 +331,13 @@ bar {
 #	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
 #	font pango:URW Gothic L 8
 	#font pango:PowerlineSymbols 8
-	#font pango:FontAwesome 8
+	font pango:Iosevka 7
+	font pango:FontAwesome 7
 	#height 20
 	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
 	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
-	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic disk:root cpu memory battery pasink pasource system -p root.path=/ -t dracula-powerline
+	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic network_traffic disk:root cpu memory battery pasink pasource system -p root.path=/ -t greyish-powerline
+	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m kernel spacer xrandr spacer brightness spacer caffeine cmus pulseaudio docker_ps layout indicator system -t dracula-powerline
 }
 #
 # Launch initial workspace

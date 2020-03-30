@@ -92,3 +92,4 @@
 /home/boret/Descargas/wp-sunrise.jpg
 /home/boret/Descargas/wp-527488.jpg
 /home/boret/Descargas/wp-87232.jpg
+/home/boret/Descargas/wp_moon_oryx_2560x1440.png

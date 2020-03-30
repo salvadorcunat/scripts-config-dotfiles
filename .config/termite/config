@@ -19,6 +19,7 @@ scrollback_lines = 10000
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 #browser = xdg-open
+browser = /home/boret/sbin/termite_wrap --class 'termite_floating'
 
 # "system", "on" or "off"
 cursor_blink = system
