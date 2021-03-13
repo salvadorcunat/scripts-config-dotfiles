@@ -209,8 +209,14 @@ done
 
 # Check internet connectivity. Abort if none, as we can't update anything.
 #
-check_connect
-case $? in
+i=0; RC=1
+while [[ $RC -ne 0 && $i -lt 20 ]]; do
+	sleep 0.5
+	(( i++ ))
+	check_connect
+	RC=$?
+done
+case $RC in
 	1)	aborting "${0##*/}" "-- No default route. Check your network settings" ;;
 	2)	aborting "${0##*/}" "-- Local route but no internet access. Check your network settings" ;;
 esac
@@ -292,3 +298,4 @@ done
 # Remove color sequences from _tempfile before mailing it
 sed -i '{s/\x1b..\;3.m//g ; s/\x1b..m//g}' "$_tempfile"
 [[ $_MAIL = "true" ]] && mail -s "${0##*/} log $(date +"%F %T")" "$_mail" <"$_tempfile"
+exit 0

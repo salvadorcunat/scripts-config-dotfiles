@@ -1,9 +1,14 @@
 [global_config]
   enabled_plugins = CustomCommandsMenu, APTURLHandler, LaunchpadBugURLHandler
+  title_use_system_font = False
+  title_font = Iosevka Medium 9
 [keybindings]
 [profiles]
   [[default]]
     cursor_color = "#aaaaaa"
+    font = JetBrains Mono Medium 10
+    word_chars = "-,./?%&#:_>=~"
+    copy_on_selection = True
   [[boret]]
     icon_bell = False
     background_darkness = 0.9
@@ -19,7 +24,7 @@
     background_darkness = 0.82
     background_type = transparent
     cursor_color = "#839496"
-    font = Ubuntu Mono derivative Powerline 10
+    font = Iosevka Medium Italic 10
     show_titlebar = False
     scrollbar_position = hidden
     scrollback_infinite = True
@@ -43,7 +48,7 @@
     background_type = transparent
     cursor_shape = underline
     cursor_color = "#aaaaaa"
-    font = Ubuntu Mono derivative Powerline Italic 10
+    font = Iosevka Medium Italic 11
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden

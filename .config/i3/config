@@ -222,6 +222,7 @@ for_window [class="^Xfce4-terminal$"] border none
 for_window [class="^Terminator$"] border none
 for_window [class="^cool-retro-term$"] border none
 for_window [class="^Termite$"] border none
+for_window [class="^qterminal$"] border none
 for_window [class="^dolphin$"] border none
 #new_float pixel 1
 
@@ -324,20 +325,20 @@ for_window [title="Escritorio — Plasma"] kill; floating enable; border none
 bar {
 	#i3bar_command i3bar -t
 	#position top
-#	status_command i3status
-	#status_command i3blocks
+##	status_command i3status
+	##status_command i3blocks
 	#tray_output none
-	#strip_workspace_numbers yes
-#	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
-#	font pango:URW Gothic L 8
-	#font pango:PowerlineSymbols 8
-	font pango:Iosevka 7
-	font pango:FontAwesome 7
-	#height 20
-	#i3bar_command "/home/boret/src/lemonbar/i3_lemonbar.sh | /home/boret/src/lemonbar/i3_lemonbar_output_parser.sh 2>/dev/null &"
-	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
-	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic network_traffic disk:root cpu memory battery pasink pasource system -p root.path=/ -t greyish-powerline
-	#status_command /home/boret/src/bumblebee-status/bumblebee-status -m kernel spacer xrandr spacer brightness spacer caffeine cmus pulseaudio docker_ps layout indicator system -t dracula-powerline
+	##strip_workspace_numbers yes
+##	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
+	#font pango:URW Gothic L 8
+	##font pango:PowerlineSymbols 8
+	#font pango:Iosevka 7
+	#font pango:FontAwesome 7
+	##height 20
+	#i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
+	##status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic network_traffic disk:root cpu memory battery pasink pasource system -p root.path=/ -t greyish-powerline
+	#status_command "python3 /home/boret/src/bumblebee-status/bumblebee-status -m kernel spacer xrandr spacer brightness spacer caffeine cmus pulseaudio docker_ps layout indicator system -t dracula-powerline"
+	i3bar_command "/home/boret/.i3/polybar-i3-wrap.sh"
 }
 #
 # Launch initial workspace

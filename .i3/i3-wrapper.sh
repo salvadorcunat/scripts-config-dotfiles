@@ -57,6 +57,9 @@ if [ ${#_MONITORS[@]} -gt 1 ]; then
 	fi
 fi
 
+	SDDM_CURRENT_BG="$(grep background "/usr/share/sddm/themes/boret/theme.conf" |cut -d"=" -f2)"
+	export SDDM_CURRENT_BG
+
 # Modify sddm boret theme  to get a different background in next run
 /home/boret/sbin/sddm_bgs.sh || \
 	echo "$(date) sddm_bg.sh failed" >&2

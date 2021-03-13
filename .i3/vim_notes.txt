@@ -1,7 +1,3 @@
-*Pestañas
-Avanzar|Ctrl+PgUp
-Retroc|Ctrl+PgDown
-Nueva|:tabnew
 *Borrar
 linea|[esc] d[num]d
 palabra|w
@@ -10,12 +6,29 @@ h/fin linea|$
 |[esc] v <seleccionar texto> zf
 Unfold|zo
 Refold|zc
+Fold toggle|za
+*Undo/Redo
+redo|(n)CTRL-R
 *Posición
 anterior|CTRL-O
 última|CTRL-I
+ir a línea|:(numlinea)
 *Ortografía
 |:setlocal spell spelllang=es_es
 Buscar mal adelante|]s
 Buscar mal atrás|[s
 Añadir palabra|
 bajo el cursor|zg
+*Sesiones
+|:mksession (filename)
+|:source (filename)
+*Busqueda
+Suspender resaltado|:noh
+Bajo cursor adelante| *
+Bajo cursor atrás| \#
+*Marcas
+Lista marcas|:marks
+Poner marca|m (x)
+ir a marca|` (x)
+posición anterior|``
+

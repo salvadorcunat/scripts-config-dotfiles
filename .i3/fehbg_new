@@ -64,8 +64,19 @@ while [[ $# -gt 0 ]];do
 	esac
 done
 
+# Set as first bg the one used by sddm
+if [ -n "$SDDM_CURRENT_BG" ]; then
+	feh --bg-fill "$SDDM_CURRENT_BG"
+fi
+
 # loop forever
 while : ; do
+
+	if [[ -n $_delay ]]; then
+		"$_sleep" "$_delay"
+	else
+		break
+	fi
 
 	# to get the upper randomize limit, get the number of lines in $_file,
 	# if _max is not set, default to 1 to avoid infinite looping in randomize()
@@ -84,18 +95,12 @@ while : ; do
 	# set the background reading the line given by $_idx. if fails to read $_file
 	# set a default string to check, notify failure and exit.
 	_wp=$(sed -n "$_idx"p <"$_file")
-	if [[ ! -z $_wp ]]
+	if [[ -n $_wp ]]
 		then
 			feh --bg-fill "$_wp" || \
 				report2screen critical "$0" "failed to run feh --bg-fill $_wp"
 		else
 			report2screen -u critical "$0" "failed to read $_file or index $_idx is wrong"
 			exit 65
-	fi
-
-	if [[ -n $_delay ]]; then
-		"$_sleep" "$_delay"
-	else
-		break
 	fi
 done

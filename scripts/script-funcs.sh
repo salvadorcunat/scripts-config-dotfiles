@@ -33,7 +33,7 @@ get_term_size()
 	declare -n _term_h=${1:-T_HEIGHT}
 	declare -n _term_w=${2:-T_WIDTH}
 	dialog --print-maxsize 2> $tempfile
-	_sizes=( $(sed -E 's/^.*\: ([1-9]{1,}), ([1-9]{1,})/\1 \2/g' <$tempfile) )
+	_sizes=( $(sed -E 's/^.*\: ([0-9]{1,}), ([0-9]{1,})/\1 \2/g' <$tempfile) )
 	_term_h=${_sizes[0]:-0}
 	_term_w=${_sizes[1]:-0}
 	rm -f $tempfile

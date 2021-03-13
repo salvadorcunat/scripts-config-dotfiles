@@ -19,12 +19,16 @@ fi
 export EDITOR=/usr/bin/vim.nox
 
 # other stuff
-if [ ! -z "$DISPLAY" ]; then
+if [ -n "$DISPLAY" ]; then
 	source ~/.xsh
 	/usr/bin/udiskie -s &
 	case "$DESKTOP_SESSION" in
 		*i3*|*spectrwm*)
 			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+			;;
+		*nstant*)
+			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+			/home/boret/.i3/fehbg_new -d 10m &
 			;;
 		*)	;;
 	esac

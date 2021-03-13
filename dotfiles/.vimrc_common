@@ -11,16 +11,25 @@ syntax on
 "colorscheme industry
 " colorscheme solarized
 "colorscheme darkblue
-colorscheme elflord
+"colorscheme elflord
 "colorscheme wombat256
-"colorscheme yaflandia
+set rtp+=/home/boret/.vim/bundle/yaflandia
+colorscheme yaflandia
+set rtp+=/home/boret/.vim/bundle/dracula
+if &diff
+	colorscheme dracula
+endif
+"colorscheme dracula
 set hls
 set is
 set nu
 set cul
 let mapleader=","
+set foldcolumn=3
+set foldmethod=manual
+set sessionoptions=buffers,curdir,folds,globals,localoptions,resize,tabpages,winpos,winsize
 " The default blue is just impossible to see on a black terminal
-highlight Comment ctermfg=Brown
+"highlight Comment ctermfg=DarkGrey
 " clearly point out when someone have trailing spaces
 highlight ExtraWhitespace ctermbg=red guibg=red
 " Show trailing whitespace and spaces before a tab:
@@ -49,21 +58,23 @@ let g:NERDTreeWinSize = 30
 " airline
 "
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#bufferline#overwrite_variables = 1
+"let g:airline#extensions#bufferline#enabled = 1
+"let g:airline#extensions#bufferline#overwrite_variables = 1
 let g:airline#extensions#branch#enabled = 1	"activa integracion de fugitive
 " let g:airline_theme='zenburn'
-let g:airline_theme='powerlineish'
+"let g:airline_theme='powerlineish'
 " let g:airline_theme='dark'
- "let g:airline_theme='wombat'
+"let g:airline_theme='wombat'
 " let g:airline_theme='serene'
 "let g:airline_theme='tomorrow'
-" let g:airline_theme='xtermlight'
+"let g:airline_theme='google_dark'
+"let g:airline_theme='yaflandia'
 " let g:airline_right_sep='|'
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
 let g:airline_powerline_fonts=1
 let g:airline#extensions#capslock#enabled = 1
+let g:airline#extensions#tagbar#enabled = 1
 
 " powerline
 "
@@ -119,19 +130,6 @@ let g:tagbar_case_insensitive = 1
 let g:tagbar_indent = 2
 let g:tagbar_left = 1
 
-" multiple_cursors
-"
-"let g:multi_cursor_use_default_mapping=0
-""
-"let g:multi_cursor_start_word_key	= '<C-m>'
-"let g:multi_cursor_select_all_word_key	= '<A-m>'
-"let g:multi_cursor_start_key           = 'g<C-m>'
-"let g:multi_cursor_select_all_key      = 'g<A-m>'
-"let g:multi_cursor_next_key            = '<C-Right>'
-"let g:multi_cursor_prev_key            = '<C-Left>'
-"let g:multi_cursor_skip_key            = '<C-x>'
-"let g:multi_cursor_quit_key            = '<Esc>'
-
 " vimtex plugin
 "
 let g:tex_flavor='latex'
@@ -165,3 +163,19 @@ let g:neodbg_openregisters_default = 0               " Open registers window, De
 let g:neodbg_keymap_toggle_breakpoint  = '<C-B>'     " toggle break point on current line
 let g:neodbg_keymap_print_variable     = '<C-P>'     " view variable under the cursor
 
+" vim-arduino plugin
+"
+let g:arduino_upload_using_programmer = 0
+function! ArduinoStatusLine()
+  let port = arduino#GetPort()
+  let line = '[' . g:arduino_board . '] [' . g:arduino_programmer . ']'
+  if !empty(port)
+    let line = line . ' (' . port . ':' . g:arduino_serial_baud . ')'
+  endif
+  return line
+endfunction
+autocmd BufNewFile,BufRead *.ino let g:airline_section_x='%{ArduinoStatusLine()}'
+
+" boret
+"
+command! -nargs=* Arduino vert terminal arduino_cli

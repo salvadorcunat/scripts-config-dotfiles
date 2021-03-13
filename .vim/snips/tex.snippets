@@ -5,13 +5,12 @@ snippet beamhead "Set a default Beamer header" b
 \mode<presentation>
 {
 	\usetheme[blockcolors=${3:plain},	%normal, reversed, plain,
-	tone=blue,			%blue, teal, red, green, pink, orange
-	usefootline=${4:plain},		%none, plain, infolines, reversed,
-					%clearbg, split. miniframes
-	frametitlelayout=${5:reversed},	%boxes, lines, reversed, blockwithlogo
+	tone=blue,			%blue, teal, red, green, pink, orange, blackandwhite, an reversed.
+	usefootline=${4:plain},		%none, plain, infolines, reversed, clearbg, checker, sectionchecker, fullchecker, split, miniframes
+	frametitlelayout=${5:reversed},	%boxes, lines, reversed, blockwithlogo, blocksimple
 	sidebarplain={left}{0}{.11\paperwidth}{.7\paperheight},	%simple sidebar
 	%sidebarmnf={right}{.11\textwidth}{.90},		%sidebar with miniframes
-	titlepagestyle=${6:centered},	%none, centered, line
+	titlepagestyle=${6:centered},	%none, centered, line, reversed
 	]{${7:boretmade}}		% beamer theme
 	\setbeamercovered{transparent}
 	\setbeamercolor{background canvas}{bg=}
@@ -27,6 +26,7 @@ snippet beamhead "Set a default Beamer header" b
 \usepackage{lmodern}
 \usepackage[ddmmyyyy]{datetime}
 \usepackage{booktabs}
+% \usepackage{qrcode} % use only if needed \qrcode[options]{text}
 \usepackage{pgfplotstable} % Generates table from .csv
 \usepackage{siunitx} % Formats the units and values
 \sisetup{
@@ -43,7 +43,8 @@ snippet beamhead "Set a default Beamer header" b
 
 % Logos:
 % Uncomment and modify next line if you want to add a logo in the footline
-%\logoinfootline{logo_file.jpg}[1][0.5]
+%\logoinfootline{logo_file.jpg}[1][0.5]  % 1=logo file 2&3 = X&Y positions
+%\navsyminfootline{right}[-.1\textwidth][0]
 % If using frame title style "blockwithlogo" uncoment to set file and position
 %\logoinframetitle{logo_file.jpg}[left]        % left/right - optional default left
 %

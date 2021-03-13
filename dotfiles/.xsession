@@ -27,8 +27,12 @@ xsetroot -solid "#333333"
 # Enable core dumps in case something goes wrong
 ulimit -c unlimited
 
+xset +fp /home/boret/.fonts
+xset fp rehash
+
+
 # Modify sddm boret theme  to get a different background in next run
-/home/boret/sbin/sddm_bg.sh || \
+/home/boret/sbin/sddm_bgs.sh || \
 	echo "$(date) sddm_theme.sh failed" >&2
 
 # Start i3 and log to ~/.i3/logfile

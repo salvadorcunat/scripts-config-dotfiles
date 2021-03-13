@@ -56,9 +56,10 @@ fill_repos()
 get_result()
 {
 	case $1 in
-		$DIALOG_CANCEL|$DIALOG_ESC) clear
+		"$DIALOG_CANCEL"|"$DIALOG_ESC") clear
 					    echo "Abortado"
-					    exit 3
+					    exit 3;;
+		"$DIALOG_EXTRA") volume_form;;
 	esac
 }
 
@@ -67,19 +68,20 @@ get_result()
 #
 volume_form()
 {
-	$DIALOG --clear  --backtitle "$_backtitle" --title " Punto de montaje " \
+	$DIALOG --clear  --backtitle "$_backtitle" --title " Punto de montaje " --extra-button --extra-label "Añadir más" \
 		--form 'Selecciona el punto de montaje en la imagen y el directorio local a montar' $((_H/2)) $((_W/2)) 3 \
 "Punto de montaje: "	1 1	/mnt/data	1 21 250 0 \
 "Carpeta local: "	2 1	/home/boret/src	2 21 250 0 \
 "Opciones de montaje:"	3 1	rw		3 21 250 0 \
 2> $tempfile
 
-	get_result $?
-
-	VOLUME="-v $(cut -d'
+	RC=$?
+	VOLUME="$VOLUME -v $(cut -d'
 ' -f2 $tempfile):$(cut -d'
 ' -f1 $tempfile):$(cut -d'
 ' -f3 $tempfile)"
+: >/$tempfile
+	get_result $RC
 }
 
 # a dialog to get the desired name of a container
@@ -94,6 +96,38 @@ name_form()
 	get_result $?
 
 	CON_NAME="$(cat $tempfile)"
+}
+
+# a dialog to connect the container to a network
+# sets a global variable _NETWORK
+#
+network_form()
+{
+	$DIALOG --clear --backtitle "$_backtitle" --title " Red a conectar " \
+		--inputbox 'Selecciona un tipo de red a conectar' $((_H/2)) $((_W/2)) "host" \
+		2> $tempfile
+
+	get_result $?
+
+	_NETWORK="$(cat $tempfile)"
+}
+
+# Form to add environment variables to the container
+#
+env_form()
+{
+	declare -n _env=${1:-_ENV_VARS}
+	$DIALOG --clear --backtitle "$_backtitle" --title " Environment Variables " \
+		--inputbox 'Add environment variables if needed.
+Use the format: Qt_DIR=/foo/bar BUILD_DIR=/abc/def' $((_H/2)) $((_W/2)) \
+		2> $tempfile
+	get_result $?
+	local VARS=( $(cat $tempfile) )
+	local j=0
+	while [ "$j" -lt "${#VARS[@]}" ]; do
+		_env[$j]="-e ${VARS[$j]}"
+		(( j++ ))
+	done
 }
 
 # output to stdout the name of an image, given its sha
@@ -142,10 +176,14 @@ while (( i < ${#IMAGE[@]} )); do
 		"privileged" " " off \
 		"CAP_SYS_ADMIN" " " off \
 		"name"	"Give a name to the container" off \
+		"env"	"Set environment vars" off \
 		"v" "Mount a volume" off \
+		"rm" "Remove container on exit" on \
+		"network" "bridge, host, none, etc" on \
 		"d" "Detach" on \
 		"i" "Interactive" on \
 		"t" "Tty" on 2> $tempfile
+
 	get_result $?
 
 	declare -a OPTIONS=( $(cat "$tempfile") )
@@ -157,7 +195,10 @@ while (( i < ${#IMAGE[@]} )); do
 			CAP_SYS_ADMIN)	COMMAND="$COMMAND -e CAP_SYS_ADMIN"
 					;;
 			name)		name_form
-					[[ ! -z $CON_NAME ]] && COMMAND="$COMMAND --name $CON_NAME"
+					[[ -n $CON_NAME ]] && COMMAND="$COMMAND --name $CON_NAME"
+					;;
+			network)	network_form
+					[[ -n $_NETWORK ]] && COMMAND="$COMMAND --network=$_NETWORK"
 					;;
 			d)		COMMAND="$COMMAND -d"
 					;;
@@ -166,7 +207,12 @@ while (( i < ${#IMAGE[@]} )); do
 			t)		COMMAND="$COMMAND -t"
 					;;
 			v)		volume_form
-					COMMAND="$COMMAND $VOLUME"
+					[[ -n $VOLUME ]] && COMMAND="$COMMAND $VOLUME"
+					;;
+			env)		env_form _ENV_VARS
+					COMMAND="$COMMAND ${_ENV_VARS[@]}"
+					;;
+			rm)		COMMAND="$COMMAND --rm"
 					;;
 		esac
 		(( j++ ))
@@ -184,6 +230,6 @@ Por defecto se ejecuta un shell de bash." $((_H/2)) $((_W/2)) "/bin/bash" 2> $te
 		--msgbox "$(echo "Result for running container $CON_NAME"; \
 			   $COMMAND 2>&1 & wait; \
 			   echo "---------------------------------------------------")" $((_H/2)) $((_W/2))
-	unset OPTIONS COMMAND VOLUME CON_NAME
+	unset OPTIONS COMMAND VOLUME CON_NAME RC _NETWORK _ENV_VARS
 	(( i++ ))
 done

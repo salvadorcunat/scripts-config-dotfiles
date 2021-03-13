@@ -156,7 +156,7 @@ bind status	C	!git commit
 bind stash	P	?git stash pop %(stash)
 bind stash	!	?git stash drop %(stash)
 bind refs	C	?git checkout %(branch)
-bind refs	M	?git rebase %(branch)
+bind refs	R	?git rebase %(branch)
 bind refs	B	?git checkout -b %(prompt)
 bind refs	M	?git merge %(ref)
 bind refs	!	?git branch -D %(branch)
