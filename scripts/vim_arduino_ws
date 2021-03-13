@@ -1,0 +1,9 @@
+#!/bin/bash
+#vim "+vert terminal" "+terminal ++rows=28 arduino_cli" "$@"
+
+i3-msg "append_layout $HOME/.i3/arduino_layout.json"
+termite -c "$HOME/.config/termite/boret_deep_blue.config" -e arduino_cli &
+sleep 0.25
+termite -c "$HOME/.config/termite/boret_deep_blue.config" &
+sleep 0.25
+termite -c "$HOME/.config/termite/boret_deep_blue.config" -e "vim $*" &

@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+report_msg()
+{
+	printf "**** %s\t%s\n" "$1" "$2"
+}
+
+# Are we running dockerd service?
+if ! pgrep -c dockerd >/dev/null 2>&1; then
+	report_msg "docker service not running." "Starting ..."
+	sudo systemctl start docker
+fi
+
+_DOCKER="$(command -v docker)"
+
+report_msg "${0##*\/}" "Starting Arduino IDE ..."
+"$_DOCKER" run \
+	--name arduino_ide \
+	-i \
+	--rm \
+	--network=host \
+	--privileged \
+	-e DISPLAY="$DISPLAY" \
+	-v /dev:/dev \
+	-v "$HOME"/.Xauthority:/home/boret/.Xauthority  \
+	-v "$HOME"/Arduino:/home/boret/Arduino \
+	-v "$HOME"/.arduino15:/home/boret/.arduino15 \
+	boret/arduino:ide-1.8.13 \
+	arduino 2>/dev/null &
+sleep 5
+report_msg "${0##*\/}" "Enjoy ..."
+

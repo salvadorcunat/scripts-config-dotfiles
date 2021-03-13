@@ -1,0 +1,68 @@
+help
+q
+update-cache
+set id3_default_charset
+set id3_default_charset ISO-8859-15
+set id3_default_charset (ISO-8859-1)
+bind -f common F push filter 
+qa
+delete
+add -p
+bind -f common } vol -0 -1%
+bind common <key> left-view
+bind -f common 1 view tree
+set status_display_program=/home/boret/.config/cmus/cmus-status-display
+set status_display_program="/home/boret/.config/cmus/cmus-status-display >> ~/cmus-status.txt"
+set status_display_program=/usr/share/doc/cmus/examples/cmus-status-display
+set cmus-status-display=/usr/share/doc/cmus/examples/cmus-status-display
+add playlist
+add
+/Blow
+remove
+add ~/musica/Manowar
+add ~/musica/ozzy_osbourne
+add ~/.aMule/Incoming/ozzy_osbourne
+add ~/.aMule/Incoming/Manowar
+h
+?
+rand
+a ~/.aMule/Incoming
+cd .aMule
+cd
+!cd .aMulw
+set color_cur_sel_attr=green
+colorscheme default
+colorscheme solarized-dark
+set color_titleline_bg=black12
+colorscheme xterm-white
+colorscheme green
+colorscheme night
+colorscheme cyan
+colorscheme green-mono-88
+colorscheme zenburn
+colorscheme zenburn.theme
+set color_win_title_bg=blue
+set color_win_title_bg=100
+set color_win_title_bg=15
+set color_win_title_bg=grey
+set color_win_title_bg=gray
+set color_win_title_bg=darkgray
+set color_win_title_bg=black
+set color_win_title_bg=lightblue
+set color_win_title_bg=lightgreen
+set color_win_title_bg=green
+set color_win_sel_bg=blue
+set color_win_sel_bg=lightblue
+save
+add ~/musica
+add ~/Descargas
+add ~/.aMule/Incoming
+cd .aMule/Incoming
+cd ..
+pwd
+set mixer.alsa.channel="Master"
+set mixer.alsa.device="HDA Intel"
+bind -f common x player-play
+mixer
+cd .amule/Incoming
+cd amule

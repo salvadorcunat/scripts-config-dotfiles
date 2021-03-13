@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+report_msg()
+{
+	printf "**** %s\t%s\n" "$1" "$2"
+}
+
+# Are we running dockerd service?
+if ! pgrep -c dockerd >/dev/null 2>&1; then
+	report_msg "docker service not running." "Starting ..."
+	sudo systemctl start docker
+fi
+
+_DOCKER="$(command -v docker)"
+
+report_msg "${0##*\/}" "Starting Arduino CLI ..."
+"$_DOCKER" run \
+	--name arduino_cli \
+	--privileged \
+	-e DISPLAY=:0 \
+	-i \
+	-t \
+	--rm \
+	--network=host \
+	-v /dev:/dev \
+	-v /home/boret/.Xauthority:/home/boret/.Xauthority \
+	-v /home/boret/Arduino:/home/boret/Arduino \
+	-v /home/boret/.arduino15:/home/boret/.arduino15 \
+	boret/arduino:cli-0.14.0 \
+	/usr/local/bin/arduino_cli
+report_msg "${0##*\/}" "Done. Good Bye."

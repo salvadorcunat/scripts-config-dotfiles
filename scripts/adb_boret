@@ -1,0 +1,157 @@
+#!/bin/bash
+
+_usage="
+A simple front for some adb commands.
+
+$ adb_boret [-s|--shell] [-u|--usb] [-w|--wifi -ip nnn.nnn.nnn.nnn] [-o|--output /desired/path]
+
+Options:	-s|--shell	Detach an adb shell terminal
+		-u|--usb	Use USB connection
+		-w|--wifi	Use wifi connection (-ip mandatory)
+		-ip		IP device's direction
+		-o|--output	Folder where download will be stored
+
+Setting an output path implies we want to download predefined device's
+directories. If this option is not set we won't download anything.
+"
+# Variables and defaults
+#
+_adb="$(command -v adb)"; [ -z "$_adb" ] && { echo "Adb command not found."; exit 1; }
+_term="$(command -v termite_wrap)"
+
+_dwld_BL043896="/sdcard/CameraV
+/sdcard/DCIM
+/sdcard/Pictures
+/sdcard/Download
+/sdcard/bluetooth
+/sdcard/WhatsApp/Media/WhatsApp Images
+/sdcard/WhatsApp/Media/WhatsApp Video
+/sdcard/WhatsApp/Media/WhatsApp Stickers"
+
+_dwld_LGD722499a765b="/storage/emulated/legacy/DCIM
+/storage/emulated/legacy/WhatsApp/Media/WhatsApp Images
+/storage/emulated/legacy/WhatsApp/Media/WhatsApp Video
+/storage/emulated/legacy/Download
+/storage/external_SD/Download
+/storage/external_SD/DCIM
+/storage/external_SD/bluetooth
+/storage/external_SD/WhatsApp/Media/WhatsApp Images
+/storage/external_SD/WhatsApp/Media/WhatsApp Video
+/storage/external_SD/download"
+
+LIGHT_RED="\\033[1;31m"
+GREEN="\\033[0;32m"
+WHITE="\\033[1;37m"
+DEFAULT="\\033[0m"
+
+
+report_msg()
+{
+	echo -e " --  $1\\t --> $2"
+}
+
+warning()
+{
+	report_msg "${GREEN}Warning${DEFAULT}" "${WHITE}$1${DEFAULT}"
+}
+
+abort()
+{
+	report_msg "${LIGHT_RED}Abort${DEFAULT}" "${WHITE}$1${DEFAULT}"
+	exit 1
+}
+
+# Download selected directories depending on serial Nº passed as argument.
+# The directories have been prevoiously fixed in _dwld_XXXXXX strings.
+#
+do_download()
+{
+	IFS=$'\n'
+	declare -a _array
+	# shellcheck is about to commit suicide because of this indirect
+	# reference but ... it simply works
+	eval _array=( "\$_dwld_$1" )
+	local i=0
+	while [ "$i" -lt "${#_array[@]}" ]; do
+		if "$_adb" pull -a "${_array[$i]}" "$_dir" ; then
+			report_msg "Download" "${_array[$i]} completed"
+		else
+			warning "Downloading ${_array[$i]} failed"
+		fi
+		i=$(( i+1 ))
+	done
+}
+
+if [ ! "$#" -gt 0 ]; then
+	echo "$_usage"
+	abort "Haven't choose any connection. Please select -w or -u."
+fi
+
+while [ "$#" -gt 0 ]; do
+	case "$1" in
+		-u|--usb)	_conn="usb"
+				;;
+		-w|--wifi)	_conn="any"
+				;;
+		-o|--output)	_dir="$2"
+				shift
+				;;
+		-ip)		_dev_IP="$2"
+				shift
+				;;
+		-s|--shell)	_shell="true"
+				;;
+		*)		echo "$_usage"
+				exit 1
+				;;
+	esac
+	shift
+done
+
+echo "
+ --  Connect your device to the PC via USB cable.
+ --  Configure your device to support usb debug (and wifi if needed).
+ --
+ --> Waiting for device ...
+"
+"$_adb" wait-for-"$_conn"-device
+
+if [ "$_conn" != "usb" ]; then
+	"$_adb" tcpip 5555
+	"$_adb" connect "$_dev_IP" >/dev/null ||\
+		abort "Failed to connect to $_dev_IP."
+	warning "Disconnect usb cable and press any key ..."
+	read -r
+fi
+
+sleep 1
+
+"$_adb" get-state >/dev/null ||\
+	abort "get-state failed. No device found.."
+
+report_msg "Device"  "$($_adb get-serialno)"
+report_msg "Through" "$($_adb get-devpath)"
+
+if [ -n "$_shell" ]; then
+	[ -z "$_term" ] && abort "Can't find expected terminal command."
+	"$_term" -t "ADB shell session with $($_adb get-serialno)" --class=termite_floating -e "$_adb shell" 2>/dev/null &
+	sleep 1
+	_termpid=$(pgrep -n termite)  #TODO: make this portable
+fi
+
+if [ -n "$_dir" ]; then
+	warning "Downloading files to $_dir"
+	mkdir -p "$_dir"
+	do_download "$($_adb get-serialno)"
+else
+	warning "No output directory set. Continue without download."
+fi
+
+if [ -n "$_termpid" ]; then
+	while [ -d "/proc/$_termpid" ]; do
+		sleep 3
+	done
+fi
+
+report_msg "Finished" "Killing adb server. Bye."
+"$_adb" kill-server
