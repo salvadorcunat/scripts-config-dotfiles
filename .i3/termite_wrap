@@ -5,7 +5,7 @@
 # for debuging
 #trap 'set +x; sleep 1; set -x' DEBUG
 
-_TERMITE="$(which termite)"
+_TERMITE="$(command -v termite)"
 _configdir="$HOME"/.config
 _termitedir="$_configdir"/termite
 declare -a _conf_files

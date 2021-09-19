@@ -22,7 +22,7 @@ export LC_TIME=en_DK.UTF-8
 export AWT_TOOLKIT=XToolkit
 
 # Set background color
-xsetroot -solid "#333333"
+#xsetroot -solid "#333333"
 
 # Enable core dumps in case something goes wrong
 ulimit -c unlimited
@@ -39,5 +39,5 @@ xset fp rehash
 printf "%s\n" "**********************************************************************
 Starting at $(date)
 **********************************************************************" >>$HOME/.i3/i3log
-exec i3 -V >>"$HOME/".i3/i3log 2>&1
+exec i3 -V >"$HOME"/.i3/i3log 2>&1
 

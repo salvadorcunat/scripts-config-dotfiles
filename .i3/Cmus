@@ -7,8 +7,8 @@
 # Arguments: none
 #
 
-I3MSG=$(which i3-msg)
-NOTIFY=$(which notify-send)
+I3MSG=$(command -v i3-msg)
+NOTIFY=$(command -v notify-send)
 TMPFILE=/tmp/tmp_$$
 CAT=/bin/cat
 

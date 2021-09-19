@@ -1,7 +1,7 @@
 # .bashrc
 
 # User specific aliases and functions
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin:/usr/local/sbin:/home/boret/sbin
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin:/usr/local/sbin:/home/boret/sbin:/home/boret/.local/bin:/home/boret/src/install-root/bin
 
   # Adndroid  development kit definitions
 #  export M2_HOME=/usr/local/apache-maven/apache-maven-3.2.1
@@ -57,7 +57,7 @@ force_color_prompt=yes
 [ -f /home/boret/.travis/travis.sh ] && source /home/boret/.travis/travis.sh
 
 # uncomment for powerline prompt. boret. 26-02-2018
-if [ -f $(which powerline-daemon) ]; then
+if [ -f "$(command -v powerline-daemon)" ]; then
   powerline-daemon -q
   export POWERLINE_BASH_CONTINUATION=1
   export POWERLINE_BASH_SELECT=1
@@ -70,3 +70,4 @@ alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"
 alias ls="ls --color=auto"
 alias vimcat="vimcat +n --"
 alias crt='cool-retro-term -p boret'
+alias cat='batcat --paging=never --plain'

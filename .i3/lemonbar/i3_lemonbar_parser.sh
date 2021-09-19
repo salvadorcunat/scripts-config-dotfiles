@@ -154,7 +154,7 @@ while read -r line ; do
 			bg_col=${line##*\ }
 			fg_col="${color_white}"
 			wifi_ap=${line#???}; wifi_ap=${wifi_ap%\ *}
-			wifi="%{F${bg_col}}${sep_left}%{F${fg_col} B${bg_col} T2}%{A:wifi_ap:}$(pad_str "${icon_wap}" 3)%{T1}$(pad_str "${wifi_ap}" 16)%{A}"
+			wifi="%{F${bg_col}}${sep_left}%{F${fg_col} B${bg_col} T2}%{A:wifi_ap:}$(pad_str "${icon_wap}" 3)%{T1}$(pad_str "${wifi_ap}" 16) %{A}"
 			;;
 		BDW*)
 			# Bandwidth up/down

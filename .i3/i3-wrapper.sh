@@ -65,4 +65,4 @@ fi
 	echo "$(date) sddm_bg.sh failed" >&2
 
 # Launch i3
-/usr/local/bin/i3 -V >>"$HOME"/.i3/i3log 2>&1
+/usr/local/bin/i3 -V >"$HOME"/.i3/i3log 2>&1

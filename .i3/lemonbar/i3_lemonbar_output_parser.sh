@@ -23,10 +23,11 @@ capability() {
 while read -r _line; do
 	case "$_line" in
 		iface|wifi_ap|bdwidth)
-			"$_CRT" -e wicd-curses &
+			nmcli device wifi rescan
+			"$_CRT" -e nmtui &
 			;;
 		cpu_load)
-			"$_TERMINATOR" -b -T "Mpstat" -p floating -e 'gotop' &
+			"$_TERMINATOR" -b --geometry 800x600 -T "Mpstat" -p floating -e 'bpytop' &
 			;;
 		change_ws*)
 			"$_I3MSG" workspace "${_line##*\ }" &

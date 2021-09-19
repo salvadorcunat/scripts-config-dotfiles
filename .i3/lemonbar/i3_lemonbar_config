@@ -2,13 +2,14 @@
 # i3 panel config. Powerline style.
 
 panel_fifo="/tmp/i3_lemonbar_${USER}"
-font="Arimo for Powerline-8"
+#font="Arimo for Powerline-8"
 #font="URW Gothic-8"
+font="Terminess for Powerline-8"
 iconfont="FontAwesome-8"
 monofont="Iosevka-8"
 
 res_w=$(xrandr | grep "current" | awk '{print $8a}')
-geometry="${res_w}x16"
+geometry="${res_w}x15"
 
 # Alarm settings
 cpu_alert=75                        # % cpu use

@@ -1,15 +1,15 @@
 #!/bin/bash
 # To run from i3-wm config file
-# Find if an instance of compton is running and launch a new instance if it's not.
-# Use parameter -f or --force to re-launch compton
+# Find if an instance of picom is running and launch a new instance if it's not.
+# Use parameter -f or --force to re-launch picom
 
 # for debuging
 #trap 'set +x; sleep 1; set -x' DEBUG
 
 . $HOME/sbin/script-funcs.sh
 
-COMPTON="$(which compton)"
-COMPTONPROC=$(pgrep -l compton |grep -v wrap); COMPTONPROC=${COMPTONPROC%\ *}
+COMPTON="$(command -v picom)"
+COMPTONPROC=$(pgrep -l picom |grep -v wrap); COMPTONPROC=${COMPTONPROC%\ *}
 
 # Parse the command line. Abort on wrong options.
 # Note the begining of the error text, similar to report_msg.
@@ -24,7 +24,7 @@ unset TEMP
 while true; do
 	case $1 in
 		-f| --force)	[[ ! -z $COMPTONPROC ]] && \
-					report_msg "${0##*/}" "killing compton, PID $COMPTONPROC" && \
+					report_msg "${0##*/}" "killing picom, PID $COMPTONPROC" && \
 					kill -9 "$COMPTONPROC" && \
 					COMPTONPROC=
 				break
@@ -39,5 +39,5 @@ while true; do
 done
 
 [[ -z $COMPTONPROC ]] && \
-	$COMPTON -b --config "$HOME"/.config/compton/compton.conf && \
-	report_msg "${0##*/}" "Running compton" 
+	$COMPTON -b --config "$HOME"/.config/picom/picom.conf && \
+	report_msg "${0##*/}" "Running picom" 

@@ -166,10 +166,10 @@ abort_dlg()
 # Returns:	0 if running, 1 otherwise.
 is_running()
 {
-	local _dialog="$(which dialog)"
-	local _pgrep="$(which pgrep)"
+	local _dialog="$(command -v dialog)"
+	local _pgrep="$(command -v pgrep)"
 	local _program="${1%_*}";
-	local _path_program="$(which "$_program")"
+	local _path_program="$(command -v "$_program")"
 	local _prog_parms="${1#*(}"; _prog_parms="${_prog_parms%)}"
 	local _rc
 	get_term_size _h _w

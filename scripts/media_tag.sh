@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # For debugging
-#_sleep="$(which sleep)"
+#_sleep="$(command -v sleep)"
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 _usage="
@@ -40,9 +40,9 @@ while : ; do
 		# use different player for images or videos
 		_suffix="$(basename "$_file")"; _suffix=${_suffix##*\.}
 		case $_suffix in
-			jpg|JPG|png|PNG) _player=( "$(which feh)" "-Tinfo_border" )
+			jpg|JPG|png|PNG) _player=( "$(command -v feh)" "-Tinfo_border" )
 					 ;;
-			mp4|MP4|mov|MOV) _player=( "$(which mplayer)" "-ni" "-nocache" )
+			mp4|MP4|mov|MOV) _player=( "$(command -v mplayer)" "-ni" "-nocache" )
 					 ;;
 		esac
 		# visualize the archive

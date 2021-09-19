@@ -22,9 +22,9 @@ _usage="
 
 _file="$HOME/.i3/wallpapers.txt"	# file containing the list of wallpapers
 _wp=
-_sleep="$(which sleep)"
+_sleep="$(command -v sleep)"
 _delay=					# Delay. Default to 15 minutes
-_notify="$(which notify-send)"		# notify command or simple echo if not installed
+_notify="$(command -v notify-send)"		# notify command or simple echo if not installed
 . "$HOME"/sbin/script-funcs.sh
 
 # Reporting messages and errors format.

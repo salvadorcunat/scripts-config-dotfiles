@@ -33,7 +33,7 @@ exec 1> >(tee "$_tempfile") 2>&1
 . "$HOME"/sbin/script-funcs.sh
 
 # For debuging
-#_sleep="$(which sleep)"		#/bin/sleep
+#_sleep="$(command -v sleep)"		#/bin/sleep
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 # Colors for fancy output

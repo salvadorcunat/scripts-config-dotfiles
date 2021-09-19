@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # For debugging
-#_sleep="$(which sleep)"
+#_sleep="$(command -v sleep)"
 #trap 'set +x; $_sleep 0.25; set -x' DEBUG
 
 _usage="

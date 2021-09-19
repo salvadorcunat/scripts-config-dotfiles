@@ -9,7 +9,7 @@
 # for debuging
 #trap 'set +x; sleep 1; set -x' DEBUG
 
-I3MSG="$(which i3-msg)"
+I3MSG="$(command -v i3-msg)"
 I3CMD=					# command to launch with i3-msg
 WS=					# workspace to launch
 LAYOUT=					# preconfigured layout file

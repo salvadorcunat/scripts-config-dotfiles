@@ -24,7 +24,7 @@ script-funcs.sh file.
 
 "
 # For debuging
-#_sleep="$(which sleep)"
+#_sleep="$(command -v sleep)"
 #trap 'set +x; $_sleep 0.05; set -x' DEBUG
 
 DIALOG_OK=0					#

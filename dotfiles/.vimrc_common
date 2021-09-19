@@ -9,7 +9,7 @@ set cindent tabstop=8 shiftwidth=8 cinoptions=l1,:0,(0,g0
 set nocompatible
 syntax on
 "colorscheme industry
-" colorscheme solarized
+"colorscheme solarized
 "colorscheme darkblue
 "colorscheme elflord
 "colorscheme wombat256
@@ -113,11 +113,11 @@ let g:ale_list_window_size = 5
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0                       "Do not lint on openning. Use mapped key
-let g:ale_linters = {
-\	'c': ['gcc'],
-\	'cpp': ['cppcheck'],
-\	'sh': ['shellcheck']
-\}
+"let g:ale_linters = {
+"\	'c': ['gcc'],
+"\	'cpp': ['cppcheck'],
+"\	'sh': ['shellcheck']
+"\}
 let g:ale_sh_shellcheck_exclusions = 'SC2164'
 nmap <F9> : ALEToggle<CR>
 
@@ -165,6 +165,7 @@ let g:neodbg_keymap_print_variable     = '<C-P>'     " view variable under the c
 
 " vim-arduino plugin
 "
+let g:arduino_run_headless = 0
 let g:arduino_upload_using_programmer = 0
 function! ArduinoStatusLine()
   let port = arduino#GetPort()
