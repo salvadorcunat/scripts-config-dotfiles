@@ -2,8 +2,8 @@
 #vim "+vert terminal" "+terminal ++rows=28 arduino_cli" "$@"
 
 i3-msg "append_layout $HOME/.i3/arduino_layout.json"
-termite -c "$HOME/.config/termite/boret_deep_blue.config" -e arduino_cli &
+alacritty --config-file "$HOME/.config/alacritty/alacritty_boret_deep_blue.yml" -e arduino_cli &
 sleep 0.25
-termite -c "$HOME/.config/termite/boret_deep_blue.config" &
+alacritty --config-file "$HOME/.config/alacritty/alacritty_boret_deep_blue.yml" &
 sleep 0.25
-termite -c "$HOME/.config/termite/boret_deep_blue.config" -e "vim $*" &
+alacritty --config-file "$HOME/.config/alacritty/alacritty_boret_deep_blue.yml" -e vim "$@" &

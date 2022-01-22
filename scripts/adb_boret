@@ -17,7 +17,7 @@ directories. If this option is not set we won't download anything.
 # Variables and defaults
 #
 _adb="$(command -v adb)"; [ -z "$_adb" ] && { echo "Adb command not found."; exit 1; }
-_term="$(command -v termite_wrap)"
+_term="$(command -v alacritty_wrap)"
 
 _dwld_BL043896="/sdcard/CameraV
 /sdcard/DCIM
@@ -134,9 +134,9 @@ report_msg "Through" "$($_adb get-devpath)"
 
 if [ -n "$_shell" ]; then
 	[ -z "$_term" ] && abort "Can't find expected terminal command."
-	"$_term" -t "ADB shell session with $($_adb get-serialno)" --class=termite_floating -e "$_adb shell" 2>/dev/null &
+	"$_term" -t "ADB shell session with $($_adb get-serialno)" --class=alacritty,alacritty_floating -e "$_adb shell" 2>/dev/null &
 	sleep 1
-	_termpid=$(pgrep -n termite)  #TODO: make this portable
+	_termpid=$(pgrep -n alacritty)  #TODO: make this portable
 fi
 
 if [ -n "$_dir" ]; then

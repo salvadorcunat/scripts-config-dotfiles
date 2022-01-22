@@ -26,6 +26,6 @@ report_msg "${0##*\/}" "Starting Arduino CLI ..."
 	-v /home/boret/.Xauthority:/home/boret/.Xauthority \
 	-v /home/boret/Arduino:/home/boret/Arduino \
 	-v /home/boret/.arduino15:/home/boret/.arduino15 \
-	boret/arduino:cli-0.14.0 \
+	boret/amd64:arduino_cli-0-19-2 \
 	/usr/local/bin/arduino_cli
 report_msg "${0##*\/}" "Done. Good Bye."

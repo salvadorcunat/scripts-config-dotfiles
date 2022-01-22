@@ -6,18 +6,22 @@ snippet beamhead "Set a default Beamer header" b
 {
 	\usetheme[blockcolors=${3:plain},	%normal, reversed, plain,
 	tone=blue,			%blue, teal, red, green, pink, orange, blackandwhite, an reversed.
-	usefootline=${4:plain},		%none, plain, infolines, reversed, clearbg, checker, sectionchecker, fullchecker, split, miniframes
-	frametitlelayout=${5:reversed},	%boxes, lines, reversed, blockwithlogo, blocksimple
-	sidebarplain={left}{0}{.11\paperwidth}{.7\paperheight},	%simple sidebar
+	usefootline=${4:plain},		%none, plain, infolines, reversed, clearbg, checker, sectionchecker, fullchecker, infochecker, split, miniframes, numbered
+	frametitlelayout=${5:reversed},	%plain, boxes, lines, reversed, blockwithlogo, blocksimple, boxrounded
+	%sidebarfancy={right}{0pt}{.11\paperwidth}{.75\paperheight}{rounded}{mLightTeal},
+		% 1=right/left	2=height	3=width	4=totalheight 5= square or rounded 6=none or color (basic or theme defined)
+	%sidebarplain={left}{0}{.11\paperwidth}{.7\paperheight},	%simple sidebar
 	%sidebarmnf={right}{.11\textwidth}{.90},		%sidebar with miniframes
+	%itemstyle=default,  %e.g. faArrowRight, faCheck, faCheckSquare, faHandPointRight ...
 	titlepagestyle=${6:centered},	%none, centered, line, reversed
+	font=${7:fira},        %fira, go, arimo, gillius2 and carlito.   
 	]{${7:boretmade}}		% beamer theme
 	\setbeamercovered{transparent}
 	\setbeamercolor{background canvas}{bg=}
 }
 
-\def\myTitlePageBg{${8}}      % background image for title and end pages
-\def\myPagesBg{${9}}   % background image por regular pages
+% \def\myTitlePageBg{${8}}      % background image for title and end pages on current master
+% \def\myPagesBg{${9}}   % background image por regular pages on current master
 
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
@@ -27,15 +31,19 @@ snippet beamhead "Set a default Beamer header" b
 \usepackage[ddmmyyyy]{datetime}
 \usepackage{booktabs}
 % \usepackage{qrcode} % use only if needed \qrcode[options]{text}
-\usepackage{pgfplotstable} % Generates table from .csv
+% \usepackage{pgfplotstable} % Generates table from .csv
 \usepackage{siunitx} % Formats the units and values
 \sisetup{
 	round-mode          = places, % Rounds numbers
 	round-precision     = 2, % to 2 places
 }
 
+% \usepackage{fancybox} % uncomment if using fancy boxes
 \usepackage{background}
+\usepackage{boretmade_test} % depending of git branch used for boretmade
 \mybackground[\myTitlePageBg]
+\renewcommand\myTitlePageBg{${10}}      % background image for title and end pages in boretmade_test
+\renewcommand\myPagesBg{${11}}   % background image por regular pages in boretmade_test
 
 \title[${10:Shorttitle}]{${11:Title}}
 \date{Valencia, \today}
@@ -47,6 +55,7 @@ snippet beamhead "Set a default Beamer header" b
 %\navsyminfootline{right}[-.1\textwidth][0]
 % If using frame title style "blockwithlogo" uncoment to set file and position
 %\logoinframetitle{logo_file.jpg}[left]        % left/right - optional default left
+%\logoinsidebar{../logos/SVR_Fndo_Blanco.jpg}  % sidebar controlled
 %
 % Uncomment and modify next lines if you want to add a logo out of the footline or
 % there is no footline at all
@@ -104,4 +113,19 @@ snippet graphpgf "Make a graph from a csv text file" b
 		\end{tikzpicture}
 	\end{center}
 \end{figure}
+endsnippet
+
+snippet fancybox "Boxes environment from fancyboxes package" b
+\\${1:shadowbox}{			 % shadowbox, doublebox, ovalbox, Ovalbox
+	\begin{minipage}{2:\textwidth} % minipage width
+		
+	\end{minipage}
+}
+endsnippet
+
+snippet faitem "Itemize environment with FontAwesome icons" b
+\begin{itemize}
+	\item[${1:\faArrowRight}]{${2:First item}}
+	
+\end{itemize}
 endsnippet

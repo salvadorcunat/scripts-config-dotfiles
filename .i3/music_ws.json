@@ -21,7 +21,7 @@
               "percent": 0.6,
               "swallows": [
                  {
-                 "class": "^Termite$",
+                 "class": "^Alacritty$",
                  "title": "^cmus$"
                  }
               ],
@@ -41,7 +41,7 @@
               "percent": 0.4,
               "swallows": [
                  {
-                 "class": "^Termite$",
+                 "class": "^Alacritty$",
                  "title": "alsamixer$"
                  }
               ],

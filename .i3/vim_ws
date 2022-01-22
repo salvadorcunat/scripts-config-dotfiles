@@ -3,7 +3,7 @@
 # Creates an i3-wm workspace, launching vim in a terminal and a conky instance
 # nearby, containing vim useful commands an key shortcuts
 #
-# Requires conky, termite and libnotify-bin (last two may be changed to
+# Requires conky, alacritty and libnotify-bin (last two may be changed to
 # different preferences changing this script)
 #
 # Uses a config file for conky, containing vim's commands and shortcuts and
@@ -17,7 +17,7 @@
 #trap 'set +x; sleep 1; set -x' DEBUG
 
 I3MSG=$(command -v i3-msg)
-TRMNL=$HOME/.i3/termite_wrap	# adjust to your preferred
+TRMNL=$HOME/sbin/alacritty_wrap	# adjust to your preferred
 CONKY=$(command -v conky)
 NOTIFY=$(command -v notify-send)
 SLEEP=/bin/sleep		# GNU sleep permits float numbers

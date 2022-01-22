@@ -11,7 +11,7 @@
 
 set $mod Mod4
 set $_term /usr/bin/terminator
-set $alt_term $HOME/.i3/termite_wrap
+set $alt_term $HOME/sbin/alacritty_wrap
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -221,7 +221,7 @@ exec --no-startup-id /home/boret/sbin/multi_screen --multi 1 0
 for_window [class="^Xfce4-terminal$"] border none
 for_window [class="^Terminator$"] border none
 for_window [class="^cool-retro-term$"] border none
-for_window [class="^Termite$"] border none
+for_window [class="^Alacritty$"] border none
 for_window [class="^qterminal$"] border none
 for_window [class="^dolphin$"] border none
 #new_float pixel 1
@@ -296,8 +296,8 @@ for_window [title="^Mpstat$"] floating enabled
 for_window [title="^fetchscr$"] border none
 for_window [title="^motorhead$"] floating enable
 for_window [class="^cool-retro-term$"] floating enable
-for_window [class="^termite_floating$"] border pixel 1
-for_window [class="^termite_floating$"] floating enable
+for_window [class="^alacritty_floating$"] border pixel 1
+for_window [class="^alacritty_floating$"] floating enable
 # for_window [title="mc"] floating enabled
 #for_window [class="^qterminal$"] floating enabled
 for_window [title="^Bluetoothctl$"] floating enabled
@@ -323,8 +323,8 @@ for_window [title="Escritorio — Plasma"] kill; floating enable; border none
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	#i3bar_command i3bar -t
-	#position top
+	i3bar_command i3bar -t
+	position top
 ##	status_command i3status
 	##status_command i3blocks
 	#tray_output none
@@ -332,40 +332,43 @@ bar {
 ##	font -misc-fixed-medium-r-normal--10-120-75-75-C-70-iso10646-1
 	#font pango:URW Gothic L 8
 	##font pango:PowerlineSymbols 8
-	#font pango:Iosevka 7
+	font pango:Roboto Mono Medium for Powerline 8
 	#font pango:FontAwesome 7
-	##height 20
-	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
+	height 16
+#	i3bar_command "/home/boret/.i3/lemonbar/i3_lemonbar_wrap.sh"
 	##status_command /home/boret/src/bumblebee-status/bumblebee-status -m nic network_traffic disk:root cpu memory battery pasink pasource system -p root.path=/ -t greyish-powerline
-	#status_command "python3 /home/boret/src/bumblebee-status/bumblebee-status -m kernel spacer xrandr spacer brightness spacer caffeine cmus pulseaudio docker_ps layout indicator system -t dracula-powerline"
-	#i3bar_command "/home/boret/.i3/polybar-i3-wrap.sh"
+	workspace_buttons no
+	status_command "/home/boret/src/bumblebee-status/bumblebee-status -m bluetooth spacer nic publicip network_traffic cmus spacer system \
+			-p cmus.theme.align='center,center,center,center,center' \
+			-p cmus.format='{artist} - {title}' \
+			-p nic.format='{state} {ip} {ssid}' \
+			-p nic.states=^down \
+			-t dracula-powerline"
+}
+bar{
+	i3bar_command i3bar -t
+	position bottom
+	font pango:Roboto Mono Medium for Powerline 8
+	height 16
+	status_command "/home/boret/src/bumblebee-status/bumblebee-status -m xrandr spacer  disk:root disk:home disk:DATOS spacer cpu battery battery_upower amixer datetime indicator \
+			-p root.path=/ home.path=/home DATOS.path=/media/DATOS \
+			-p root.format=' {left} ({percent:05.02f}%)' \
+			-p home.format=' {left} ({percent:05.02f}%)' \
+			-p DATOS.format='DATOS {left} ({percent:05.02f}%)' \
+			-t dracula-powerline"
 }
 #
 # Launch initial workspace
-#exec --no-startup-id "$HOME/.i3/init_ws -w '1: Init' -l $HOME/.i3/init_ws-3.json"
-
-
 exec --no-startup-id "/home/boret/.i3/init_ws -w '1: Init' \
 	     -l '/home/boret/.i3/testing.json' \
 	     -c '/home/boret/.i3/fehbg_new -d 10m' \
-	     -c '/home/boret/.i3/termite_wrap -t ranger -e ranger' \
-	     -c '/home/boret/.i3/termite_wrap -t Terminal' \
-	     -c '/home/boret/.i3/termite_wrap -t Terminal'"
-	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_termite_cheat.conf' \
-	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_ranger_cheat.conf' \
-	     #-c '/usr/bin/conky -c /home/boret/.i3/conky_motorhead.conf' \
+	     -c '/home/boret/sbin/alacritty_wrap --class alacritty,Alacritty -t ranger -e ranger' \
+	     -c '/home/boret/sbin/alacritty_wrap' \
+	     -c '/home/boret/sbin/alacritty_wrap'"
 #
 # Run compton_wrap once conky cheats have been called
 #
-#exec --no-startup-id "while ! pgrep conky >/dev/null 2>&1; \
-			#do \
-				#echo ' -- i3 launch --> waiting for conky'; \
-				#sleep 1; \
-			#done; \
-			#sleep 1; \
-			#/home/boret/.i3/compton_wrap -f"
 exec --no-startup-id "/home/boret/.i3/compton_wrap -f; \
 		      wait; \
 		      /usr/bin/conky -c /home/boret/.i3/conky_motorhead.conf"
 
-#exec --no-startup-id "sleep 3s; terminator -T 'fetchscr' -p 'transparent' -e 'screenfetch -p -c 15,9 -a /home/boret/motorhead_ascii_2'"

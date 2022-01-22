@@ -87,11 +87,11 @@ is_excluded_dir()
 # origin if there are no others.
 preferred_remote()
 {
-	local exclude="fork"
+	local exclude="fork gitea"
 	local include="origin"
 	for i in $1; do
-		[[ $i == "$exclude" ]] && continue
-		[[ $i != "$include" ]] && echo "$i" && return 0
+		[[ "$exclude" == *$i* ]] && continue
+		[[ "$include" != *$i* ]] && echo "$i" && return 0
 		tmp="$i"
 	done
 	echo "$tmp"

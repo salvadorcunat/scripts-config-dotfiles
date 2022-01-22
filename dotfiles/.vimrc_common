@@ -25,6 +25,7 @@ set is
 set nu
 set cul
 let mapleader=","
+let maplocalleader=","
 set foldcolumn=3
 set foldmethod=manual
 set sessionoptions=buffers,curdir,folds,globals,localoptions,resize,tabpages,winpos,winsize
@@ -38,6 +39,7 @@ match ExtraWhitespace /\s\+$\| \+\ze\t/
 " for powerline
 "
 set encoding=utf-8
+set fileencoding=utf-8
 let g:Powerline_symbols = 'fancy'
 autocmd FileType text setlocal textwidth=78
 highlight Normal ctermbg=none
@@ -135,19 +137,77 @@ let g:tagbar_left = 1
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
-set conceallevel=1
+set conceallevel=2
 let g:tex_conceal='abdmg'
+let g:vimtex_fold_enabled=1
+let g:vimtex_fold_manual=1
+let g:vimtex_fold_types = {}
+let g:vimtex_fold_types_defaults = {
+	\ 'preamble' : {},
+	\ 'items' : {},
+	\ 'comments' : {'enabled' : 0},
+	\ 'envs' : {
+	\   'blacklist' : [],
+	\   'whitelist' : [],
+	\ },
+	\ 'env_options' : {},
+	\ 'markers' : {},
+	\ 'sections' : {
+	\   'parse_levels' : 0,
+	\   'sections' : [
+	\     '%(add)?part',
+	\     '%(chapter|addchap)',
+	\     '%(section|addsec)',
+	\     'subsection',
+	\     'subsubsection',
+	\   ],
+	\   'parts' : [
+	\     'appendix',
+	\     'frontmatter',
+	\     'mainmatter',
+	\     'backmatter',
+	\   ],
+	\ },
+	\ 'cmd_single' : {
+	\   'cmds' : [
+	\     'hypersetup',
+	\     'tikzset',
+	\     'pgfplotstableread',
+	\     'lstset',
+	\   ],
+	\ },
+	\ 'cmd_single_opt' : {
+	\   'cmds' : [
+	\     'usepackage',
+	\     'includepdf',
+	\   ],
+	\ },
+	\ 'cmd_multi' : {
+	\   'cmds' : [
+	\     '%(re)?new%(command|environment)',
+	\     'providecommand',
+	\     'presetkeys',
+	\     'Declare%(Multi|Auto)?CiteCommand',
+	\     'Declare%(Index)?%(Field|List|Name)%(Format|Alias)',
+	\   ],
+	\ },
+	\ 'cmd_addplot' : {
+	\   'cmds' : [
+	\     'addplot[+3]?',
+	\   ],
+	\ },
+	\}
 
 " ultisnips plugin
 "
+set runtimepath+=~/.vim/bundle/vim-snippets/snippets
 let g:UltiSnipsUsePythonVersion = 3
-let g:UltiSnipsExpandTrigger="<F7>"
+let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsListSnippets="<S-F7>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsEditSplit='context'
-let g:UltiSnipsSnippetsDir="/home/boret/.vim/snips"
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "snips"]
+let g:UltiSnipsSnippetDirectories=["UltiSnips","snips"]
 
 " neodebug plugin
 "

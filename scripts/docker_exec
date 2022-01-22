@@ -5,7 +5,7 @@
 
 DIALOG="$(command -v dialog)" || { echo "Can't find dialog binary. Exiting" && exit 1; }
 DOCKER="$(command -v docker)" || { echo "Can't find docker binary. Exiting" && exit 1; }
-_term="$(command -v termite_wrap)" || { echo "Can't find termite_wrap. Exiting" && exit 1; }
+_term="$(command -v alacritty_wrap)" || { echo "Can't find alacritty_wrap. Exiting" && exit 1; }
 
 DIALOG_OK=0					#
 DIALOG_CANCEL=1					#
@@ -164,4 +164,4 @@ while (( n < ${#OPTIONS[@]} )); do
 done
 
 clear
-"$_term" -t "Termite running in $CONT_SELECTED" --class=termite_floating -e "${COMMAND[*]}" &
+"$_term" -t "Alacritty running in $CONT_SELECTED" --class=alacritty,alacritty_floating -e "${COMMAND[*]}" &

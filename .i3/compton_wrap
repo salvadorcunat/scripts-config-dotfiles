@@ -26,6 +26,7 @@ while true; do
 		-f| --force)	[[ ! -z $COMPTONPROC ]] && \
 					report_msg "${0##*/}" "killing picom, PID $COMPTONPROC" && \
 					kill -9 "$COMPTONPROC" && \
+					/bin/sleep 0.25 && \
 					COMPTONPROC=
 				break
 				;;

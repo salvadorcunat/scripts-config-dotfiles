@@ -12,7 +12,7 @@ LOGFILE="$(grep file "${CONFIGFILE}" |awk '{printf "%s", $2}')"
 SKETCHDIR="$(grep user "${CONFIGFILE}" |awk '{printf "%s", $2}')"
 BUILDIR="/tmp/arduino-cli-build/build"; [[ ! -d "${BUILDIR}" ]] && mkdir -p "${BUILDIR}"
 CACHEDIR="/tmp/arduino-cli-build/cache"; [[ ! -d "${CACHEDIR}" ]] && mkdir -p "${CACHEDIR}"
-declare -a _TERMINAL=( termite_wrap --class "termite_floating" -e )
+declare -a _TERMINAL=( alacritty_wrap --class "alacritty,alacritty_floating" -e )
 RC=0
 LAST_PACKAGE="$(grep target_package "${PREF_FILE}" |cut -d'=' -f2)"
 LAST_PLATFORM="$(grep target_platform "${PREF_FILE}" |cut -d'=' -f2)"

@@ -3,7 +3,7 @@
 # Open vim with passed arguments, and a predefined cheat-sheet with vim
 # shortcuts in an i3 container, right of the terminal.
 #
-# Requires conky, termite and libnotify-bin (last two may be changed to
+# Requires conky, alacritty and libnotify-bin (last two may be changed to
 # different preferences changing this script)
 #
 # Uses a config file for conky, containing vim's commands and shortcuts and
@@ -17,7 +17,7 @@
 #trap 'set +x; sleep 1; set -x' DEBUG
 
 I3MSG=$(command -v i3-msg)
-TRMNL=$(command -v termite_wrap)	# adjust to your preferred
+TRMNL=$(command -v alacritty_wrap)	# adjust to your preferred
 CONKY=$(command -v conky)
 NOTIFY=$(command -v notify-send)
 SLEEP=$(command -v /bin/sleep)		# GNU sleep permits float numbers

@@ -25,7 +25,7 @@ report_msg "${0##*\/}" "Starting Arduino IDE ..."
 	-v "$HOME"/.Xauthority:/home/boret/.Xauthority  \
 	-v "$HOME"/Arduino:/home/boret/Arduino \
 	-v "$HOME"/.arduino15:/home/boret/.arduino15 \
-	boret/arduino:ide-1.8.13 \
+	boret/amd64:arduino_ide-1-8-13 \
 	arduino 2>/dev/null &
 sleep 5
 report_msg "${0##*\/}" "Enjoy ..."

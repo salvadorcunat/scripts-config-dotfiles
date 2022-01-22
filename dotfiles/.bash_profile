@@ -45,3 +45,4 @@ export LD_LIBRARY_PATH="$HOME"/src/install-root/lib:"$LD_LIBRARY_PATH"
 
 # set QT5 var needed by qt5ct
 export QT_QPA_PLATFORMTHEME="qt5ct"
+. "$HOME/.cargo/env"
