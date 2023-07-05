@@ -37,7 +37,7 @@ function notify_error()
 }
 
 # Launch vim in a terminal and admit file names, abort on error
-$TRMNL -t "Terminal" -e "vim $*" >>$TEMPFILE 2>&1 &
+$TRMNL -t "Terminal" -e "vim"  "$*" >>$TEMPFILE 2>&1 &
 $SLEEP 1.00
 TERMPROC=$(pgrep -n vim)
 if [[ -z $TERMPROC ]]; then
@@ -50,7 +50,7 @@ $CONKY -DD -c "$HOME"/.i3/conky_vim_cheat.conf >>$TEMPFILE 2>&1 &
 $SLEEP 0.50
 CONKYPROC=$(pgrep -n -f vim_cheat)
 if [[ -z $CONKYPROC ]]; then
-	notify_error $CONKY $TEMPFILE
+	notify_error "$CONKY" "$TEMPFILE"
 	exit $RC
 fi
 

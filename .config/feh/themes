@@ -67,11 +67,11 @@ thumb_b_nt --thumbnails --cache-thumbnails --thumb-width 256 --thumb-height 256 
 #
 # Boret
 #
-info	--auto-rotate --auto-zoom --borderless --draw-tinted -g 800x600 \
+info	--auto-zoom --borderless --draw-tinted -g 800x600 \
 	--sort mtime --image-bg black \
 	--info "exiftool -p ~/.config/feh/exiftool_out.fmt %F"
 
-info_border	--auto-rotate --scale-down --draw-tinted -g 800x600 \
+info_border	--scale-down --draw-tinted -g 800x600 \
 	--sort mtime --image-bg black \
 	--info "exiftool -p ~/.config/feh/exiftool_out.fmt %F"
 

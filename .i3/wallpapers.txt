@@ -98,3 +98,7 @@
 /home/boret/Descargas/7033140-fishing-asian-art_boret.png
 /home/boret/Descargas/chinese_cormoran_fisherman_boret.png
 /home/boret/Descargas/Computer-Science-Pictures.jpg
+/home/boret/Descargas/wp_motorhead_2.png
+/home/boret/Descargas/IMG_20220813_171427.jpg
+/home/boret/Descargas/wp_debian_verde.png
+/home/boret/Descargas/wp_ergo_ez_04-2023-2560x1440.jpg

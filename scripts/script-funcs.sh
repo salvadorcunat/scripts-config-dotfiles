@@ -250,7 +250,7 @@ report2screen()
 	local _LOG=$(command -v logger)
 	local _NOTIFY=$(command -v notify-send)
 	if [ -n "$_LOG" ]; then
-		"$_LOG" -s --pid=$$ "$2 --> $3"
+		"$_LOG" -s --id=$$ "$2 --> $3"
 	else
 		report_msg "$2" "$3" >&2
 	fi

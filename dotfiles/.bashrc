@@ -89,7 +89,8 @@ if [ "$color_prompt" = yes ]; then
 
     prompt_color='\[\033[;32m\]'
     info_color='\[\033[1;34m\]'
-    prompt_symbol=㉿
+    prompt_symbol=☣
+    #㉿
     if [ "$EUID" -eq 0 ]; then # Change prompt colors for root user
         prompt_color='\[\033[;94m\]'
         info_color='\[\033[1;31m\]'
@@ -98,7 +99,7 @@ if [ "$color_prompt" = yes ]; then
     #git_branch="$(parse_git_branch)"
     case "$PROMPT_ALTERNATIVE" in
         twoline)
-		PS1=$prompt_color'┌──${debian_chroot:+($debian_chroot)──}${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)'$prompt_color')}('$info_color'\u${prompt_symbol}\h'$prompt_color')-[\[\033[0;1m\]\w'$prompt_color']$(parse_git_branch)\n'$prompt_color'└─'$info_color'\$\[\033[0m\] ';;
+		PS1=$prompt_color'┌──${debian_chroot:+($debian_chroot)──}${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)'$prompt_color')}('$info_color'\u ${prompt_symbol} \h'$prompt_color')-[\[\033[0;1m\]\w'$prompt_color']$(parse_git_branch)\n'$prompt_color'└─'$info_color'\$\[\033[0m\] ';;
         oneline)
             PS1='${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV)) }${debian_chroot:+($debian_chroot)}'$info_color'\u@\h\[\033[00m\]:'$prompt_color'\[\033[01m\]\w\[\033[00m\]\$ ';;
         backtrack)
@@ -118,6 +119,12 @@ alias ls="ls --color=auto"
 alias vimcat="vimcat +n --"
 alias crt='cool-retro-term -p boret'
 alias cat='batcat --paging=never --plain'
+alias gitea-connect='/usr/bin/surf -g -n -t -z 0.75 https://192.168.0.172:3000 2> /dev/null &'
+alias pihole-connect='/usr/bin/surf -g -n -t -z 0.75 http://192.168.0.172:8008 2> /dev/null &'
+alias dol_guldur-connect='/usr/bin/surf -g -n -t -z 0.75 https://192.168.0.2:8443 2> /dev/null &'
+alias rpi-connect='ssh boret@192.168.0.172'
+alias rpi-btop='ssh boret@192.168.0.172 "xterm -e btop"'
+alias surf="/usr/bin/surf -g -n -t -z 0.75"
 
 # For alacritty terminal
 #
@@ -126,4 +133,4 @@ source ~/.bash_completion/alacritty
 
 # rtv environment vars
 #
-RTV_BROWSER="alacritty_wrap -e links2"
+export RTV_BROWSER="surf -g -n -t -z 0.75"

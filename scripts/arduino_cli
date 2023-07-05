@@ -239,7 +239,7 @@ or: arduino:samd:mkr1000" "serial:///dev/ttyACM0"
 			COMMAND="${COMMAND} --$(cat ${tempfile})"
 			inputbox_form " Details parameters " ""  "$DEFAULT_BOARD"
 			[[ $? -eq ${DIALOG_CANCEL} ]] && return 0
-			COMMAND="${COMMAND} $(cat ${tempfile})"
+			COMMAND="${COMMAND} -b $(cat ${tempfile})"
 			global_flags_menu
 			output_prgbox_form " Details output " "${COMMAND}"
 			;;

@@ -25,6 +25,7 @@ if [ -n "$DISPLAY" ]; then
 	case "$DESKTOP_SESSION" in
 		*i3*|*spectrwm*)
 			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
+			#/usr/bin/lxqt-notificationd &
 			;;
 		*nstant*)
 			/usr/bin/dunst -config /home/boret/.config/dunst/dunstrc &
@@ -45,4 +46,9 @@ export LD_LIBRARY_PATH="$HOME"/src/install-root/lib:"$LD_LIBRARY_PATH"
 
 # set QT5 var needed by qt5ct
 export QT_QPA_PLATFORMTHEME="qt5ct"
+
+# trying to run libreoffice without crashing it
+# currently works fine with qt5 and kf5
+export SAL_USE_VCLPLUGIN="qt5"
+
 . "$HOME/.cargo/env"

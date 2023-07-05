@@ -71,6 +71,7 @@ let g:airline#extensions#branch#enabled = 1	"activa integracion de fugitive
 "let g:airline_theme='tomorrow'
 "let g:airline_theme='google_dark'
 "let g:airline_theme='yaflandia'
+let g:airline_theme='blood_red'
 " let g:airline_right_sep='|'
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
@@ -115,11 +116,12 @@ let g:ale_list_window_size = 5
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0                       "Do not lint on openning. Use mapped key
-"let g:ale_linters = {
-"\	'c': ['gcc'],
-"\	'cpp': ['cppcheck'],
-"\	'sh': ['shellcheck']
-"\}
+let g:ale_linters = {
+\	'c': ['gcc'],
+\	'cpp': ['cppcheck'],
+\	'sh': ['shellcheck'],
+\	'tex':['lacheck','textlint','vale']
+\}
 let g:ale_sh_shellcheck_exclusions = 'SC2164'
 nmap <F9> : ALEToggle<CR>
 

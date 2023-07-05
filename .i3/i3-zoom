@@ -8,6 +8,9 @@
 # Depends on i3-msg, xwininfo amd xdotool.
 #
 
+# get active window
+_active_win="$(xdotool getactivewindow)"
+
 # get screen size
 _sizeX=$(xwininfo -root |grep Width| awk '{print $2}')
 _sizeY=$(xwininfo -root |grep Height| awk '{print $2}')
@@ -22,11 +25,18 @@ if [ -n "$1" ]; then
 	_win_s_Y=${1##*x}
 fi
 
-i3-msg -q "border 1pixel; floating toggle; resize set $_win_s_X $_win_s_Y"
+_is_floating=$(xprop -id "$_active_win" |grep I3_FLOATING_WINDOW |cut -d" " -f3)
+
+if [ -z "$_is_floating" ]; then
+	i3-msg -q "border 1pixel; floating toggle; resize set $_win_s_X $_win_s_Y"
+else
+	i3-msg -q "border none; floating toggle"
+	exit 0
+fi
 
 # get theoretical upper left window point.
-_init_win_pos_X="$(xwininfo -id "$(xdotool getactivewindow)" | grep 'Absolute upper-left X' |awk '{print $4}')"      #$(( _sizeX * 30 / 100 ))
-_init_win_pos_Y="$(xwininfo -id "$(xdotool getactivewindow)" | grep 'Absolute upper-left Y' |awk '{print $4}')"      #$(( _sizeY * 30 / 100 ))
+_init_win_pos_X="$(xwininfo -id "$_active_win" | grep 'Absolute upper-left X' |awk '{print $4}')"      #$(( _sizeX * 30 / 100 ))
+_init_win_pos_Y="$(xwininfo -id "$_active_win" | grep 'Absolute upper-left Y' |awk '{print $4}')"      #$(( _sizeY * 30 / 100 ))
 
 i3-msg -q "move left $(( _init_win_pos_X - ((_sizeX - _win_s_X) / 2))); move up $(( _init_win_pos_Y - ((_sizeY - _win_s_Y) / 2)))"
 

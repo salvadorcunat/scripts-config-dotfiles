@@ -1,14 +1,25 @@
-update-cache -f
-help
 q
+update-cache -f
 update-cache
+bind -f common enter win-activate
+help
+help toogle_aaa_mode
+pwd
+add -p /home/boret/.config/cmus/playlists/judas_studio
+add -p judas_studio
+add -p
+clear
+remove
+delete
+stop
+filter 
+wq
+clear -l
 set id3_default_charset
 set id3_default_charset ISO-8859-15
 set id3_default_charset (ISO-8859-1)
 bind -f common F push filter 
 qa
-delete
-add -p
 bind -f common } vol -0 -1%
 bind common <key> left-view
 bind -f common 1 view tree
@@ -19,7 +30,6 @@ set cmus-status-display=/usr/share/doc/cmus/examples/cmus-status-display
 add playlist
 add
 /Blow
-remove
 add ~/musica/Manowar
 add ~/musica/ozzy_osbourne
 add ~/.aMule/Incoming/ozzy_osbourne
@@ -60,7 +70,6 @@ add ~/Descargas
 add ~/.aMule/Incoming
 cd .aMule/Incoming
 cd ..
-pwd
 set mixer.alsa.channel="Master"
 set mixer.alsa.device="HDA Intel"
 bind -f common x player-play
