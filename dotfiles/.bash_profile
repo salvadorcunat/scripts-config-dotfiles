@@ -20,7 +20,6 @@ export EDITOR=/usr/bin/vim.nox
 
 # other stuff
 if [ -n "$DISPLAY" ]; then
-	source ~/.xsh
 	/usr/bin/udiskie -s &
 	case "$DESKTOP_SESSION" in
 		*i3*|*spectrwm*)
