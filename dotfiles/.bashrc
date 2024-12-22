@@ -24,6 +24,8 @@ set -o vi
 
 #export TERM="screen.xterm-256color"
 export TERM="xterm-termite"
+#export TERM="alacritty"
+
 # Activamos un "prompt" coloreado
 color_prompt=yes
 force_color_prompt=yes
@@ -114,7 +116,6 @@ unset color_prompt force_color_prompt
 
 # set aliases
 alias grep='grep --color'
-alias yavide="vim --servername yavide -f -N -u /opt/yavide/.vimrc"
 alias ls="ls --color=auto"
 alias vimcat="vimcat +n --"
 alias crt='cool-retro-term -p boret'
@@ -125,6 +126,8 @@ alias dol_guldur-connect='/usr/bin/surf -g -n -t -z 0.75 https://192.168.0.2:844
 alias rpi-connect='ssh boret@192.168.0.172'
 alias rpi-btop='ssh boret@192.168.0.172 "xterm -e btop"'
 alias surf="/usr/bin/surf -g -n -t -z 0.75"
+alias jekyll-test="bundle exec jekyll serve"
+alias viml="vim -u /home/boret/.vimrc_viml"
 
 # For alacritty terminal
 #
@@ -134,3 +137,8 @@ source ~/.bash_completion/alacritty
 # rtv environment vars
 #
 export RTV_BROWSER="surf -g -n -t -z 0.75"
+
+# For helix editor
+#
+export HELIX_RUNTIME="$HOME"/src/helix/runtime
+

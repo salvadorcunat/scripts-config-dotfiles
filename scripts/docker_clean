@@ -2,6 +2,11 @@
 #
 # Limpia los contenedores que docker deja colgando
 #
+
+if [ "$1" == "--purge" ]; then
+	docker system prune
+	exit 0
+fi
 for i in $(docker ps -a -q)
 do
 	docker rm --force "$i"

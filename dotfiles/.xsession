@@ -39,5 +39,6 @@ xset fp rehash
 printf "%s\n" "**********************************************************************
 Starting at $(date)
 **********************************************************************" >>$HOME/.i3/i3log
+export XDG_CURRENT_DESKTOP="i3-gaps"
 exec i3 -V >"$HOME"/.i3/i3log 2>&1
 

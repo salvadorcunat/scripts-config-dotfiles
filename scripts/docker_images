@@ -28,7 +28,6 @@ _CMD_list="rm:Delete images:run:Run images:history:View image history:inspect:Vi
 _backtitle="dialog based Docker images manager by boret"
 VOLUME=""
 CON_NAME=""
-COMMAND="docker image"
 tempfile=/tmp/test$$
 
 #############################################################################
@@ -77,6 +76,7 @@ get_result()
 #                                Main body                                  #
 #############################################################################
 while : ; do
+	COMMAND="docker image"
 	IMG_REPO=( $(docker images |awk '{printf "%s ", $1}'))
 	IMG_TAG=( $(docker images |awk '{printf "%s ", $2}') )
 	IMG_ID=( $(docker images |awk '{printf "%s ", $3}') )

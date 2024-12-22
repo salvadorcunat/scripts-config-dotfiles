@@ -16,7 +16,9 @@ if [ -d ~/bin ] ; then
 fi
 
 # set default editor to vim
-export EDITOR=/usr/bin/vim.nox
+#export EDITOR=/usr/bin/vim.nox
+# currently, set helix as default lightweight editor
+export EDITOR=/home/boret/.cargo/bin/hx
 
 # other stuff
 if [ -n "$DISPLAY" ]; then

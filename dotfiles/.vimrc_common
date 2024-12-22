@@ -204,7 +204,7 @@ let g:vimtex_fold_types_defaults = {
 "
 set runtimepath+=~/.vim/bundle/vim-snippets/snippets
 let g:UltiSnipsUsePythonVersion = 3
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandOrJumpTrigger="<tab>"
 let g:UltiSnipsListSnippets="<S-F7>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"

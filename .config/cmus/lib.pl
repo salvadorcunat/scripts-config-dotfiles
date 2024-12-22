@@ -849,6 +849,20 @@ cue:///media/DATOS/musica/Iron Maiden - Discografia + Covers + Singles/Iron Maid
 /media/DATOS/musica/Judas Priest/JUDAS PRIEST - Firepower/12-No Surrender.flac
 /media/DATOS/musica/Judas Priest/JUDAS PRIEST - Firepower/13-Lone Wolf.flac
 /media/DATOS/musica/Judas Priest/JUDAS PRIEST - Firepower/14-Sea of Red.flac
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/01 - Panic Attack.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/02 - The Serpent and the King.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/03 - Invincible Shield.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/04 - Devil in Disguise.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/05 - Gates of Hell.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/06 - Crown of Horns.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/07 - As God is my Witness.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/08 - Trial By Fire.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/09 - Escape From Reality.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/10 - Sons of Thunder.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/11 - Giants in the Sky.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/12 - Fight of Your Life.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/13 - Vicious Circle.mp3
+/media/DATOS/musica/Judas Priest/Judas Priest - Invincible Shield (2024)/14 - The Lodger.mp3
 /media/DATOS/musica/Led Zeppelin/1970 Led Zeppelin III/(01) Immigrant Song.mp3
 /media/DATOS/musica/Manowar (Discografia 1982-2007)/Manowar 1983 - Into Glory Ride/Manowar - 03 - Gloves of Metal.mp3
 /media/DATOS/musica/Manowar (Discografia 1982-2007)/Manowar 1983 - Into Glory Ride/Manowar - 04 - Gates of Valhalla.mp3
@@ -1143,79 +1157,96 @@ cue:///media/DATOS/musica/Iron Maiden - Discografia + Covers + Singles/Iron Maid
 /media/DATOS/musica/Motorhead/Motorhead 2002 (LP Hammered Completo) by EL MAG/Hammered Bonus Disc/Motörhead - 01 - Shoot You In The Back.mp3
 /media/DATOS/musica/Motorhead/Motorhead 2002 (LP Hammered Completo) by EL MAG/Hammered Bonus Disc/Motörhead - 02 - R.A.M.O.N.E.S.mp3
 /media/DATOS/musica/Motorhead/Motorhead 2002 (LP Hammered Completo) by EL MAG/Hammered Bonus Disc/Motörhead - 03 - The Game.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/01.- Motorhead - Terminal show - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/02.- Motorhead - Killers - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/03.- Motorhead - In the name of tragedy - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/04.- Motorhead - Suicide - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/05.- Motorhead - Lifes a bitch - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/06.- Motorhead - Down on me - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/07.- Motorhead - In the black - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/08.- Motorhead - Fight - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/09.- Motorhead - In the year of the wolf - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/10.- Motorhead - Keys to the kingdom - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/11.- Motorhead - Smiling like a killer - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Inferno/12.- Motorhead - Whorehouse blues - [EMG].mp3
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/01-Sucker.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/02-One night Stand.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/03-Devil I know.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/04-Trigger.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/05-Under the Gun.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/06-God was never on your side.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/07-Living in the past.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/08-Christine.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/09-Sword of Glory.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/10-Be my baby.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/11-Kingdom of the Worm.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/12-Going Down.flac
-/media/DATOS/musica/Motorhead/Motorhead - Kiss Of Death (2006)/13-Whiplash.flac
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/01-runaround_man-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/02-teach_you_how_to_sing_the_blues-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/03-when_the_eagle_screams-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/04-rock_out-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/05-one_short_life-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/06-buried_alive-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/07-english_rose-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/08-back_on_the_chain-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/09-heroes-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/10-time_is_right-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motorhead - Motorizer (2008)/11-the_thousand_names_of_god-qtxmp3.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/1. Born To Lose.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/2. I Know How To Die.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/3. Get Back In Line.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/4. Devils In My Hand.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/5. Rock N Roll Music.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/6. Waiting For The Snake.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/7. Brotherhood Of Man.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/8. Outlaw.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/9. I Know What You Need.mp3
-/media/DATOS/musica/Motorhead/Motörhead - The World Is Yours(2010).By.Music4All/10. Bye Bye Bitch Bye Bye.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/01. Heartbreaker.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/02. Coup De Grace.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/03. Lost Woman Blues.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/04. End Of Time.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/05. Do You Believe.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/06. Death Machine.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/07. Dust And Glass.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/08. Going To Mexico.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/09. Silence When You Speak To Me.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/10. Crying Shame.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/11. Queen Of The Damned.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/12. Knife.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/13. Keep Your Powder Dry.mp3
-/media/DATOS/musica/Motorhead/Motörhead - Aftershock [2013]/14. Paralyzed.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/01. Victory Or Die.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/02. Thunder & Lightning.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/03. Fire Storm Hotel.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/04. Shoot Out All Of Your Lights.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/05. The Devil .mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/06. Electricity.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/07. Evil Eye.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/08. Teach Them How To Bleed.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/09. Till The End.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/10. Tell Me Who To Kill.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/11. Choking On Your Screams.mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/12. When The Sky Comes Looking For You .mp3
-/media/DATOS/musica/Motorhead/MOTORHEAD - Bad Magic  (2015)/13. Sympathy For The Devil (The Rolling Stones Cover).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/01.- Motorhead - Terminal show - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/02.- Motorhead - Killers - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/03.- Motorhead - In the name of tragedy - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/04.- Motorhead - Suicide - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/05.- Motorhead - Lifes a bitch - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/06.- Motorhead - Down on me - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/07.- Motorhead - In the black - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/08.- Motorhead - Fight - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/09.- Motorhead - In the year of the wolf - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/10.- Motorhead - Keys to the kingdom - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/11.- Motorhead - Smiling like a killer - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2004 - Inferno/12.- Motorhead - Whorehouse blues - [EMG].mp3
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/01-Sucker.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/02-One Night Stand.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/03-Devil I Know.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/04-Trigger.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/05-Under The Gun.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/06-God Was Never On Your Side.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/07-Living In The Past.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/08-Christine.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/09-Sword Of Glory.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/10-Be My Baby.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/11-Kingdom Of The Worm.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/12-Going Down.flac
+/media/DATOS/musica/Motorhead/Motorhead 2006 - Kiss Of Death (Limited Edition)/13-Whiplash.flac
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/01 Runaround Man.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/02 Teach You How to Sing the Blues.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/03 When the Eagle Screams.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/04 Rock Out.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/05 One Short Life.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/06 Buried Alive.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/07 English Rose.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/08 Back on the Chain.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/09 Heroes.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/10 Time Is Right.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2008 - Motorizer/11 The Thousand Names of God.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/1. Born To Lose.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/2. I Know How To Die.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/3. Get Back In Line.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/4. Devils In My Hand.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/5. Rock N Roll Music.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/6. Waiting For The Snake.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/7. Brotherhood Of Man.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/8. Outlaw.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/9. I Know What You Need.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2010 - The World Is Yours/10. Bye Bye Bitch Bye Bye.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/01 - Heartbreaker.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/02 - Coup De Grace.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/03 - Lost Woman Blues.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/04 - End Of Time.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/05 - Do You Believe.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/06 - Death Machine.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/07 - Dust And Glass.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/08 - Going To Mexico.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/09 - Silence When You Speak To Me.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/10 - Crying Shame.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/11 - Queen Of The Damned.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/12 - Knife.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/13 - Keep Your Powder Dry.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2013 - Aftershock/14 - Paralyzed.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/01. Motörhead - Victory Or Die.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/02. Motörhead - Thunder & Lightning.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/03. Motörhead - Fire Storm Hotel.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/04. Motörhead - Shoot Out All of Your Lights.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/05. Motörhead - The Devil.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/06. Motörhead - Electricity.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/07. Motörhead - Evil Eye.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/08. Motörhead - Teach Them How To Bleed.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/09. Motörhead - Till The End.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/10. Motörhead - Tell Me Who To Kill.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/11. Motörhead - Choking On Your Screams.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/12. Motörhead - When The Sky Comes Looking For You.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/13. Motörhead - Sympathy For The Devil.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/14. Motörhead - Heroes.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/15. Motörhead - Bullet In Your Brain.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/16. Motörhead - Greedy Bastards.mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/17. Motörhead - We Are Motörhead (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/18. Motörhead - Damage Case (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/19. Motörhead - Stay Clean (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/20. Motörhead - Metropolis (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/21. Motörhead - Over the Top (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/22. Motörhead - String Theory (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/23. Motörhead - The Chase is Better Than the Catch (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/24. Motörhead - Rock It (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/25. Motörhead - Lost Woman Blues (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/26. Motörhead - Doctor Rock (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/27. Motörhead - Just 'Cos You Got the Power (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/28. Motörhead - Going to Brazil (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/29. Motörhead - Ace of Spades (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
+/media/DATOS/musica/Motorhead/Motorhead 2015 - Bad Magic_SERIOUSLY BAD MAGIC/30. Motörhead - Overkill (Live at Mt Fuji Festival 2015 - Sayonara Folks!).mp3
 /media/DATOS/musica/Nightwish Discography (1997-2011) by Sloty/Studio Albums/(1997) Angels Fall First/01 - Elvenpath.mp3
 /media/DATOS/musica/Nightwish Discography (1997-2011) by Sloty/Studio Albums/(1997) Angels Fall First/02 - Beauty And The Beast.mp3
 /media/DATOS/musica/Nightwish Discography (1997-2011) by Sloty/Studio Albums/(1997) Angels Fall First/03 - The Carpenter.mp3

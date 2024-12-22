@@ -47,6 +47,15 @@ _dwld_R5CNA0P5AZM="/storage/emulated/0/DCIM (1)/Camera
 /storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/Whatsapp Documents
 /storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/Whatsapp Animated Gifs"
 
+_dwld_52003b614fdc3677="/sdcard/DCIM/Camera
+/sdcard/Download
+/storage/278D-0906/DCIM/Camera
+/sdcard/WhatsApp/Media/WhatsApp Documents
+/sdcard/WhatsApp/Media/WhatsApp Images
+/sdcard/WhatsApp/Media/WhatsApp Video
+/sdcard/WhatsApp/Media/WhatsApp Animated Gifs
+/sdcard/WhatsApp/Media/WhatsApp Stickers"
+
 LIGHT_RED="\\033[1;31m"
 GREEN="\\033[0;32m"
 WHITE="\\033[1;37m"

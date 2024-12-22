@@ -33,7 +33,7 @@ SIG_QUIT=3					#
 SIG_KILL=9					#
 SIG_TERM=15					#
 
-_backtitle="dialog front-end for $(${ACLI} version |awk '{printf "%s %s %s\n", $1, $2, $4}')"
+_backtitle="dialog front-end for $(${ACLI} version |awk '{printf "%s %s %s\n", $1, $3, $5}')"
 declare -a _global_dialog_opts=( --clear --no-shadow --backtitle "${_backtitle}" )
 tempfile=/tmp/acli_$$
 

@@ -8,7 +8,7 @@ _usage="
 	SUBSYSTEM==\"drm\", ACTION==\"change\", RUN+=\"/bin/su -c '/home/boret/sbin/check-heads.sh' boret\"
 	(double quotes scaped for this help)"
 sleep 1
-read -r _status </sys/devices/pci0000:00/0000:00:02.0/drm/card0/*HDMI*/status
+read -r _status </sys/devices/pci0000:00/0000:00:02.0/drm/card0/*HDMI*1/status
 if [[ $_status == "connected" ]]; then
 	"$HOME"/sbin/multi_screen -f -d || { echo "$_usage" && exit 1; }
 	logger "${0##*/}: HDMI head attached"

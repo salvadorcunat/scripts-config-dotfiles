@@ -1,10 +1,5 @@
-/home/boret/Descargas/wp_motorhead.jpg
-/home/boret/Descargas/wp_ergodox_ez_august.png
-/home/boret/Descargas/wp_ergodox_ez_july.png
 /home/boret/Descargas/wp_airship_4.jpg
 /home/boret/Descargas/mayan_calendar_2012-wallpaper-1366x768.jpg
-/home/boret/Descargas/wp_mundos_1.jpg
-/home/boret/Descargas/254500-thewallpaper.jpg
 /home/boret/Descargas/roma_wp_1.jpg
 /home/boret/Descargas/lotr_wp_1.jpg
 /home/boret/Descargas/blade_runner_6_2.jpg
@@ -12,3 +7,7 @@
 /home/boret/Descargas/Alien-Wallpaper-Creative-3K_2.jpg
 /home/boret/Descargas/wp_exgodox-ez_logo.jpg
 /home/boret/Descargas/bokeh-316425_1280.jpg
+/home/boret/Descargas/blade_runner_1_2.jpg
+/home/boret/Descargas/Alien.jpg
+/home/boret/.local/share/wallpapers/174170-2-deb.png
+/home/boret/Descargas/motorhead_2.jpg

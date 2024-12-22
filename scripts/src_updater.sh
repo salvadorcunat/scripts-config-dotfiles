@@ -175,8 +175,8 @@ is_updated_dir()
 	else
 		_branch_sha="$(cat "$1"/.git/"$(cut -d" " -f2 <"$1"/.git/HEAD)")"
 	fi
-	if [[ -f "$1"/.git/refs/remotes/origin/"$_branch" ]]; then
-		_remote_sha="$(cat "$1"/.git/refs/remotes/origin/"$_branch")"
+	if [[ -f "$1"/.git/refs/remotes/"$_remote"/"$_branch" ]]; then
+		_remote_sha="$(cat "$1"/.git/refs/remotes/"$_remote"/"$_branch")"
 	else
 		_remote_sha="$(cut -f1 <"$1"/.git/FETCH_HEAD)"
 	fi
@@ -265,11 +265,11 @@ while [ $# -gt 0 ]; do
 						git -C "$_SRCDIR/$_dir" pull --recurse-submodules=yes
 						git -C "$_SRCDIR/$_dir" submodule update
 					fi
-					(
+					{
 						re-build "$_SRCDIR/$_dir"
 						case $? in
 							0)	report_msg "${GREEN}Building done$DEFAULT" ;;
-							2)	report_msg "Couldn't cd into $_SRCDIR/$dir" "${LIGHT_RED}Not Built$DEFAULT";;
+							2)	report_msg "Couldn't cd into $_SRCDIR/$_dir" "${LIGHT_RED}Not Built$DEFAULT";;
 							3)	report_msg "Build failed" "${LIGHT_RED} Check output$DEFAULT" ;;
 							4)	report_msg "${LIGHT_RED}Couldn't get back to prevous directory. Be careful.${DEFAULT}";;
 						esac
@@ -277,9 +277,9 @@ while [ $# -gt 0 ]; do
 						[[ "$_tr_blob" != "$_curr_blob" ]] && git -C "$_SRCDIR/$_dir" checkout "$_curr_blob"
 						(( _stashed == 1 )) && git -C "$_SRCDIR/$_dir" stash pop
 
-						[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_blob\nTest changes in directory"
+						[[ -n $DISPLAY ]] && notify-send -u critical "${0##*/}" "Updated $_dir.\nRepo:\t$_repo\nBranch:\t$_tr_blob\nTest changes in directory"
 						echo -e "---- ${WHITE}${_dir}${DEFAULT} ------------------ Finished ------------------"
-					)
+					}
 					;;
 				2)	report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Problem with git HEADs, try manually.${DEFAULT}"
 					;;

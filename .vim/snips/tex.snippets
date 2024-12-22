@@ -5,9 +5,15 @@ snippet beamhead "Set a default Beamer header" b
 \documentclass[aspectratio=${1:169},${2:14}pt,xcolor=table]{beamer}
 \mode<presentation>
 {
-	\usetheme[blockcolors=${3:plain},	%plain (no background), normal, reversed, complementary, complementarynormal. (currently only for normal block type)
-	usefootline=${4:plain},		%none, plain, reversed, clearbg, checker, sectionchecker, fullchecker, infolines, split, miniframes, numbered.
-	frametitlelayout=${5:reversed},	blockwithlogo (do not select logo for blocksimple), boxes, lines, reversed, boxrounded, centered, leftrectangle, leftrectanglefull.
+	\usetheme[
+	font=${3:fira},        %fira, go, arimo, gillius2 and carlito.
+	tone=${4:blue},			%blue, teal, red, green, pink, orange, blackandwhite, reversed, reuma, lafe.
+	%shade,	% uncomment if we want automatic shading
+	titlepagestyle=${5:centered},	%centered, centeredwithlogo, reversed, line, halfscreen, halftriangle, network, leftrectangle, leftrectanglefull.
+	frametitlelayout=${6:reversed},	%blockwithlogo (do not select logo for blocksimple), boxes, lines, reversed, boxrounded, centered, leftrectangle, leftrectanglefull.
+	blockcolors=${7:plain},	%plain (no background), normal, reversed, complementary, complementarynormal. (currently only for normal block type)
+	blockstyle=${8:normal}, %normal, boxed, boxrounded,  shadowed, lines.
+	usefootline=${9:plain},		%none, plain, reversed, clearbg, checker, sectionchecker, fullchecker, infolines, split, miniframes, numbered.
 	%sidebarfancy={right}{0pt}{.11\paperwidth}{.75\paperheight}{rounded}{mLightTeal},
 		% 1=right/left	2=height	3=width	4=totalheight 5= square or rounded 6=none or color (basic or theme defined)
 	%sidebarplain={left}{0}{.11\paperwidth}{.7\paperheight},	%simple sidebar
@@ -15,11 +21,7 @@ snippet beamhead "Set a default Beamer header" b
 	%sidebarchecker={right}{0.05\paperwidth}{0.75\paperheight}{}{},
 	%sidebarsectionschecker={left}{0.10\textwidth}{.30\paperheight}{bottom}{}{},
 	%itemstyle=default,  %e.g. faArrowRight, faCheck, faCheckSquare, faHandPointRight ...
-	titlepagestyle=${6:centered},	%centered, centeredwithlogo, reversed, line, halfscreen, halftriangle, network, leftrectangle, leftrectanglefull.
-	font=${7:fira},        %fira, go, arimo, gillius2 and carlito.
-	blockstyle=${8:normal}, %normal, boxed, boxrounded,  shadowed, lines.
-	tone=${9:blue},			%blue, teal, red, green, pink, orange, blackandwhite, reversed, reuma, lafe.
-	%shade,	% uncomment if we want automatic shading
+	%backgrnd=lightshade,	%footbar, fullshade, lightshade, bubles, obliquebars, squares, randombubles
 	%sectionpage,	%uncomment to have section titles at section beginning
 	%biblio={faHandPointRight}, % uncomment to have automatic bibliography, leave icon empty for "no icon", ***compile with pdflatex -shell-escape nameoffile.tex***.
 	%thankspage, %uncoment to automatically add a thanks page, predefined format depending on frametitle layout
@@ -72,6 +74,14 @@ snippet beamhead "Set a default Beamer header" b
 %\logo{\pgfuseimage{university-logo}}
 
 \begin{document}
+
+	{\begin{frame}[plain,noframenumbering]
+		\titlepage
+	\end{frame}}
+
+	\begin{frame}[plain, noframenumbering, allowframebreaks]{Contenido}
+		\tableofcontents
+	\end{frame}
 
 \end{document}
 endsnippet
@@ -181,10 +191,25 @@ snippet framew2cols&trianglebg "Frame with 2 cols environment and fototrianglebg
 \end{frame}
 endsnippet
 
+snippet framew2cols&rectanglebg "Frame with 2 cols environment and fotorectanglebg" b
+\begin{frame}[t]{${1:frametitle}}
+	\framesubtitle{${2:framesubtitle if any}}
+	\fotorectanglebg{${3: Image path}} %params: 1-image size(6cm), 2-Xcorrect(-1cm), 3-Ycorrect
+	\begin{columns}
+		\begin{column}{${4:0.33\paperwidth}}
+			% blank column, just space for decoration
+		\end{column}
+		\begin{column}{${5:0.6\paperwidth}}
+
+		\end{column}
+	\end{columns}
+\end{frame}
+endsnippet
+
 snippet frameWdecoration "Frame with some kind of background decoration" b
 \begin{frame}[t]{${1:frametitle}}
 	\framesubtitle{${2:framesubtitle}}
-	${3:\bublesbg}[][] % lightshadebg, bublesbg, obliquebars, bublesgenerator, squaregenerator, fototrianglebg, adnbg
+	${3:\bublesbg}[][] % lightshadebg, bublesbg, obliquebars, bublesgenerator, squaregenerator, fototrianglebg, fotorectanglebg, adnbg
 
 \end{frame}
 endsnippet

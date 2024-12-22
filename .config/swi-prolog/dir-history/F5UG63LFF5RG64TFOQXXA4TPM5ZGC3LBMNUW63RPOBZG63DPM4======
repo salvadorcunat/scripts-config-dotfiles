@@ -1,7 +1,4 @@
 _HiStOrY_V2_
-go.
-notrace.
-trace(tail_insert).
 reconsult('dive_planner.pl').
 go.
 halt.
@@ -97,5 +94,8 @@ ejemplo_mensajes.
 halt.
 ejemplo_mensajes.
 halt.
+ejemplo_mensajes.
+halt.
+ejemplo.
 ejemplo_mensajes.
 halt.

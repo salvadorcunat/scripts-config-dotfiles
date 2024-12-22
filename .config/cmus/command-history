@@ -1,5 +1,6 @@
-q
+qa
 update-cache -f
+q
 update-cache
 bind -f common enter win-activate
 help
@@ -19,7 +20,6 @@ set id3_default_charset
 set id3_default_charset ISO-8859-15
 set id3_default_charset (ISO-8859-1)
 bind -f common F push filter 
-qa
 bind -f common } vol -0 -1%
 bind common <key> left-view
 bind -f common 1 view tree
