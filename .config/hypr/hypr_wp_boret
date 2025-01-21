@@ -1,0 +1,110 @@
+#!/bin/bash
+
+_usage="
+
+ $ hypr_bg_boret [-h|--help] [-d|--delay [n]]
+
+ Set a random backgroung image using hyprctl. Can change the image randomly if we
+ set a time lapse
+
+ WARNING: This script loops forever. Run it in backgroung.
+
+ parameters:	-d/--delay: Delay (same units in sleep command)
+		-h/--help:  This help
+ output: none
+ returns: 0 on success, 65 on failure.
+"
+
+# for debuging pourposes
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+_file="$HOME/.i3/wallpapers.txt"	# file containing the list of wallpapers
+_wp=
+_sleep="$(command -v sleep)"
+_delay=					# Delay. Default to 15 minutes
+_notify="$(command -v notify-send)"		# notify command or simple echo if not installed
+. "$HOME"/sbin/script-funcs.sh
+
+# Reporting messages and errors format.
+# Put a report in the screen and send another to stderr, which should
+# be printed to .xsession-errors
+# Parameters	1.- report level for notify-send, e.g. normal
+#		2.- header for notify send, usually the program name
+#		3.- tex message
+#
+report2screen()
+{
+	report_msg "$2" "$3" >&2
+	$_notify -u "$1" "$2" "$3"
+}
+
+# Is there another script running? Kill it.
+_prev="$(pgrep -of "$(basename "$0")")"
+[[ -n $_prev ]] && [[ $_prev != "$$" ]] && kill -9 "$_prev"
+unset _prev
+
+# Read parameters if any
+while [[ $# -gt 0 ]];do
+	case "$1" in
+		--dark)         _file="$HOME"/.i3/wallpapers-dark.txt
+				shift
+				;;
+		-d|--delay)	_delay="${2:-15m}"
+				if [[ -n $2 ]]; then
+					shift 2
+				else
+					shift
+				fi
+				;;
+		*)		echo "$_usage"
+				exit 65
+				;;
+	esac
+done
+# Hyprpaper tends to die ??? Check if it's running and start it if not
+pgrep hyprpaper >/dev/null 2>&1 || \
+	/usr/bin/hyprpaper >/dev/null 2>&1 &
+
+# Set as first bg the one used by sddm
+SDDM_BG="$(grep background "/usr/share/sddm/themes/boret/theme.conf" |cut -d"=" -f2)"
+# for debugging
+#notify-send "Current SDDM background: $SDDM_BG"
+hyprctl hyprpaper preload "$SDDM_BG" >/dev/null 2>&1
+hyprctl hyprpaper wallpaper "eDP-1, $SDDM_BG" >/dev/null 2>&1
+
+# loop forever
+while : ; do
+
+	if [[ -n $_delay ]]; then
+		"$_sleep" "$_delay"
+	else
+		break
+	fi
+
+	# to get the upper randomize limit, get the number of lines in $_file,
+	# if _max is not set, default to 1 to avoid infinite looping in randomize()
+	if [[ -s $_file ]] && [[ -r $_file ]]
+		then
+			_max=$(wc -l "$_file" |cut -d" " -f1)
+		else
+			report2screen critical "$0" "Failed to read $_file.\nCheck it and its permissions"
+			exit 65
+	fi
+	let _max=${_max:-1}
+
+	# randomized number, is the line to read from $_file
+	_idx=$(randomize 1 $(( _max + 1 )))
+
+	# set the background reading the line given by $_idx. if fails to read $_file
+	# set a default string to check, notify failure and exit.
+	_wp=$(sed -n "$_idx"p <"$_file")
+	if [[ -n $_wp ]]; then
+		pgrep hyprpaper >/dev/null 2>&1 || \
+			/usr/bin/hyprpaper >/dev/null 2>&1 &
+		{ hyprctl hyprpaper unload all >/dev/null 2>&1 && "$_sleep" 0.25 && hyprctl hyprpaper preload "$_wp" >/dev/null 2>&1 && "$_sleep" 0.25 && hyprctl hyprpaper wallpaper "eDP-1, $_wp" >/dev/null 2>&1; } || \
+			report2screen critical "$0" "failed to run hyprpaper for $_wp"
+	else
+		report2screen -u critical "$0" "failed to read $_file or index $_idx is wrong"
+		exit 65
+	fi
+done
