@@ -121,8 +121,17 @@ select_dlg()
 	# get leading number
 	_sel=${_sel%:\ *}
 	# no confirmation needed, report error if any
-	feh --bg-fill "$(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
-		abort_dlg "Error: feh failed." "$(cat $tempfile)"
+	if [[ $XDG_CURRENT_DESKTOP == "Hyprland" ]]; then
+		hyprctl hyprpaper unload all
+		hyprctl hyprpaper preload "$(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
+			abort_dlg "Error: hyprpaper failed." "$(cat $tempfile)"
+		hyprctl hyprpaper wallpaper "eDP-1, $(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
+			abort_dlg "Error: hyprpaper failed." "$(cat $tempfile)"
+	else
+		feh --bg-fill "$(sed -n "$_sel"p <"$_wp_repo")" 2> $tempfile || \
+			abort_dlg "Error: feh failed." "$(cat $tempfile)"
+
+	fi
 	return $rc
 }
 
