@@ -16,7 +16,9 @@ _usage="
 "
 
 # for debuging pourposes
-#trap 'set +x; sleep 1; set -x' DEBUG
+# trap 'set +x; sleep 1; set -x' DEBUG
+set -x
+exec 1> >(tee "$HOME"/.config/hypr/background.log) 2>&1
 
 _file="$HOME/.i3/wallpapers.txt"	# file containing the list of wallpapers
 _wp=
@@ -24,19 +26,6 @@ _sleep="$(command -v sleep)"
 _delay=					# Delay. Default to 15 minutes
 _notify="$(command -v notify-send)"		# notify command or simple echo if not installed
 . "$HOME"/sbin/script-funcs.sh
-
-# Reporting messages and errors format.
-# Put a report in the screen and send another to stderr, which should
-# be printed to .xsession-errors
-# Parameters	1.- report level for notify-send, e.g. normal
-#		2.- header for notify send, usually the program name
-#		3.- tex message
-#
-report2screen()
-{
-	report_msg "$2" "$3" >&2
-	$_notify -u "$1" "$2" "$3"
-}
 
 # Is there another script running? Kill it.
 _prev="$(pgrep -of "$(basename "$0")")"
@@ -63,14 +52,14 @@ while [[ $# -gt 0 ]];do
 done
 # Hyprpaper tends to die ??? Check if it's running and start it if not
 pgrep hyprpaper >/dev/null 2>&1 || \
-	/usr/bin/hyprpaper >/dev/null 2>&1 &
+	{ "$_sleep 1"; /usr/bin/hyprpaper >/dev/null 2>&1 & }
 
 # Set as first bg the one used by sddm
 SDDM_BG="$(grep background "/usr/share/sddm/themes/boret/theme.conf" |cut -d"=" -f2)"
 # for debugging
 #notify-send "Current SDDM background: $SDDM_BG"
-hyprctl hyprpaper preload "$SDDM_BG" >/dev/null 2>&1
-hyprctl hyprpaper wallpaper "eDP-1, $SDDM_BG" >/dev/null 2>&1
+"$_sleep" 1 && hyprctl hyprpaper preload "$SDDM_BG" >/dev/null 2>&1
+"$_sleep" 1 && hyprctl hyprpaper wallpaper "eDP-1, $SDDM_BG" >/dev/null 2>&1
 
 # loop forever
 while : ; do
@@ -100,8 +89,8 @@ while : ; do
 	_wp=$(sed -n "$_idx"p <"$_file")
 	if [[ -n $_wp ]]; then
 		pgrep hyprpaper >/dev/null 2>&1 || \
-			/usr/bin/hyprpaper >/dev/null 2>&1 &
-		{ hyprctl hyprpaper unload all >/dev/null 2>&1 && "$_sleep" 0.25 && hyprctl hyprpaper preload "$_wp" >/dev/null 2>&1 && "$_sleep" 0.25 && hyprctl hyprpaper wallpaper "eDP-1, $_wp" >/dev/null 2>&1; } || \
+			{ "$_sleep 1"; /usr/bin/hyprpaper >/dev/null 2>&1 & }
+		{ hyprctl hyprpaper unload all >/dev/null 2>&1 && "$_sleep" 0.50 && hyprctl hyprpaper preload "$_wp" >/dev/null 2>&1 && "$_sleep" 0.50 && hyprctl hyprpaper wallpaper "eDP-1, $_wp" >/dev/null 2>&1; } || \
 			report2screen critical "$0" "failed to run hyprpaper for $_wp"
 	else
 		report2screen -u critical "$0" "failed to read $_file or index $_idx is wrong"

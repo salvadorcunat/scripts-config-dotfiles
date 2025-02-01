@@ -240,7 +240,9 @@ while [ $# -gt 0 ]; do
 	for _dir in $(ls -F "$_SRCDIR/" |grep "/"); do
 		_dir=${_dir%/}
 		if is_excluded_dir "$_dir"; then
-			report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
+			if [[ "$_VERBOSE" == "true" ]]; then
+				report_msg "${0##*/}" "---- ${WHITE}${_dir}${DEFAULT} --> ${LIGHT_RED}Excluded${DEFAULT}"
+			fi
 			continue
 		fi
 		if [[ -d "$_SRCDIR/$_dir/.git" ]]; then
