@@ -1,0 +1,62 @@
+#!/bin/bash
+
+_usage="
+Tiny script to launch an amule web server, generating on the fly a pseudo-random
+password for this server session.
+It's intended to be used while running an amuled server.
+No params needed.
+"
+
+# for debuging
+#trap 'set +x; sleep 1; set -x' DEBUG
+
+. "$HOME/sbin/script-funcs.sh"
+
+_WS=$(command -v amuleweb); [[ -z $_WS ]] && { echo "amuleweb not found ... Aborted"; exit 1; }
+_IP=$(get_ip); [[ -z $_IP ]] && { echo "¿No IP? Check your network"; exit 1; }
+_SRF=$(command -v surf); [[ -z $_SRF ]] && report_msg "" "NO surf instace found, run browser manually"
+
+# passworg generator function.
+# 1 arg -> password longitude.
+# This is not full-random, Do not rely on it for
+# serious pourposes.
+#
+generate_pass()
+{
+	local _string=""
+	local i=0
+	while [[ $i -lt $1 ]]; do
+		# generate $1 random decimal numbers
+		_c=$(randomize 48 125)
+		# convert decimal to hex using dc utility
+		_h=$(echo "$_c 16 o p" |dc); _h="\x$_h"
+		_string="$_string$_h"
+		(( i++ ))
+	done
+	echo -e "$_string"
+}
+
+# Main script
+#
+
+# show usage if any param given
+if [ "$#" -gt 0 ]; then
+	echo "$_usage"
+	exit 0
+fi
+
+if ! is_running "amuled_(-f)" "$0"; then
+	abort_dlg "amuleweb can't run without amuled daemon. Bye."
+	exit 0
+fi
+
+_pass="$(generate_pass 8)";
+report_msg "" "One use password = $_pass"
+report_msg "" "Running aMule web server at http://$_IP:4711"
+
+# run amuleweb with generated password as superuser
+"$_WS" -h "$_IP" -A "$_pass" >/dev/null 2>&1 &
+
+if [ -n "$_SRF" ]; then
+	"$_SRF" -g -n -t -z 0.75 "http://$_IP:4711" >/dev/null 2>&1 &
+fi
