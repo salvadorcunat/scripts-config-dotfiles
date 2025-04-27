@@ -1,0 +1,52 @@
+general.import = ["/home/boret/.config/alacritty/common.toml"]
+
+[colors.bright]
+black = "#494949"
+blue = "#3b80c4"
+cyan = "#3bcfaa"
+green = "#56cf5b"
+magenta = "#8a66c4"
+red = "#a46676"
+white = "#ffffff"
+yellow = "#a4b45b"
+
+[colors.cursor]
+cursor = "#a46676"
+text = "CellBackground"
+
+[colors.normal]
+black = "#000000"
+blue = "#215c85"
+cyan = "#219074"
+green = "#329041"
+magenta = "#544c85"
+red = "#654c52"
+white = "#b2b2b2"
+yellow = "#657f41"
+
+[colors.primary]
+background = "#060116"
+foreground = "#ccfff6"
+
+[colors.vi_mode_cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[font]
+size = 8.0
+
+[font.bold]
+family = "Jetbrains Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Jetbrains Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Jetbrains Mono"
+style = "Italic"
+
+[font.normal]
+family = "Jetbrains Mono"
+style = "Regular"
