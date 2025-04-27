@@ -14,12 +14,11 @@ syntax on
 "colorscheme elflord
 "colorscheme wombat256
 set rtp+=/home/boret/.vim/bundle/yaflandia
-colorscheme yaflandia
 set rtp+=/home/boret/.vim/bundle/dracula
 if &diff
-	colorscheme dracula
+	colorscheme yaflandia
 endif
-"colorscheme dracula
+colorscheme dracula
 set hls
 set is
 set nu

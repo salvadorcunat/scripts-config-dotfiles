@@ -10,7 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference !
 
 set $mod Mod4
-set $_term /usr/bin/terminator
+set $_term /usr/bin/qterminal
 set $alt_term $HOME/sbin/alacritty_wrap
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -35,7 +35,8 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 #bindsym $mod+Return exec /usr/bin/konsole
-bindsym $mod+Shift+Return exec $_term -b -p boret
+#bindsym $mod+Shift+Return exec $_term -b -p boret
+bindsym $mod+Shift+Return exec $_term -p boret
 bindsym $mod+Return exec $alt_term -t Terminal
 
 # kill focused window
@@ -47,7 +48,7 @@ bindsym $mod+Shift+q kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 #bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
-bindsym $mod+d exec --no-startup-id "/usr/bin/rofi -show drun -show-icons"
+bindsym $mod+d exec --no-startup-id "/usr/local/bin/rofi -show drun -show-icons"
 
 # start a xfce4 panel if needed or close it
 #bindsym $mod+p exec --no-startup-id "/usr/bin/xfce4-panel -d"

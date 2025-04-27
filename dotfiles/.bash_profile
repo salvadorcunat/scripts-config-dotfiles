@@ -46,7 +46,7 @@ export HISTSIZE=10000
 export LD_LIBRARY_PATH="$HOME"/src/install-root/lib:"$LD_LIBRARY_PATH"
 
 # set QT5 var needed by qt5ct
-export QT_QPA_PLATFORMTHEME="qt5ct"
+export QT_QPA_PLATFORMTHEME="qt6ct"
 
 # trying to run libreoffice without crashing it
 # currently works fine with qt5 and kf5
