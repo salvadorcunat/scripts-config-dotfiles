@@ -48,7 +48,9 @@ _DB="/tmp/undupl_db_$$"
 trap 'rm -f $_tempfile $_DB' "$SIG_NONE" "$SIG_HUP" "$SIG_INT" "$SIG_QUIT" "$SIG_TERM"
 
 # Source functions library
-. "$HOME"/sbin/script-funcs.sh
+CURRCMD="$0"
+BINDIR=${CURRCMD%%"$(basename "$CURRCMD")"}; BINDIR="${BINDIR%\/}"
+. "$BINDIR"/script-funcs.sh
 
 # Remove unset values in an array, reducing its size
 shrink_array()
@@ -127,7 +129,7 @@ while [ $# != 0 ]; do
 done
 
 # security checks
-[[ "$(whoami)" == "root" ]] && echo "Do not run as root" && exit 1
+#[[ "$(whoami)" == "root" ]] && echo "Do not run as root" && exit 1
 [[ -z $_dir ]] && echo "$_usage" && exit 1
 
 read_files "$_dir" _blacklisted _files || exit 1

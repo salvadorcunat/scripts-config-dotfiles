@@ -20,9 +20,9 @@ SIG_QUIT=3					#
 SIG_KILL=9					#
 SIG_TERM=15					#
 
-declare -a IMG_REPO=( $(docker images |awk '{printf "%s ", $1}') )
-declare -a IMG_TAG=( $(docker images |awk '{printf "%s ", $2}') )
-declare -a IMG_ID=( $(docker images |awk '{printf "%s ", $3}') )
+declare -a IMG_REPO=( $(docker images --format=table|awk '{printf "%s ", $1}') )
+declare -a IMG_TAG=( $(docker images --format=table|awk '{printf "%s ", $2}') )
+declare -a IMG_ID=( $(docker images --format=table|awk '{printf "%s ", $3}') )
 declare -a _dialog_opts
 _CMD_list="rm:Delete images:run:Run images:history:View image history:inspect:View image's low level info"
 _backtitle="dialog based Docker images manager by boret"
@@ -77,9 +77,9 @@ get_result()
 #############################################################################
 while : ; do
 	COMMAND="docker image"
-	IMG_REPO=( $(docker images |awk '{printf "%s ", $1}'))
-	IMG_TAG=( $(docker images |awk '{printf "%s ", $2}') )
-	IMG_ID=( $(docker images |awk '{printf "%s ", $3}') )
+	IMG_REPO=( $(docker images --format=table|awk '{printf "%s ", $1}'))
+	IMG_TAG=( $(docker images --format=table|awk '{printf "%s ", $2}') )
+	IMG_ID=( $(docker images --format=table|awk '{printf "%s ", $3}') )
 
 	get_term_size _H _W
 

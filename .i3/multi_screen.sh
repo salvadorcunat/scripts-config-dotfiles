@@ -22,6 +22,10 @@ Parameters: One single parameter meaning the task to do:
 "
 . $HOME/sbin/script-funcs.sh
 
+if [[ $XDG_SESSION_TYPE == wayland ]], then
+	exit 0
+fi
+
 XRANDR="$(command -v xrandr)"; [[ -z $XRANDR ]] && report_msg "${0##*/}"  "xrandr not avaliable" >&2 && exit 1
 TMPFILE=/tmp/tmp_$$
 _force="false"

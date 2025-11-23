@@ -71,6 +71,8 @@
 /home/boret/Descargas/cyber-2.jpg
 /home/boret/Descargas/motorhead_2.jpg
 /home/boret/Descargas/wp_hexagons_1.jpg
-/home/boret/Descargas/wp_hexagons_2.png
 /home/boret/Descargas/wp_hexagons_3.jpg
 /home/boret/Descargas/wp_hexagons_4.jpg
+/usr/share/hypr/wall0.png
+/usr/share/hypr/wall1.png
+/usr/share/hypr/wall2.png

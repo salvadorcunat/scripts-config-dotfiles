@@ -39,8 +39,12 @@ else
 	fortune |cowsay -f r2d2
 fi
 
-# set history size
-export HISTSIZE=10000
+# set history format
+export HISTCONTROL=
+export HISTIGNORE=
+export HISTFILESIZE=-1
+export HISTSIZE=-1
+export HISTTIMEFORMAT="%F-%R "
 
 # set personal libraries
 export LD_LIBRARY_PATH="$HOME"/src/install-root/lib:"$LD_LIBRARY_PATH"
